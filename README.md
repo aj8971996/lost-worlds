@@ -88,11 +88,6 @@ ng serve
 ng build --configuration production
 ```
 
-### GitHub Pages Deployment
-```bash
-ng deploy --base-href=/lost-worlds/
-```
-
 ---
 
 ## Roadmap
