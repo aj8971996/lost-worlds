@@ -1,0 +1,275 @@
+// ============================================================================
+// LOST WORLDS - MAIN STYLESHEET
+// ============================================================================
+// This is the main entry point for all styles.
+// Import order matters!
+
+// ============================================================================
+// 1. ABSTRACTS - Variables, mixins, functions (no output)
+// ============================================================================
+@use './styles/abstracts/variables' as *;
+@use './styles/abstracts/mixins' as *;
+
+// ============================================================================
+// 2. THEMES - CSS Custom Properties
+// ============================================================================
+@use './styles/themes/light';
+@use './styles/themes/dark';
+
+// ============================================================================
+// 3. BASE - Reset, typography, base elements
+// ============================================================================
+@use './styles/base/reset';
+@use './styles/base/typography';
+@use './styles/base/utilities';
+
+// ============================================================================
+// 4. LAYOUT - App-wide layout styles
+// ============================================================================
+// @use 'styles/layout/header';
+// @use 'styles/layout/footer';
+// @use 'styles/layout/navigation';
+
+// ============================================================================
+// 5. COMPONENTS - Shared component styles (if any global)
+// ============================================================================
+// @use 'styles/components/buttons';
+// @use 'styles/components/cards';
+// @use 'styles/components/forms';
+
+// ============================================================================
+// APP ROOT STYLES
+// ============================================================================
+
+// Angular app root
+:host {
+  display: block;
+}
+
+// App container
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+// Main content area
+.main-content {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+// ============================================================================
+// MATERIAL SYMBOLS CONFIGURATION
+// ============================================================================
+
+// Material Symbols default settings
+.material-symbols-outlined {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+  
+  // Prevent text selection on icons
+  user-select: none;
+  
+  // Vertical alignment
+  vertical-align: middle;
+}
+
+// Filled variant
+.material-symbols-filled {
+  font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
+// Icon sizes
+.icon-sm {
+  font-size: 18px;
+}
+
+.icon-md {
+  font-size: 24px;
+}
+
+.icon-lg {
+  font-size: 32px;
+}
+
+.icon-xl {
+  font-size: 48px;
+}
+
+// ============================================================================
+// BUTTON COMPONENT STYLES (Global)
+// ============================================================================
+
+.btn {
+  @include button-base;
+}
+
+.btn-primary {
+  @include button-primary;
+}
+
+.btn-secondary {
+  @include button-secondary;
+}
+
+.btn-ghost {
+  @include button-ghost;
+}
+
+// Button sizes
+.btn-sm {
+  padding: $spacing-2 $spacing-4;
+  font-size: $font-size-sm;
+}
+
+.btn-lg {
+  padding: $spacing-4 $spacing-8;
+  font-size: $font-size-lg;
+}
+
+// Button with icon
+.btn-icon {
+  gap: $spacing-2;
+  
+  .material-symbols-outlined {
+    font-size: 20px;
+  }
+}
+
+// ============================================================================
+// CARD COMPONENT STYLES (Global)
+// ============================================================================
+
+.card {
+  background-color: var(--color-surface);
+  border: $border-width-thin solid var(--color-border);
+  border-radius: $border-radius-lg;
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.card-interactive {
+  @include card-interactive;
+  box-shadow: var(--shadow-card);
+  
+  &:hover {
+    box-shadow: var(--shadow-card-hover);
+  }
+}
+
+.card-header {
+  padding: $spacing-4 $spacing-6;
+  border-bottom: $border-width-thin solid var(--color-border);
+}
+
+.card-body {
+  padding: $spacing-6;
+}
+
+.card-footer {
+  padding: $spacing-4 $spacing-6;
+  border-top: $border-width-thin solid var(--color-border);
+  background-color: var(--color-surface-alt);
+}
+
+// ============================================================================
+// FORM STYLES (Global)
+// ============================================================================
+
+.form-group {
+  margin-bottom: $spacing-4;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: $spacing-2;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: var(--color-text);
+}
+
+.form-input {
+  @include input-base;
+}
+
+.form-hint {
+  margin-top: $spacing-1;
+  font-size: $font-size-sm;
+  color: var(--color-text-muted);
+}
+
+.form-error {
+  margin-top: $spacing-1;
+  font-size: $font-size-sm;
+  color: var(--color-error);
+}
+
+// ============================================================================
+// ANIMATION KEYFRAMES
+// ============================================================================
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+// Animation classes
+.animate-fade-in {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.4s ease forwards;
+}
+
+.animate-gradient {
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+// Stagger children animation
+.stagger-children > * {
+  opacity: 0;
+  animation: fadeInUp 0.4s ease forwards;
+  
+  @for $i from 1 through 10 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 0.1}s;
+    }
+  }
+}

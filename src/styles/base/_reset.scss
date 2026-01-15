@@ -1,0 +1,232 @@
+// ============================================================================
+// LOST WORLDS - CSS RESET
+// Modern reset based on Josh Comeau's CSS Reset
+// ============================================================================
+
+@use '../abstracts/variables' as *;
+
+// ============================================================================
+// BOX SIZING
+// ============================================================================
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+// ============================================================================
+// REMOVE DEFAULT MARGINS & PADDING
+// ============================================================================
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+// ============================================================================
+// CORE BODY DEFAULTS
+// ============================================================================
+
+html {
+  // Prevent font size inflation on mobile
+  -moz-text-size-adjust: none;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+  
+  // Smooth scrolling (respects user preference)
+  @media (prefers-reduced-motion: no-preference) {
+    scroll-behavior: smooth;
+  }
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  // Typographic defaults
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  
+  // Colors from theme
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  
+  // Improve text rendering
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+// ============================================================================
+// TYPOGRAPHY RESETS
+// ============================================================================
+
+// Balance text wrapping on headings
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+
+// Improve paragraph readability
+p {
+  text-wrap: pretty;
+  overflow-wrap: break-word;
+}
+
+// ============================================================================
+// MEDIA DEFAULTS
+// ============================================================================
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+// ============================================================================
+// FORM ELEMENT RESETS
+// ============================================================================
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+// Remove default button styles
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+// Textarea without resize handle (can override as needed)
+textarea {
+  resize: vertical;
+}
+
+// Remove search input styling in WebKit
+input[type='search']::-webkit-search-decoration,
+input[type='search']::-webkit-search-cancel-button,
+input[type='search']::-webkit-search-results-button,
+input[type='search']::-webkit-search-results-decoration {
+  display: none;
+}
+
+// ============================================================================
+// LIST RESETS
+// ============================================================================
+
+ul,
+ol {
+  list-style: none;
+}
+
+// ============================================================================
+// LINK RESETS
+// ============================================================================
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+// ============================================================================
+// TABLE RESETS
+// ============================================================================
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+// ============================================================================
+// ACCESSIBILITY
+// ============================================================================
+
+// Respect reduced motion preferences
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+// Focus visible for keyboard navigation
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+// Skip link support
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  z-index: 9999;
+  padding: $spacing-4;
+  background: var(--color-surface);
+  
+  &:focus {
+    top: 0;
+  }
+}
+
+// ============================================================================
+// SELECTION
+// ============================================================================
+
+::selection {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+// ============================================================================
+// SCROLLBAR STYLING (Optional - WebKit only)
+// ============================================================================
+
+// Custom scrollbar for WebKit browsers
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-alt);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-strong);
+  border-radius: 4px;
+  
+  &:hover {
+    background: var(--color-text-subtle);
+  }
+}
+
+// Firefox scrollbar
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-strong) var(--color-bg-alt);
+}

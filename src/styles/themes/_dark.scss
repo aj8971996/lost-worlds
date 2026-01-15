@@ -1,0 +1,85 @@
+// ============================================================================
+// LOST WORLDS - DARK THEME
+// Theme: MidnightCountryField
+// ============================================================================
+
+@use '../abstracts/variables' as *;
+
+// Dark theme CSS custom properties
+// Applied via [data-theme="dark"]
+
+[data-theme='dark'] {
+  // Color scheme hint for browser
+  color-scheme: dark;
+
+  // --- Background Colors ---
+  --color-bg: #{$dark-bg};
+  --color-bg-alt: #{$dark-bg-alt};
+  --color-surface: #{$dark-surface};
+  --color-surface-alt: #{$dark-surface-alt};
+  --color-surface-elevated: #{$dark-surface-elevated};
+
+  // --- Border Colors ---
+  --color-border: #{$dark-border};
+  --color-border-strong: #{$dark-border-strong};
+
+  // --- Text Colors ---
+  --color-text: #{$dark-text};
+  --color-text-muted: #{$dark-text-muted};
+  --color-text-subtle: #{$dark-text-subtle};
+  --color-text-inverse: #{$dark-text-inverse};
+
+  // --- Primary Action Colors ---
+  --color-primary: #{$dark-primary};
+  --color-primary-hover: #{$dark-primary-hover};
+  --color-primary-active: #{$dark-primary-active};
+  --color-primary-subtle: #{$dark-primary-subtle};
+
+  // --- Accent Colors ---
+  --color-accent: #{$dark-accent};
+  --color-accent-hover: #{$dark-accent-hover};
+  --color-accent-subtle: #{$dark-accent-subtle};
+
+  // --- Semantic Colors ---
+  --color-success: #{$dark-success};
+  --color-success-hover: #{$dark-success-hover};
+  --color-success-subtle: #{$dark-success-subtle};
+
+  --color-warning: #{$dark-warning};
+  --color-warning-hover: #{$dark-warning-hover};
+  --color-warning-subtle: #{$dark-warning-subtle};
+
+  --color-error: #{$dark-error};
+  --color-error-hover: #{$dark-error-hover};
+  --color-error-subtle: #{$dark-error-subtle};
+
+  --color-info: #{$dark-info};
+  --color-info-hover: #{$dark-info-hover};
+  --color-info-subtle: #{$dark-info-subtle};
+
+  // --- Original Palette (Decorative) ---
+  --palette-1: #{$dark-palette-1};
+  --palette-2: #{$dark-palette-2};
+  --palette-3: #{$dark-palette-3};
+  --palette-4: #{$dark-palette-4};
+  --palette-5: #{$dark-palette-5};
+
+  // --- Gradients ---
+  --gradient-hero: #{$gradient-dark-hero};
+  --gradient-hero-overlay: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(2, 31, 63, 0.9) 100%
+  );
+
+  // --- Shadows (dark mode specific - more subtle, with color tint) ---
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-base: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.4);
+
+  // --- Card-specific shadows (cooler, subtle glow for dark theme) ---
+  --shadow-card: 0 2px 8px -2px rgb(0 0 0 / 0.4), 0 0 0 1px rgb(80 98 123 / 0.1);
+  --shadow-card-hover: 0 8px 24px -4px rgb(0 0 0 / 0.5), 0 0 0 1px rgb(77 182 201 / 0.15);
+}

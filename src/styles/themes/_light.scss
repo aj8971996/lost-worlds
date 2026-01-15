@@ -1,0 +1,86 @@
+// ============================================================================
+// LOST WORLDS - LIGHT THEME
+// Theme: AutumnNight_AloreatteEdition
+// ============================================================================
+
+@use '../abstracts/variables' as *;
+
+// Light theme CSS custom properties
+// Applied via [data-theme="light"] or as default
+
+:root,
+[data-theme='light'] {
+  // Color scheme hint for browser
+  color-scheme: light;
+
+  // --- Background Colors ---
+  --color-bg: #{$light-bg};
+  --color-bg-alt: #{$light-bg-alt};
+  --color-surface: #{$light-surface};
+  --color-surface-alt: #{$light-surface-alt};
+  --color-surface-elevated: #{$light-surface-elevated};
+
+  // --- Border Colors ---
+  --color-border: #{$light-border};
+  --color-border-strong: #{$light-border-strong};
+
+  // --- Text Colors ---
+  --color-text: #{$light-text};
+  --color-text-muted: #{$light-text-muted};
+  --color-text-subtle: #{$light-text-subtle};
+  --color-text-inverse: #{$light-text-inverse};
+
+  // --- Primary Action Colors ---
+  --color-primary: #{$light-primary};
+  --color-primary-hover: #{$light-primary-hover};
+  --color-primary-active: #{$light-primary-active};
+  --color-primary-subtle: #{$light-primary-subtle};
+
+  // --- Accent Colors ---
+  --color-accent: #{$light-accent};
+  --color-accent-hover: #{$light-accent-hover};
+  --color-accent-subtle: #{$light-accent-subtle};
+
+  // --- Semantic Colors ---
+  --color-success: #{$light-success};
+  --color-success-hover: #{$light-success-hover};
+  --color-success-subtle: #{$light-success-subtle};
+
+  --color-warning: #{$light-warning};
+  --color-warning-hover: #{$light-warning-hover};
+  --color-warning-subtle: #{$light-warning-subtle};
+
+  --color-error: #{$light-error};
+  --color-error-hover: #{$light-error-hover};
+  --color-error-subtle: #{$light-error-subtle};
+
+  --color-info: #{$light-info};
+  --color-info-hover: #{$light-info-hover};
+  --color-info-subtle: #{$light-info-subtle};
+
+  // --- Original Palette (Decorative) ---
+  --palette-1: #{$light-palette-1};
+  --palette-2: #{$light-palette-2};
+  --palette-3: #{$light-palette-3};
+  --palette-4: #{$light-palette-4};
+  --palette-5: #{$light-palette-5};
+
+  // --- Gradients ---
+  --gradient-hero: #{$gradient-light-hero};
+  --gradient-hero-overlay: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(245, 242, 237, 0.8) 100%
+  );
+
+  // --- Shadows (light mode specific) ---
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-base: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+  // --- Card-specific shadows (warmer tone for light theme) ---
+  --shadow-card: 0 2px 8px -2px rgb(37 58 64 / 0.08), 0 4px 16px -4px rgb(37 58 64 / 0.12);
+  --shadow-card-hover: 0 8px 24px -4px rgb(37 58 64 / 0.12), 0 12px 32px -8px rgb(37 58 64 / 0.16);
+}

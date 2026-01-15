@@ -1,0 +1,232 @@
+// ============================================================================
+// LOST WORLDS - DESIGN TOKENS
+// ============================================================================
+// This file contains all design tokens as SCSS variables.
+// CSS custom properties are generated in the theme files.
+
+// ============================================================================
+// TYPOGRAPHY
+// ============================================================================
+
+$font-family-base: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$font-family-display: 'Inter', system-ui, sans-serif;
+$font-family-mono: 'Fira Code', 'Consolas', monospace;
+
+$font-size-xs: 0.75rem;    // 12px
+$font-size-sm: 0.875rem;   // 14px
+$font-size-base: 1rem;     // 16px
+$font-size-lg: 1.125rem;   // 18px
+$font-size-xl: 1.25rem;    // 20px
+$font-size-2xl: 1.5rem;    // 24px
+$font-size-3xl: 1.875rem;  // 30px
+$font-size-4xl: 2.25rem;   // 36px
+$font-size-5xl: 3rem;      // 48px
+$font-size-6xl: 3.75rem;   // 60px
+
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+$line-height-tight: 1.25;
+$line-height-base: 1.5;
+$line-height-relaxed: 1.75;
+
+// ============================================================================
+// SPACING
+// ============================================================================
+
+$spacing-0: 0;
+$spacing-1: 0.25rem;   // 4px
+$spacing-2: 0.5rem;    // 8px
+$spacing-3: 0.75rem;   // 12px
+$spacing-4: 1rem;      // 16px
+$spacing-5: 1.25rem;   // 20px
+$spacing-6: 1.5rem;    // 24px
+$spacing-8: 2rem;      // 32px
+$spacing-10: 2.5rem;   // 40px
+$spacing-12: 3rem;     // 48px
+$spacing-16: 4rem;     // 64px
+$spacing-20: 5rem;     // 80px
+$spacing-24: 6rem;     // 96px
+
+// ============================================================================
+// BORDERS & RADIUS
+// ============================================================================
+
+$border-width-thin: 1px;
+$border-width-base: 2px;
+$border-width-thick: 4px;
+
+$border-radius-sm: 0.25rem;   // 4px
+$border-radius-base: 0.5rem;  // 8px
+$border-radius-lg: 0.75rem;   // 12px
+$border-radius-xl: 1rem;      // 16px
+$border-radius-2xl: 1.5rem;   // 24px
+$border-radius-full: 9999px;
+
+// ============================================================================
+// SHADOWS
+// ============================================================================
+
+$shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+$shadow-base: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+$shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+$shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+$shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+// ============================================================================
+// TRANSITIONS
+// ============================================================================
+
+$transition-fast: 150ms ease;
+$transition-base: 250ms ease;
+$transition-slow: 350ms ease;
+$transition-slower: 500ms ease;
+
+// ============================================================================
+// BREAKPOINTS
+// ============================================================================
+
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+$breakpoint-2xl: 1536px;
+
+// ============================================================================
+// Z-INDEX SCALE
+// ============================================================================
+
+$z-index-dropdown: 100;
+$z-index-sticky: 200;
+$z-index-fixed: 300;
+$z-index-modal-backdrop: 400;
+$z-index-modal: 500;
+$z-index-popover: 600;
+$z-index-tooltip: 700;
+
+// ============================================================================
+// COLOR PALETTES
+// ============================================================================
+
+// --- Light Theme: AutumnNight_AloreatteEdition ---
+// Original palette colors (for decorative use)
+$light-palette-1: #253a40;  // Dark Teal
+$light-palette-2: #425751;  // Muted Sage
+$light-palette-3: #be9d63;  // Warm Gold
+$light-palette-4: #b88750;  // Amber
+$light-palette-5: #9d7751;  // Warm Brown
+
+// Semantic colors - Light Theme
+$light-bg: #f5f2ed;
+$light-bg-alt: #ebe6df;
+$light-surface: #ffffff;
+$light-surface-alt: #f8f6f3;
+$light-surface-elevated: #ffffff;
+$light-border: #d4cfc6;
+$light-border-strong: #b8b2a7;
+
+$light-text: #1f2937;
+$light-text-muted: #6b7280;
+$light-text-subtle: #9ca3af;
+$light-text-inverse: #ffffff;
+
+// Action colors - Light Theme (WCAG AA compliant)
+$light-primary: #1d5c6b;
+$light-primary-hover: #154854;
+$light-primary-active: #0f3a44;
+$light-primary-subtle: #e8f4f6;
+
+$light-accent: #8b5a2b;
+$light-accent-hover: #744a24;
+$light-accent-subtle: #faf5ef;
+
+$light-success: #3d6b4f;
+$light-success-hover: #325842;
+$light-success-subtle: #eef6f1;
+
+$light-warning: #9a6215;
+$light-warning-hover: #7d5012;
+$light-warning-subtle: #fef8ed;
+
+$light-error: #b84233;
+$light-error-hover: #9a3729;
+$light-error-subtle: #fdf2f0;
+
+$light-info: #3d6789;
+$light-info-hover: #325571;
+$light-info-subtle: #eff5f9;
+
+
+// --- Dark Theme: MidnightCountryField ---
+// Original palette colors (for decorative use)
+$dark-palette-1: #021f3f;   // Deep Navy
+$dark-palette-2: #023167;   // Dark Blue
+$dark-palette-3: #50627b;   // Slate Blue
+$dark-palette-4: #627e7c;   // Muted Teal
+$dark-palette-5: #524939;   // Dark Olive
+
+// Semantic colors - Dark Theme
+$dark-bg: #021f3f;
+$dark-bg-alt: #031a33;
+$dark-surface: #023167;
+$dark-surface-alt: #0a3d7a;
+$dark-surface-elevated: #0d4a8f;
+$dark-border: #50627b;
+$dark-border-strong: #627e7c;
+
+$dark-text: #e8e6e3;
+$dark-text-muted: #9ca3af;
+$dark-text-subtle: #6b7280;
+$dark-text-inverse: #1f2937;
+
+// Action colors - Dark Theme (WCAG AA compliant)
+$dark-primary: #4db6c9;
+$dark-primary-hover: #6fcfdf;
+$dark-primary-active: #8de0ed;
+$dark-primary-subtle: #0a3d4d;
+
+$dark-accent: #d4a955;
+$dark-accent-hover: #e0bb70;
+$dark-accent-subtle: #3d3525;
+
+$dark-success: #6bbf7d;
+$dark-success-hover: #85cf94;
+$dark-success-subtle: #1a3d24;
+
+$dark-warning: #e0b04a;
+$dark-warning-hover: #e8c06a;
+$dark-warning-subtle: #3d3520;
+
+$dark-error: #e07a6b;
+$dark-error-hover: #e99485;
+$dark-error-subtle: #3d1f1a;
+
+$dark-info: #7db4d4;
+$dark-info-hover: #98c5e0;
+$dark-info-subtle: #1a2d3d;
+
+// ============================================================================
+// GRADIENT DEFINITIONS (for hero sections)
+// ============================================================================
+
+// Light theme gradient - warm, earthy
+$gradient-light-hero: linear-gradient(
+  135deg,
+  #{$light-palette-1} 0%,
+  #{$light-palette-2} 25%,
+  #{$light-palette-1} 50%,
+  #{$light-palette-2} 75%,
+  #{$light-palette-1} 100%
+);
+
+// Dark theme gradient - deep, mysterious
+$gradient-dark-hero: linear-gradient(
+  135deg,
+  #{$dark-palette-1} 0%,
+  #{$dark-palette-2} 25%,
+  #{$dark-palette-1} 50%,
+  #{$dark-palette-2} 75%,
+  #{$dark-palette-1} 100%
+);

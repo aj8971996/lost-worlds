@@ -1,0 +1,324 @@
+// ============================================================================
+// LOST WORLDS - TYPOGRAPHY
+// ============================================================================
+
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+// ============================================================================
+// HEADINGS
+// ============================================================================
+
+h1, .h1 {
+  font-family: $font-family-display;
+  font-size: $font-size-4xl;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-tight;
+  letter-spacing: -0.025em;
+  color: var(--color-text);
+
+  @include respond-to('md') {
+    font-size: $font-size-5xl;
+  }
+
+  @include respond-to('lg') {
+    font-size: $font-size-6xl;
+  }
+}
+
+h2, .h2 {
+  font-family: $font-family-display;
+  font-size: $font-size-3xl;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-tight;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+
+  @include respond-to('md') {
+    font-size: $font-size-4xl;
+  }
+}
+
+h3, .h3 {
+  font-family: $font-family-display;
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-tight;
+  color: var(--color-text);
+
+  @include respond-to('md') {
+    font-size: $font-size-3xl;
+  }
+}
+
+h4, .h4 {
+  font-family: $font-family-display;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-tight;
+  color: var(--color-text);
+
+  @include respond-to('md') {
+    font-size: $font-size-2xl;
+  }
+}
+
+h5, .h5 {
+  font-family: $font-family-display;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-base;
+  color: var(--color-text);
+}
+
+h6, .h6 {
+  font-family: $font-family-display;
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-base;
+  color: var(--color-text);
+}
+
+// ============================================================================
+// BODY TEXT
+// ============================================================================
+
+p {
+  margin-bottom: $spacing-4;
+  color: var(--color-text);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.lead {
+  font-size: $font-size-lg;
+  line-height: $line-height-relaxed;
+  color: var(--color-text-muted);
+
+  @include respond-to('md') {
+    font-size: $font-size-xl;
+  }
+}
+
+.small, small {
+  font-size: $font-size-sm;
+}
+
+.text-xs {
+  font-size: $font-size-xs;
+}
+
+// ============================================================================
+// TEXT COLORS
+// ============================================================================
+
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+.text-subtle {
+  color: var(--color-text-subtle);
+}
+
+.text-primary {
+  color: var(--color-primary);
+}
+
+.text-accent {
+  color: var(--color-accent);
+}
+
+.text-success {
+  color: var(--color-success);
+}
+
+.text-warning {
+  color: var(--color-warning);
+}
+
+.text-error {
+  color: var(--color-error);
+}
+
+// ============================================================================
+// LINKS
+// ============================================================================
+
+a:not([class]) {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  @include transition(color);
+
+  &:hover {
+    color: var(--color-accent-hover);
+  }
+}
+
+// ============================================================================
+// LISTS
+// ============================================================================
+
+.list {
+  margin-bottom: $spacing-4;
+  padding-left: $spacing-6;
+
+  li {
+    margin-bottom: $spacing-2;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.list-disc {
+  @extend .list;
+  list-style-type: disc;
+}
+
+.list-decimal {
+  @extend .list;
+  list-style-type: decimal;
+}
+
+// ============================================================================
+// BLOCKQUOTES
+// ============================================================================
+
+blockquote {
+  padding-left: $spacing-4;
+  border-left: 4px solid var(--color-accent);
+  font-style: italic;
+  color: var(--color-text-muted);
+  margin: $spacing-6 0;
+
+  p {
+    margin-bottom: $spacing-2;
+  }
+
+  cite {
+    display: block;
+    margin-top: $spacing-2;
+    font-size: $font-size-sm;
+    font-style: normal;
+    color: var(--color-text-subtle);
+  }
+}
+
+// ============================================================================
+// CODE
+// ============================================================================
+
+code {
+  font-family: $font-family-mono;
+  font-size: 0.9em;
+  padding: 0.125em 0.375em;
+  background-color: var(--color-surface-alt);
+  border-radius: $border-radius-sm;
+}
+
+pre {
+  font-family: $font-family-mono;
+  font-size: $font-size-sm;
+  padding: $spacing-4;
+  background-color: var(--color-surface-alt);
+  border-radius: $border-radius-base;
+  overflow-x: auto;
+
+  code {
+    padding: 0;
+    background: none;
+    border-radius: 0;
+  }
+}
+
+// ============================================================================
+// HORIZONTAL RULES
+// ============================================================================
+
+hr {
+  margin: $spacing-8 0;
+  border: none;
+  border-top: 1px solid var(--color-border);
+}
+
+// ============================================================================
+// TEXT UTILITIES
+// ============================================================================
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.font-normal {
+  font-weight: $font-weight-normal;
+}
+
+.font-medium {
+  font-weight: $font-weight-medium;
+}
+
+.font-semibold {
+  font-weight: $font-weight-semibold;
+}
+
+.font-bold {
+  font-weight: $font-weight-bold;
+}
+
+.uppercase {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+// ============================================================================
+// DECORATIVE TEXT (Using palette colors)
+// ============================================================================
+
+.text-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--palette-3) 0%,
+    var(--palette-4) 50%,
+    var(--palette-5) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+// Tagline styling
+.tagline {
+  font-size: $font-size-lg;
+  font-style: italic;
+  color: var(--color-text-muted);
+  letter-spacing: 0.02em;
+
+  @include respond-to('md') {
+    font-size: $font-size-xl;
+  }
+}
+
+// Section label (small caps style)
+.section-label {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-primary);
+}
