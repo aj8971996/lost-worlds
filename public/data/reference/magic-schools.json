@@ -1,0 +1,155 @@
+{
+  "cosmic": {
+    "id": "cosmic",
+    "name": "Cosmic Magic",
+    "description": "Magic drawn from the stars, void, and the fabric of reality itself.",
+    "componentTypes": ["voidShards"],
+    "schools": {
+      "stars": {
+        "id": "stars",
+        "name": "School of Stars",
+        "focuses": [
+          { "id": "divination", "name": "Divination", "description": "Seeing truth and hidden knowledge" },
+          { "id": "fate", "name": "Fate", "description": "Manipulating destiny and probability" },
+          { "id": "prophecy", "name": "Prophecy", "description": "Glimpsing and shaping the future" },
+          { "id": "constellations", "name": "Constellations", "description": "Drawing power from star patterns" }
+        ]
+      },
+      "light": {
+        "id": "light",
+        "name": "School of Light",
+        "focuses": [
+          { "id": "radiance", "name": "Radiance", "description": "Wielding pure light energy" },
+          { "id": "protection", "name": "Protection", "description": "Shielding and warding" },
+          { "id": "purification", "name": "Purification", "description": "Cleansing corruption and evil" }
+        ]
+      },
+      "time": {
+        "id": "time",
+        "name": "School of Time",
+        "focuses": [
+          { "id": "acceleration", "name": "Acceleration", "description": "Speeding up time's flow" },
+          { "id": "delay", "name": "Delay", "description": "Slowing or pausing time" },
+          { "id": "future", "name": "Future", "description": "Reaching forward in time" },
+          { "id": "past", "name": "Past", "description": "Reaching backward in time" }
+        ]
+      },
+      "void": {
+        "id": "void",
+        "name": "School of Void",
+        "focuses": [
+          { "id": "shadow", "name": "Shadow", "description": "Manipulating darkness" },
+          { "id": "emptiness", "name": "Emptiness", "description": "Creating and controlling nothingness" },
+          { "id": "concealment", "name": "Concealment", "description": "Hiding from sight and senses" }
+        ]
+      },
+      "realms": {
+        "id": "realms",
+        "name": "School of Realms",
+        "focuses": [
+          { "id": "plasma", "name": "Plasma", "description": "Raw cosmic energy manipulation" },
+          { "id": "aether", "name": "Aether", "description": "The substance between realms" },
+          { "id": "gravity", "name": "Gravity", "description": "Controlling gravitational forces" },
+          { "id": "ether", "name": "Ether", "description": "The ethereal plane and spirits" }
+        ]
+      }
+    }
+  },
+  "earthly": {
+    "id": "earthly",
+    "name": "Earthly Magic",
+    "description": "Magic rooted in the natural world, life, and physical mastery.",
+    "componentTypes": ["focusPoints", "lifeSeeds"],
+    "schools": {
+      "elements": {
+        "id": "elements",
+        "name": "School of Elements",
+        "focuses": [
+          { "id": "earth", "name": "Earth", "description": "Stone, metal, and ground manipulation" },
+          { "id": "water", "name": "Water", "description": "Liquid and ice control" },
+          { "id": "fire", "name": "Fire", "description": "Flame and heat manipulation" },
+          { "id": "air", "name": "Air", "description": "Wind and atmosphere control" }
+        ]
+      },
+      "life": {
+        "id": "life",
+        "name": "School of Life",
+        "focuses": [
+          { "id": "healing", "name": "Healing", "description": "Restoring health and curing wounds" },
+          { "id": "growth", "name": "Growth", "description": "Accelerating natural growth" },
+          { "id": "plants", "name": "Plants", "description": "Controlling and communicating with flora" },
+          { "id": "beasts", "name": "Beasts", "description": "Commanding and bonding with animals" }
+        ]
+      },
+      "speech": {
+        "id": "speech",
+        "name": "School of Speech",
+        "focuses": [
+          { "id": "performance", "name": "Performance", "description": "Magical enhancement of artistic expression" },
+          { "id": "rhetoric", "name": "Rhetoric", "description": "Persuasion and influence through words" },
+          { "id": "jest", "name": "Jest", "description": "Humor, trickery, and misdirection" },
+          { "id": "verse", "name": "Verse", "description": "Power through poetry and song" }
+        ]
+      },
+      "body": {
+        "id": "body",
+        "name": "School of Body",
+        "focuses": [
+          { "id": "strength", "name": "Strength", "description": "Enhancing physical might" },
+          { "id": "speed", "name": "Speed", "description": "Enhancing agility and reflexes" },
+          { "id": "endurance", "name": "Endurance", "description": "Enhancing stamina and resilience" },
+          { "id": "weaponArts", "name": "Weapon Arts", "description": "Mastery of armed combat" },
+          { "id": "martialArts", "name": "Martial Arts", "description": "Mastery of unarmed combat" },
+          { "id": "senses", "name": "Senses", "description": "Enhancing perception and awareness" }
+        ]
+      },
+      "craft": {
+        "id": "craft",
+        "name": "School of Craft",
+        "focuses": [
+          { "id": "weapons", "name": "Weapons", "description": "Creating and improving weapons" },
+          { "id": "wards", "name": "Wards", "description": "Creating protective barriers" },
+          { "id": "tools", "name": "Tools", "description": "Creating and enhancing tools" },
+          { "id": "items", "name": "Items", "description": "Crafting magical items" },
+          { "id": "enchantment", "name": "Enchantment", "description": "Imbuing objects with magic" }
+        ]
+      }
+    }
+  },
+  "dead": {
+    "id": "dead",
+    "name": "Dead Magic",
+    "description": "Magic dealing with death, decay, and the forces beyond life.",
+    "componentTypes": ["deathEssence"],
+    "schools": {
+      "decay": {
+        "id": "decay",
+        "name": "School of Decay",
+        "focuses": [
+          { "id": "disease", "name": "Disease", "description": "Spreading and controlling illness" },
+          { "id": "entropy", "name": "Entropy", "description": "Accelerating breakdown and chaos" },
+          { "id": "withering", "name": "Withering", "description": "Draining life and vitality" },
+          { "id": "rot", "name": "Rot", "description": "Causing physical decomposition" }
+        ]
+      },
+      "damned": {
+        "id": "damned",
+        "name": "School of Damned",
+        "focuses": [
+          { "id": "pacts", "name": "Pacts", "description": "Bargaining with dark entities" },
+          { "id": "corruption", "name": "Corruption", "description": "Twisting and tainting" },
+          { "id": "infernal", "name": "Infernal", "description": "Channeling hellish power" }
+        ]
+      },
+      "endings": {
+        "id": "endings",
+        "name": "School of Endings",
+        "focuses": [
+          { "id": "passage", "name": "Passage", "description": "Guiding souls to the beyond" },
+          { "id": "finality", "name": "Finality", "description": "Bringing things to their end" },
+          { "id": "reaper", "name": "Reaper", "description": "Channeling the power of death itself" }
+        ]
+      }
+    }
+  }
+}

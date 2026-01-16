@@ -1,0 +1,42 @@
+{
+  "veil-other": {
+    "id": "veil-other",
+    "name": "Veil Other",
+    "source": {
+      "type": "magic",
+      "college": "cosmic",
+      "focus": "concealment",
+      "requiredLevel": 2
+    },
+    "apCost": 2,
+    "componentCost": [
+      { "type": "VS", "amount": 2 }
+    ],
+    "range": "touch",
+    "target": "ally",
+    "duration": "30 minutes",
+    "description": "Grant one ally within touch range the effects of Fade for 30 minutes. If the ally attacks or casts offensive magic, only their concealment ends, yours remains.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "Requires Fade ability to be known. Effect mirrors Fade but on an ally."
+  },
+  "weapon-mastery": {
+    "id": "weapon-mastery",
+    "name": "Weapon Mastery",
+    "source": {
+      "type": "magic",
+      "college": "earthly",
+      "focus": "weaponArts",
+      "requiredLevel": 1
+    },
+    "apCost": null,
+    "range": "self",
+    "target": "self",
+    "duration": "instant",
+    "description": "You are proficient with all weapons. When using a weapon for the first time in combat, gain +2 D20 on your first attack with it.",
+    "isPassive": true,
+    "isRitual": false,
+    "isSustained": false
+  }
+}

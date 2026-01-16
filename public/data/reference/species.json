@@ -1,0 +1,17 @@
+{
+  "cosmo-goblin": {
+    "id": "cosmo-goblin",
+    "name": "Cosmo-Goblin",
+    "description": "Goblins touched by cosmic energies, often found in the spaces between realms.",
+    "statBonuses": {
+      "SPD": 10,
+      "KNW": 10
+    },
+    "abilities": [],
+    "traits": [
+      "Darkvision 60 ft",
+      "Cosmic Affinity"
+    ],
+    "componentAccess": ["voidShards", "focusPoints"]
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "elementalist-robes": {
+    "id": "elementalist-robes",
+    "name": "Elementalist's Robes",
+    "slot": "chest",
+    "set": "elementalist",
+    "baseHp": 15,
+    "damageReduction": {
+      "dice": "1D4",
+      "check": {
+        "stats": ["MAG", "FRS"],
+        "difficulty": 10
+      }
+    },
+    "special": {
+      "name": "Second Chance",
+      "effect": "Re-roll 1 failed defense roll",
+      "cooldown": "12 hours",
+      "usesPerCooldown": 1
+    },
+    "notes": "Part of the Elementalist armor set. Holden's version is styled as a trench coat."
+  }
+}

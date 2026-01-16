@@ -1,0 +1,121 @@
+{
+  "master-lockpicker": {
+    "id": "master-lockpicker",
+    "name": "Master Lockpicker",
+    "description": "Expertise in picking locks and bypassing mechanical security systems.",
+    "category": "general",
+    "associatedStat": "SPD"
+  },
+  "great-performer": {
+    "id": "great-performer",
+    "name": "Great Performer",
+    "description": "Skill in entertaining through music, acting, or other performance arts.",
+    "category": "social",
+    "associatedStat": "COR"
+  },
+  "best-cook": {
+    "id": "best-cook",
+    "name": "Best Cook",
+    "description": "Culinary expertise for preparing meals that can provide bonuses or restore resources.",
+    "category": "survival",
+    "associatedStat": "KNW"
+  },
+  "bartender": {
+    "id": "bartender",
+    "name": "Bartender",
+    "description": "Knowledge of drinks, mixology, and the social art of tending bar.",
+    "category": "social",
+    "associatedStat": "COR"
+  },
+  "bandaid-maker": {
+    "id": "bandaid-maker",
+    "name": "Bandaid Maker",
+    "description": "Basic first aid and emergency medical treatment skills.",
+    "category": "survival",
+    "associatedStat": "KNW"
+  },
+  "earthly-diagnoser": {
+    "id": "earthly-diagnoser",
+    "name": "Earthly Diagnoser",
+    "description": "Ability to diagnose mundane illnesses and physical ailments.",
+    "category": "knowledge",
+    "associatedStat": "KNW"
+  },
+  "cosmic-diagnoser": {
+    "id": "cosmic-diagnoser",
+    "name": "Cosmic Diagnoser",
+    "description": "Ability to diagnose magical maladies and cosmic afflictions.",
+    "category": "knowledge",
+    "associatedStat": "AST"
+  },
+  "earthly-historian": {
+    "id": "earthly-historian",
+    "name": "Earthly Historian",
+    "description": "Knowledge of mundane history, cultures, and civilizations.",
+    "category": "knowledge",
+    "associatedStat": "KNW"
+  },
+  "cosmic-historian": {
+    "id": "cosmic-historian",
+    "name": "Cosmic Historian",
+    "description": "Knowledge of cosmic events, planar history, and celestial phenomena.",
+    "category": "knowledge",
+    "associatedStat": "AST"
+  },
+  "lore-master": {
+    "id": "lore-master",
+    "name": "Lore Master",
+    "description": "Deep knowledge of myths, legends, and obscure information.",
+    "category": "knowledge",
+    "associatedStat": "KNW"
+  },
+  "earthly-botanist": {
+    "id": "earthly-botanist",
+    "name": "Earthly Botanist",
+    "description": "Knowledge of mundane plants, herbs, and their uses.",
+    "category": "knowledge",
+    "associatedStat": "NAT"
+  },
+  "cosmic-botanist": {
+    "id": "cosmic-botanist",
+    "name": "Cosmic Botanist",
+    "description": "Knowledge of magical and otherworldly flora.",
+    "category": "knowledge",
+    "associatedStat": "AST"
+  },
+  "earthly-beast-master": {
+    "id": "earthly-beast-master",
+    "name": "Earthly Beast Master",
+    "description": "Skill in handling, training, and communicating with mundane animals.",
+    "category": "survival",
+    "associatedStat": "NAT"
+  },
+  "cosmic-beast-master": {
+    "id": "cosmic-beast-master",
+    "name": "Cosmic Beast Master",
+    "description": "Skill in handling magical creatures and beings from other realms.",
+    "category": "survival",
+    "associatedStat": "AST"
+  },
+  "vehicular-variety": {
+    "id": "vehicular-variety",
+    "name": "Vehicular Variety",
+    "description": "Proficiency in operating various vehicles and mounts.",
+    "category": "general",
+    "associatedStat": "SPD"
+  },
+  "codebreaker": {
+    "id": "codebreaker",
+    "name": "Codebreaker",
+    "description": "Expertise in deciphering codes, ciphers, and encrypted messages.",
+    "category": "knowledge",
+    "associatedStat": "KNW"
+  },
+  "noblemen": {
+    "id": "noblemen",
+    "name": "Noblemen",
+    "description": "Knowledge of etiquette, heraldry, and navigating high society.",
+    "category": "social",
+    "associatedStat": "COR"
+  }
+}

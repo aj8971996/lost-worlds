@@ -1,0 +1,126 @@
+{
+  "id": "holden-green",
+  "name": "Holden Green",
+  "level": 3,
+  "xp": 150,
+  "speciesId": "cosmo-goblin",
+  "age": 45,
+  "height": "6.5 ft",
+
+  "stats": {
+    "physical": {
+      "might": { "bonus": 0, "value": 0 },
+      "grit": { "bonus": 0, "value": -10 },
+      "speed": { "bonus": 10, "value": 30 }
+    },
+    "mental": {
+      "knowledge": { "bonus": 0, "value": 20 },
+      "foresight": { "bonus": 0, "value": 10 },
+      "courage": { "bonus": 0, "value": 0 },
+      "determination": { "bonus": 0, "value": 0 }
+    },
+    "magical": {
+      "astrology": { "bonus": 0, "value": 15 },
+      "magiks": { "bonus": 0, "value": 10 },
+      "nature": { "bonus": 0, "value": -10 }
+    }
+  },
+
+  "resources": {
+    "health": { "current": 182, "max": 200 },
+    "armorHp": { "current": 31, "max": 65 },
+    "stamina": { "current": 180, "max": 185 },
+    "sanity": { "current": 144, "max": 144 }
+  },
+
+  "components": {
+    "focusPoints": { "current": 6, "max": 8 },
+    "voidShards": { "current": 4, "max": 6 }
+  },
+
+  "combat": {
+    "actionPoints": 6,
+    "baseMovement": 45,
+    "initiativeMod": 0
+  },
+
+  "skills": {
+    "great-performer": 3,
+    "bandaid-maker": 1,
+    "codebreaker": 2
+  },
+
+  "magic": {
+    "cosmic": {
+      "concealment": 2
+    },
+    "earthly": {
+      "speed": 1,
+      "weaponArts": 2,
+      "enchantment": 1
+    },
+    "dead": {}
+  },
+
+  "abilities": {
+    "prepared": [
+      "veil-other",
+      "void-sight",
+      "weapon-bond",
+      "precise-cut",
+      "weapon-mastery",
+      "burst-of-speed"
+    ]
+  },
+
+  "equipment": {
+    "weapons": [
+      { "refId": "throwing-knife", "quantity": 10, "currentHp": 10 }
+    ],
+    "armor": {
+      "chest": { "refId": "elementalist-robes", "currentHp": 15 },
+      "shoulders": { "refId": "elementalist-shoulders", "currentHp": 10 },
+      "gloves": { "refId": "elementalist-gloves", "currentHp": 5 },
+      "arms": { "refId": "elementalist-armguard", "currentHp": 5 },
+      "legs": { "refId": "elementalist-legs", "currentHp": 10 },
+      "boots": { "refId": "elementalist-boots", "currentHp": 10 }
+    },
+    "accessories": [
+      { "refId": "quick-draw-holster", "currentHp": 10 }
+    ]
+  },
+
+  "inventory": {
+    "consumables": [
+      { "refId": "water", "quantity": 5 }
+    ],
+    "general": [
+      { "refId": "codebreakers-tools", "quantity": 1 },
+      { "refId": "performers-kit", "quantity": 1 }
+    ]
+  },
+
+  "currency": {
+    "era": "Las Vegas",
+    "wealth": 2.63
+  },
+
+  "backstory": "",
+  "appearance": "",
+  "alignment": {
+    "overall": "undecided",
+    "traits": {
+      "compassion": "neutral",
+      "mercy": "neutral",
+      "humility": "neutral",
+      "forgiveness": "neutral",
+      "protection": "neutral"
+    }
+  },
+
+  "relationships": [],
+  
+  "sessionLog": [
+    { "session": 1, "date": null, "xpGained": 150 }
+  ]
+}

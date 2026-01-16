@@ -1,0 +1,13 @@
+{
+  "throwing-knife": {
+    "id": "throwing-knife",
+    "name": "Throwing Knife",
+    "type": "dagger",
+    "damage": "1D6 + SPD",
+    "range": "30 ft",
+    "apCost": 2,
+    "baseHp": 10,
+    "special": "Quick Draw: Draw and throw costs 2 AP total",
+    "notes": "Stackable throwing weapon"
+  }
+}

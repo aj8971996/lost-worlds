@@ -1,0 +1,26 @@
+{
+  "water": {
+    "id": "water",
+    "name": "Water",
+    "category": "consumable",
+    "description": "Clean drinking water.",
+    "effect": "Restores hydration. Required for long rests in harsh environments.",
+    "stackable": true
+  },
+  "lesser-healing-potion": {
+    "id": "lesser-healing-potion",
+    "name": "Lesser Healing Potion",
+    "category": "consumable",
+    "description": "A small vial of red liquid that restores health.",
+    "effect": "Restore 2D6 + 5 HP. Costs 1 AP to consume.",
+    "stackable": true
+  },
+  "codebreakers-tools": {
+    "id": "codebreakers-tools",
+    "name": "Codebreaker's Tools",
+    "category": "tool",
+    "description": "A set of specialized tools for deciphering codes and breaking encryptions.",
+    "effect": "Required for Codebreaker skill checks. Grants +1 D20 on code-related checks.",
+    "stackable": false
+  }
+}
