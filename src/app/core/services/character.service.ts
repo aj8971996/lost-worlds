@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, forkJoin, map, switchMap, of, catchError } from 'rxjs';
+import { Observable, forkJoin, map, of, catchError } from 'rxjs';
 import { ReferenceDataService, AllReferenceData } from './reference-data.service';
 import {
   Character,
@@ -12,9 +12,11 @@ import {
   WeaponInstance,
   ArmorInstance,
   ItemInstance,
+  AccessoryInstance,
   ResolvedWeapon,
   ResolvedArmor,
   ResolvedItem,
+  ResolvedAccessory,
   ResolvedEquipment,
   ResolvedInventory,
   ArmorSlot
@@ -105,11 +107,7 @@ export class CharacterService {
     return {
       weapons: equipment.weapons.map(w => this.resolveWeapon(w, refData)),
       armor: this.resolveArmorSlots(equipment.armor, refData),
-      accessories: equipment.accessories.map(a => ({
-        ...refData.items[a.refId],
-        ...a,
-        maxHp: refData.items[a.refId]?.baseHp || 0
-      })) as any[] // Simplified for now
+      accessories: equipment.accessories.map(a => this.resolveAccessory(a, refData))
     };
   }
 
@@ -137,6 +135,27 @@ export class CharacterService {
       quantity: instance.quantity,
       customName: instance.customName,
       modifications: instance.modifications
+    };
+  }
+
+  private resolveAccessory(instance: AccessoryInstance, refData: AllReferenceData): ResolvedAccessory {
+    const ref = refData.accessories?.[instance.refId];
+    if (!ref) {
+      // Return a placeholder for unknown accessories
+      return {
+        id: instance.refId,
+        name: `Unknown (${instance.refId})`,
+        baseHp: 10,
+        effect: 'Unknown effect',
+        currentHp: instance.currentHp,
+        maxHp: 10
+      };
+    }
+
+    return {
+      ...ref,
+      currentHp: instance.currentHp,
+      maxHp: ref.baseHp
     };
   }
 

@@ -54,6 +54,15 @@ export class ReferenceDataService {
     return this.armor$;
   }
 
+  getAccessories(): Observable<Record<string, AccessoryReference>> {
+    if (!this.accessories$) {
+      this.accessories$ = this.loadJson<Record<string, AccessoryReference>>('accessories').pipe(
+        shareReplay(1)
+      );
+    }
+    return this.accessories$;
+  }
+
   getItems(): Observable<Record<string, ItemReference>> {
     if (!this.items$) {
       this.items$ = this.loadJson<Record<string, ItemReference>>('items').pipe(
@@ -111,6 +120,7 @@ export class ReferenceDataService {
     return forkJoin({
       weapons: this.getWeapons(),
       armor: this.getArmor(),
+      accessories: this.getAccessories(),
       items: this.getItems(),
       abilities: this.getAbilities(),
       skills: this.getSkills(),
@@ -129,6 +139,10 @@ export class ReferenceDataService {
 
   getArmorById(id: string): Observable<ArmorReference | undefined> {
     return this.getArmor().pipe(map(armor => armor[id]));
+  }
+
+  getAccessoryById(id: string): Observable<AccessoryReference | undefined> {
+    return this.getAccessories().pipe(map(accessories => accessories[id]));
   }
 
   getItemById(id: string): Observable<ItemReference | undefined> {
@@ -165,6 +179,7 @@ export class ReferenceDataService {
 export interface AllReferenceData {
   weapons: Record<string, WeaponReference>;
   armor: Record<string, ArmorReference>;
+  accessories: Record<string, AccessoryReference>;
   items: Record<string, ItemReference>;
   abilities: Record<string, AbilityReference>;
   skills: Record<string, SkillReference>;

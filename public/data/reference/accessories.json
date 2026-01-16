@@ -1,0 +1,9 @@
+{
+  "quick-draw-holster": {
+    "id": "quick-draw-holster",
+    "name": "Quick Draw Holster",
+    "baseHp": 10,
+    "effect": "Draw and throw costs are reduced by 1 AP",
+    "notes": "Worn on the hip or thigh for quick weapon access"
+  }
+}
