@@ -53,8 +53,8 @@ import { CharacterSummary } from '@core/models';
     </article>
   `,
   styles: [`
-    @use '../../../styles/abstracts/variables' as *;
-    @use '../../../styles/abstracts/mixins' as *;
+    @use 'styles/abstracts/variables' as *;
+    @use 'styles/abstracts/mixins' as *;
 
     .character-card {
       position: relative;

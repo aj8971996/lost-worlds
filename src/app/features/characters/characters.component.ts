@@ -79,8 +79,8 @@ import { CharacterCardComponent } from './components/character-card/character-ca
     </div>
   `,
   styles: [`
-    @use '../../styles/abstracts/variables' as *;
-    @use '../../styles/abstracts/mixins' as *;
+    @use 'styles/abstracts/variables' as *;
+    @use 'styles/abstracts/mixins' as *;
 
     .characters-page {
       min-height: 100vh;

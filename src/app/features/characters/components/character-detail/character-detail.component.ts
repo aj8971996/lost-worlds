@@ -109,8 +109,8 @@ import { ResolvedCharacter } from '@core/models';
     </div>
   `,
   styles: [`
-    @use '../../../../styles/abstracts/variables' as *;
-    @use '../../../../styles/abstracts/mixins' as *;
+    @use 'styles/abstracts/variables' as *;
+    @use 'styles/abstracts/mixins' as *;
 
     .character-detail-page {
       min-height: 100vh;
