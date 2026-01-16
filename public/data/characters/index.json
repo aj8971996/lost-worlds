@@ -4,6 +4,13 @@
     "name": "Holden Green",
     "level": 3,
     "speciesId": "cosmo-goblin",
-    "player": "Sample Player"
+    "player": "Player 1"
+  },
+  {
+    "id": "rosemary-alderwood",
+    "name": "RoseMary Alderwood",
+    "level": 3,
+    "speciesId": "fairy-giant",
+    "player": "Player 2"
   }
 ]

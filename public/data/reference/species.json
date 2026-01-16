@@ -13,5 +13,21 @@
       "Cosmic Affinity"
     ],
     "componentAccess": ["voidShards", "focusPoints"]
+  },
+  "fairy-giant": {
+    "id": "fairy-giant",
+    "name": "Fairy/Giant",
+    "description": "A rare hybrid of fairy and giant ancestry, combining delicate wings with formidable strength.",
+    "statBonuses": {
+      "MIT": 10,
+      "NAT": 5
+    },
+    "abilities": [],
+    "traits": [
+      "Wings (limited flight)",
+      "Size: Small",
+      "Nature Affinity"
+    ],
+    "componentAccess": ["focusPoints", "lifeSeeds"]
   }
 }

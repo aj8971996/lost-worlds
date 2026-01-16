@@ -11,7 +11,13 @@ export const routes: Routes = [
     path: 'characters',
     loadComponent: () => import('./features/characters/characters.component')
       .then(m => m.CharactersComponent),
-    title: 'Characters | Lost Worlds'
+    title: 'Character Repository | Lost Worlds'
+  },
+  {
+    path: 'characters/:id',
+    loadComponent: () => import('./features/characters/components/character-detail/character-detail.component')
+      .then(m => m.CharacterDetailComponent),
+    title: 'Character Sheet | Lost Worlds'
   },
   {
     path: 'combat',

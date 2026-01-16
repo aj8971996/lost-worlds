@@ -1,0 +1,124 @@
+{
+  "id": "rosemary-alderwood",
+  "name": "RoseMary Alderwood",
+  "level": 3,
+  "xp": 150,
+  "speciesId": "fairy-giant",
+  "age": 23,
+  "height": "4'0\"",
+
+  "stats": {
+    "physical": {
+      "might": { "bonus": 0, "value": 30 },
+      "grit": { "bonus": 0, "value": 0 },
+      "speed": { "bonus": 0, "value": 0 }
+    },
+    "mental": {
+      "knowledge": { "bonus": 0, "value": 0 },
+      "foresight": { "bonus": 0, "value": 0 },
+      "courage": { "bonus": 0, "value": 10 },
+      "determination": { "bonus": 0, "value": 10 }
+    },
+    "magical": {
+      "astrology": { "bonus": 0, "value": 0 },
+      "magiks": { "bonus": 0, "value": 10 },
+      "nature": { "bonus": 0, "value": 10 }
+    }
+  },
+
+  "resources": {
+    "health": { "current": 181, "max": 181 },
+    "armorHp": { "current": 50, "max": 50 },
+    "stamina": { "current": 175, "max": 175 },
+    "sanity": { "current": 143, "max": 143 }
+  },
+
+  "components": {
+    "lifeSeeds": { "current": 9, "max": 9 },
+    "focusPoints": { "current": 9, "max": 9 }
+  },
+
+  "combat": {
+    "actionPoints": 6,
+    "baseMovement": 25,
+    "initiativeMod": 0
+  },
+
+  "skills": {
+    "best-cook": 2,
+    "earthly-beast-master": 1,
+    "cosmic-beast-master": 1
+  },
+
+  "magic": {
+    "cosmic": {},
+    "earthly": {
+      "plants": 1,
+      "beasts": 2,
+      "strength": 3
+    },
+    "dead": {}
+  },
+
+  "abilities": {
+    "prepared": [
+      "predators-senses",
+      "power-strike",
+      "verdant-sense",
+      "iron-grip",
+      "aspect-of-the-beast",
+      "colossal-guard"
+    ]
+  },
+
+  "equipment": {
+    "weapons": [
+      { "refId": "club", "currentHp": 15 },
+      { "refId": "weighted-meteor-hammer", "currentHp": 20 }
+    ],
+    "armor": {
+      "chest": { "refId": "beast-handler-chest", "currentHp": 15 },
+      "shoulders": { "refId": "beast-handler-shoulders", "currentHp": 10 },
+      "gloves": { "refId": "beast-handler-gloves", "currentHp": 10 },
+      "boots": { "refId": "beast-handler-boots", "currentHp": 10 },
+      "arms": { "refId": "elementalist-armguard", "currentHp": 5 },
+      "legs": { "refId": "elementalist-legs", "currentHp": 10 }
+    },
+    "accessories": []
+  },
+
+  "inventory": {
+    "consumables": [
+      { "refId": "lesser-healing-potion", "quantity": 5 },
+      { "refId": "lesser-clarity-potion", "quantity": 5 },
+      { "refId": "lesser-vigor-potion", "quantity": 5 }
+    ],
+    "general": [
+      { "refId": "cooking-supplies", "quantity": 1 }
+    ]
+  },
+
+  "currency": {
+    "era": "Lost Vegas",
+    "wealth": 2.78
+  },
+
+  "backstory": "RoseMary, like her two older brothers, was born and named after the first thing her mother smelled when she was handed to her. Growing up in a massive blended family, she learned early the importance of loyalty, love, and forming strong bonds. She's a caring, vivacious young woman with a soft spot for most living things, but cross her or those she loves, and you'll find yourself on the wrong end of her late father's shillelagh. She can be as vicious as she is kind.",
+  "appearance": "Ro stands about 4'0\" tall with tan skin, the color of beech bark. A patch of green freckles spills across her nose like a bandage. Her hair, true to her namesake, is pale purple and usually worn in pin curls. Her wings are those of a luna moth. RoseMary is usually seen wearing her leather corset, button-up tops, skirts, and overall shorts that she refuses to wear over her shoulders.",
+  "alignment": {
+    "overall": "hero",
+    "traits": {
+      "compassion": "heroic",
+      "mercy": "heroic",
+      "humility": "neutral",
+      "forgiveness": "neutral",
+      "protection": "heroic"
+    }
+  },
+
+  "relationships": [],
+  
+  "sessionLog": [
+    { "session": 1, "date": null, "xpGained": 150 }
+  ]
+}
