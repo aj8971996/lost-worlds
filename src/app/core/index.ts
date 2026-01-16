@@ -1,5 +1,3 @@
-// Core Services
+// Core module barrel exports
 export * from './services/theme.service';
-
-// Core Models
-// export * from './models/...';
+export * from './services/data.service';
