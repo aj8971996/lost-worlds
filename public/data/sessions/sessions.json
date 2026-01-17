@@ -2,7 +2,7 @@
     "session-zero": 
     {
         "session_number": 1,
-        "session_date": 12202025,
+        "session_date": "2025-12-21",
         "session_notes_preface": "We are introduced to our adventurers: Holden Green and Rosemary Alderwood. It's another night at the Golden Nugget casino, and the audience is strewn about the one-armed bandits and blackjack tables. Rosemary starts her first shift, running about and following a variety of orders from the staff. Holden prepares for just another night to provide a spectacular show to their guests! As quips draw the crowd near, an unsuspecting member of the crowd is brought up to the stage for what could be a deadly night.",
         "session_notes_combat": "The show is moving along spectacularly, that is, until a mischievous imp appears out of nowhere. This doesn't appear to be a problem for Holden, though; something draws his aim directly towards where the imp was going to appear. Even before Holden himself knew what was going on...As the Hellfire Imp begins to advance, Holden keeps it at bay while trying to discern if this is some part of the show. The guests and management seem to do the same. Rosemary keeps an eye on the stage, unsure of herself - and after no one can discern who did this, no more punches are held. That Hellfire Imp is turned into a pincushion by The Magnificent Green Blade, while the new employee, Rosemary, gets her first taste of city life!",
         "session_notes_end": "With the show having come to a close, Brandon, Tucker, and Ebbers tell the two adventurers that seeing them go against the Damned Minion was impressive. They have been looking for a pair of employees who could get a special job done. Tuck tells them that his connections have heard there are strange goings-on with the mass migration of people out to the city and all the new construction along the Las Vegas strip. They want the two of them to meet them in owner's office bright and early. ",
@@ -11,6 +11,19 @@
             "rosemary-alderwood"
         ],
         "experience-gained": 100
+    },
+    "session-one": {
+        "session_number": 2,
+        "session_date": "2026-01-04",
+        "session_notes_preface": "Holden and Rosemary begin their day bright and early in the owner's office of the Golden Nugget. Though they had seen Guy McAfee before, the gangster turned president of a public corporation was rarely on the casino floor. He looked over the two employees incredulously. Were these the two who were going to spy on the new casino being built down the street? They sure were! Tuck and Ebbers vouched for their abilities, and the two adventurers were given quite a boon of items to gear up with. As they prepared to leave the establishment, Holden discovered that the Golden Nugget hadn't been doing too well recently, with the murmurings of a new age of decadence to soon hit the city spreading. Their books were a bit short, but nothing they haven't overcome before, right? Once they were prepared, Ebbers drove them under the guise of two hires from various casinos that Guy and Blake had worked with, and wanted to help out the newcomers. Rosemary and Holden had a chance to explore the not yet opened casino as they prepared for opening night, getting lucky with slot machines before feeling a bit famished and deciding to head to the dining hall.",
+        "session_notes_combat": "When they first entered, the grandiose architecture and high-strung chandeliers seemed much too fancy for two people who were used to a wooden stage and tables. This was a new luxury that the city wasn't yet accustomed to, and there seemed to be some eyes on the newcomers as they found their seats. Collins, one of the many Eastern Syndacite members who followed Benjamin Seagal to the west, had called upon a disguised minion to keep watch over them while a few tormented spirits attempted to communicate. Rosemary seemed entirely unfazed as they took the visage of her brother, and the continued insults she lobbed its way broke it's disgusie, and the battle was on. Holden was drawn to the Hellfire Imp as his mind was still filled with the assault he faced the night prior, and Rosemary was content to break the tormented wraith that dared to take on the image of someone she loved. As they both dealt with their independent foes, Collins very slowly became worried about whether he could pull off any kind of attack on these two heroes. He made way to the cellar for a note that contained the transcript of a conversation Meyer Lansky had, giving orders to take out Bugsy. Now Rosemary had it. That wasn't all, though, as Holden used a mix of the Chandeliers and his trusty thrown weapons to take down the remaining foes; he cut off any escape route that Collins would have hoped to use, and they could get any information they needed. ",
+        "session_notes_end": "The party didn't have much more chance to speak with Collins as the management group at the Flamingo walked into the now destroyed dining hall. They escorted the remaining survivors out and Collins was immediately suspected of being the cause for the distress. The few guests who had been allowed entry were cleared out and guards were placed along the doors. Benjamin had the staff push the blackjack tables together and ordered Collins, Rosemary, and Holden to have a seat so they could talk about what had just transpired in his new Dining Hall.",
+        "players": [
+            "holden-green",
+            "rosemary-alderwood"
+        ],
+        "experience-gained": 200
     }
+
 
 }
