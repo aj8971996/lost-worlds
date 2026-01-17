@@ -7,17 +7,19 @@
     </div>
   }
 
-  <!-- Error State -->
+    <!-- Error State -->
   @if (error()) {
     <div class="session-detail__error">
-      <span class="error-icon">⚠️</span>
+      <span class="error-icon material-symbols-outlined" aria-hidden="true">warning</span>
       <h1>Unable to Load Session</h1>
       <p>{{ error() }}</p>
       <a routerLink="/sessions" class="btn btn--primary">
-        ← Back to Sessions
+        <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+        <span>Back to Sessions</span>
       </a>
     </div>
   }
+
 
   <!-- Session Content -->
   @if (!loading() && !error() && session(); as s) {
@@ -43,22 +45,23 @@
 
         <div class="session-hero__meta">
           <time class="meta-item" [attr.datetime]="s.sessionDate">
-            <span class="meta-icon">📅</span>
+            <span class="meta-icon material-symbols-outlined" aria-hidden="true">calendar_month</span>
             {{ s.computed.formattedDate }}
           </time>
           
           <span class="meta-item">
-            <span class="meta-icon">✨</span>
+            <span class="meta-icon material-symbols-outlined" aria-hidden="true">auto_awesome</span>
             +{{ s.experienceGained }} XP
           </span>
 
           @if (s.computed.wordCount > 0) {
             <span class="meta-item">
-              <span class="meta-icon">📝</span>
+              <span class="meta-icon material-symbols-outlined" aria-hidden="true">description</span>
               {{ s.computed.wordCount }} words
             </span>
           }
         </div>
+
 
         <!-- Players -->
         @if (s.players.length > 0) {
@@ -93,15 +96,10 @@
       <!-- Preface Section -->
       @if (s.sessionNotesPreface) {
         <section class="narrative-section narrative-section--preface">
-          <div class="narrative-section__marker">
-            <span class="marker-icon">🌅</span>
-          </div>
-          <div class="narrative-section__content">
-            <h2 class="narrative-section__title">The Stage is Set</h2>
-            <div class="narrative-section__text">
-              <p>{{ s.sessionNotesPreface }}</p>
-            </div>
-          </div>
+          <h2 class="narrative-section__title">Session Preface</h2>
+          <p class="narrative-section__text">
+            {{ s.sessionNotesPreface }}
+          </p>
         </section>
       }
 
@@ -109,7 +107,7 @@
       @if (s.sessionNotesPreface && s.sessionNotesCombat) {
         <div class="narrative-divider">
           <span class="divider-line"></span>
-          <span class="divider-icon">⚔️</span>
+          <span class="divider-icon material-symbols-outlined" aria-hidden="true">sports_martial_arts</span>
           <span class="divider-line"></span>
         </div>
       }
@@ -117,23 +115,18 @@
       <!-- Combat Section -->
       @if (s.sessionNotesCombat) {
         <section class="narrative-section narrative-section--combat">
-          <div class="narrative-section__marker">
-            <span class="marker-icon">⚔️</span>
-          </div>
-          <div class="narrative-section__content">
-            <h2 class="narrative-section__title">Battle Unfolds</h2>
-            <div class="narrative-section__text">
-              <p>{{ s.sessionNotesCombat }}</p>
-            </div>
-          </div>
+          <h2 class="narrative-section__title">Session Conflict</h2>
+          <p class="narrative-section__text">
+            {{ s.sessionNotesCombat }}
+          </p>
         </section>
       }
 
       <!-- Divider -->
-      @if (s.sessionNotesCombat && s.sessionNotesEnd) {
+      @if (s.sessionNotesPreface && s.sessionNotesCombat) {
         <div class="narrative-divider">
           <span class="divider-line"></span>
-          <span class="divider-icon">🌙</span>
+          <span class="divider-icon material-symbols-outlined" aria-hidden="true">sports_martial_arts</span>
           <span class="divider-line"></span>
         </div>
       }
@@ -141,15 +134,10 @@
       <!-- End Section -->
       @if (s.sessionNotesEnd) {
         <section class="narrative-section narrative-section--end">
-          <div class="narrative-section__marker">
-            <span class="marker-icon">🌙</span>
-          </div>
-          <div class="narrative-section__content">
-            <h2 class="narrative-section__title">The Journey Continues</h2>
-            <div class="narrative-section__text">
-              <p>{{ s.sessionNotesEnd }}</p>
-            </div>
-          </div>
+          <h2 class="narrative-section__title">Session Closing</h2>
+          <p class="narrative-section__text">
+            {{ s.sessionNotesEnd }}
+          </p>
         </section>
       }
 
@@ -162,7 +150,7 @@
       }
     </div>
 
-    <!-- Session Footer with Navigation -->
+        <!-- Session Footer with Navigation -->
     <footer class="session-footer">
       <div class="session-footer__nav">
         @if (previousSessionId()) {
@@ -170,19 +158,21 @@
             [routerLink]="['/sessions', previousSessionId()]" 
             class="nav-link nav-link--prev"
           >
-            <span class="nav-link__arrow">←</span>
+            <span class="nav-link__arrow material-symbols-outlined" aria-hidden="true">chevron_left</span>
             <span class="nav-link__text">Previous Session</span>
           </a>
         } @else {
           <span class="nav-link nav-link--disabled">
-            <span class="nav-link__arrow">←</span>
+            <span class="nav-link__arrow material-symbols-outlined" aria-hidden="true">chevron_left</span>
             <span class="nav-link__text">Previous Session</span>
           </span>
         }
 
-        <a routerLink="/sessions" class="nav-link nav-link--all">
-          All Sessions
-        </a>
+        <span class="nav-link nav-link--all">
+          <a routerLink="/sessions">
+            <span class="nav-link__text">All Sessions</span>
+          </a>
+        </span>
 
         @if (nextSessionId()) {
           <a 
@@ -190,12 +180,12 @@
             class="nav-link nav-link--next"
           >
             <span class="nav-link__text">Next Session</span>
-            <span class="nav-link__arrow">→</span>
+            <span class="nav-link__arrow material-symbols-outlined" aria-hidden="true">chevron_right</span>
           </a>
         } @else {
           <span class="nav-link nav-link--disabled">
             <span class="nav-link__text">Next Session</span>
-            <span class="nav-link__arrow">→</span>
+            <span class="nav-link__arrow material-symbols-outlined" aria-hidden="true">chevron_right</span>
           </span>
         }
       </div>
