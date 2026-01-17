@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CharacterService } from '@core/services/character.service';
 import { ResolvedCharacter, OverallAlignment } from '@core/models/character.model';
-import { ArmorSlot } from '@core/models/equipment.model';
-import { AbilitySource } from '@core/models/ability.model';
+import { ArmorSlot, ResourceCost } from '@core/models/equipment.model';
+import { AbilitySource, ResolvedAbility } from '@core/models/ability.model';
 import { calculateMod, calculateDice } from '@core/models/stats.model';
 import { calculateCollegeProgression, FocusLevels, MagicCollege } from '@core/models/magic.model';
 
@@ -172,5 +172,70 @@ export class CharacterDetailComponent implements OnInit {
       default:
         return 'Unknown Source';
     }
+  }
+
+  // =========================================================================
+  // COST FORMATTING METHODS
+  // =========================================================================
+
+  /**
+   * Get the Material Symbols icon name for a resource/component type
+   */
+  getCostIcon(type: string): string {
+    const icons: Record<string, string> = {
+      'AP': 'schedule',
+      'ST': 'directions_run',
+      'HP': 'favorite',
+      'SY': 'psychology',
+      'FP': 'adjust',
+      'LS': 'eco',
+      'VS': 'dark_mode'
+    };
+    return icons[type] || 'toll';
+  }
+
+  /**
+   * Get the full name for a resource/component type
+   */
+  getCostTypeName(type: string): string {
+    const names: Record<string, string> = {
+      'AP': 'Action Points',
+      'ST': 'Stamina',
+      'HP': 'Health',
+      'SY': 'Sanity',
+      'FP': 'Focus Points',
+      'LS': 'Life Seeds',
+      'VS': 'Void Shards'
+    };
+    return names[type] || type;
+  }
+
+  /**
+   * Check if an ability has any resource costs (components, stamina, etc.)
+   */
+  hasResourceCosts(ability: ResolvedAbility): boolean {
+    return !!(
+      (ability.componentCost && ability.componentCost.length > 0) ||
+      ability.staminaCost
+    );
+  }
+
+  /**
+   * Get all non-AP costs for an ability as a formatted array
+   */
+  getAbilityCosts(ability: ResolvedAbility): ResourceCost[] {
+    const costs: ResourceCost[] = [];
+    
+    // Add stamina cost if present
+    if (ability.staminaCost) {
+      costs.push({ type: 'ST', amount: ability.staminaCost });
+    }
+    
+    // Add component costs if present
+    if (ability.componentCost && ability.componentCost.length > 0) {
+      costs.push(...ability.componentCost);
+    }
+    
+    return costs;
   }
 }

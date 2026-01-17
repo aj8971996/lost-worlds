@@ -507,6 +507,20 @@
                           {{ ability.apCost }} AP
                         </span>
                       }
+                      @if (ability.staminaCost) {
+                        <span class="ability-card__meta-item ability-card__meta-item--stamina">
+                          <span class="material-symbols-outlined">directions_run</span>
+                          {{ ability.staminaCost }} ST
+                        </span>
+                      }
+                      @if (ability.componentCost && ability.componentCost.length > 0) {
+                        @for (cost of ability.componentCost; track cost.type) {
+                          <span class="ability-card__meta-item ability-card__meta-item--component">
+                            <span class="material-symbols-outlined">{{ getCostIcon(cost.type) }}</span>
+                            {{ cost.amount }} {{ cost.type }}
+                          </span>
+                        }
+                      }
                       <span class="ability-card__meta-item">
                         <span class="material-symbols-outlined">straighten</span>
                         {{ ability.range }}
