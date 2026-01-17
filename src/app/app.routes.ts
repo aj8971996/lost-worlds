@@ -27,9 +27,15 @@ export const routes: Routes = [
   },
   {
     path: 'sessions',
-    loadComponent: () => import('./features/sessions/sessions.component')
-      .then(m => m.SessionsComponent),
+    loadComponent: () => import('./features/sessions/components/session-list/session-list')
+      .then(m => m.SessionListComponent),
     title: 'Session Notes | Lost Worlds'
+  },
+  {
+    path: 'sessions/:id',
+    loadComponent: () => import('./features/sessions/components/session-details/session-details')
+      .then(m => m.SessionDetailsComponent),
+    title: 'Session Details | Lost Worlds'
   },
   {
     path: '**',

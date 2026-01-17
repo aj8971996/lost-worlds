@@ -1,0 +1,212 @@
+<article class="session-detail">
+  <!-- Loading State -->
+  @if (loading()) {
+    <div class="session-detail__loading">
+      <div class="loading-spinner"></div>
+      <p>Loading session notes...</p>
+    </div>
+  }
+
+  <!-- Error State -->
+  @if (error()) {
+    <div class="session-detail__error">
+      <span class="error-icon">⚠️</span>
+      <h1>Unable to Load Session</h1>
+      <p>{{ error() }}</p>
+      <a routerLink="/sessions" class="btn btn--primary">
+        ← Back to Sessions
+      </a>
+    </div>
+  }
+
+  <!-- Session Content -->
+  @if (!loading() && !error() && session(); as s) {
+    <!-- Hero Header -->
+    <header class="session-hero">
+      <div class="session-hero__backdrop"></div>
+      <div class="session-hero__content">
+        <nav class="session-hero__breadcrumb">
+          <a routerLink="/sessions" class="breadcrumb-link">Sessions</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">{{ sessionTitle() }}</span>
+        </nav>
+
+        <div class="session-hero__number">
+          @if (s.sessionNumber === 0) {
+            <span>Session Zero</span>
+          } @else {
+            <span>Session {{ s.sessionNumber }}</span>
+          }
+        </div>
+
+        <h1 class="session-hero__title">{{ sessionTitle() }}</h1>
+
+        <div class="session-hero__meta">
+          <time class="meta-item" [attr.datetime]="s.sessionDate">
+            <span class="meta-icon">📅</span>
+            {{ s.computed.formattedDate }}
+          </time>
+          
+          <span class="meta-item">
+            <span class="meta-icon">✨</span>
+            +{{ s.experienceGained }} XP
+          </span>
+
+          @if (s.computed.wordCount > 0) {
+            <span class="meta-item">
+              <span class="meta-icon">📝</span>
+              {{ s.computed.wordCount }} words
+            </span>
+          }
+        </div>
+
+        <!-- Players -->
+        @if (s.players.length > 0) {
+          <div class="session-hero__players">
+            <span class="players-label">Adventurers:</span>
+            <div class="player-avatars">
+              @for (player of s.players; track trackByPlayerId($index, player)) {
+                <a 
+                  [routerLink]="['/characters', player.id]"
+                  class="player-avatar"
+                  [attr.title]="player.name"
+                  [attr.aria-label]="'View ' + player.name + ' character sheet'"
+                >
+                  <span class="player-avatar__initials">{{ getPlayerInitials(player) }}</span>
+                </a>
+              }
+            </div>
+            <span class="players-names">
+              @for (player of s.players; track player.id; let last = $last) {
+                <a [routerLink]="['/characters', player.id]" class="player-name">
+                  {{ player.name }}
+                </a>{{ last ? '' : ', ' }}
+              }
+            </span>
+          </div>
+        }
+      </div>
+    </header>
+
+    <!-- Session Narrative -->
+    <div class="session-narrative">
+      <!-- Preface Section -->
+      @if (s.sessionNotesPreface) {
+        <section class="narrative-section narrative-section--preface">
+          <div class="narrative-section__marker">
+            <span class="marker-icon">🌅</span>
+          </div>
+          <div class="narrative-section__content">
+            <h2 class="narrative-section__title">The Stage is Set</h2>
+            <div class="narrative-section__text">
+              <p>{{ s.sessionNotesPreface }}</p>
+            </div>
+          </div>
+        </section>
+      }
+
+      <!-- Divider -->
+      @if (s.sessionNotesPreface && s.sessionNotesCombat) {
+        <div class="narrative-divider">
+          <span class="divider-line"></span>
+          <span class="divider-icon">⚔️</span>
+          <span class="divider-line"></span>
+        </div>
+      }
+
+      <!-- Combat Section -->
+      @if (s.sessionNotesCombat) {
+        <section class="narrative-section narrative-section--combat">
+          <div class="narrative-section__marker">
+            <span class="marker-icon">⚔️</span>
+          </div>
+          <div class="narrative-section__content">
+            <h2 class="narrative-section__title">Battle Unfolds</h2>
+            <div class="narrative-section__text">
+              <p>{{ s.sessionNotesCombat }}</p>
+            </div>
+          </div>
+        </section>
+      }
+
+      <!-- Divider -->
+      @if (s.sessionNotesCombat && s.sessionNotesEnd) {
+        <div class="narrative-divider">
+          <span class="divider-line"></span>
+          <span class="divider-icon">🌙</span>
+          <span class="divider-line"></span>
+        </div>
+      }
+
+      <!-- End Section -->
+      @if (s.sessionNotesEnd) {
+        <section class="narrative-section narrative-section--end">
+          <div class="narrative-section__marker">
+            <span class="marker-icon">🌙</span>
+          </div>
+          <div class="narrative-section__content">
+            <h2 class="narrative-section__title">The Journey Continues</h2>
+            <div class="narrative-section__text">
+              <p>{{ s.sessionNotesEnd }}</p>
+            </div>
+          </div>
+        </section>
+      }
+
+      <!-- Empty State if no content -->
+      @if (!s.sessionNotesPreface && !s.sessionNotesCombat && !s.sessionNotesEnd) {
+        <div class="narrative-empty">
+          <span class="empty-icon">📜</span>
+          <p>The chronicles of this session have yet to be written...</p>
+        </div>
+      }
+    </div>
+
+    <!-- Session Footer with Navigation -->
+    <footer class="session-footer">
+      <div class="session-footer__nav">
+        @if (previousSessionId()) {
+          <a 
+            [routerLink]="['/sessions', previousSessionId()]" 
+            class="nav-link nav-link--prev"
+          >
+            <span class="nav-link__arrow">←</span>
+            <span class="nav-link__text">Previous Session</span>
+          </a>
+        } @else {
+          <span class="nav-link nav-link--disabled">
+            <span class="nav-link__arrow">←</span>
+            <span class="nav-link__text">Previous Session</span>
+          </span>
+        }
+
+        <a routerLink="/sessions" class="nav-link nav-link--all">
+          All Sessions
+        </a>
+
+        @if (nextSessionId()) {
+          <a 
+            [routerLink]="['/sessions', nextSessionId()]" 
+            class="nav-link nav-link--next"
+          >
+            <span class="nav-link__text">Next Session</span>
+            <span class="nav-link__arrow">→</span>
+          </a>
+        } @else {
+          <span class="nav-link nav-link--disabled">
+            <span class="nav-link__text">Next Session</span>
+            <span class="nav-link__arrow">→</span>
+          </span>
+        }
+      </div>
+
+      <!-- XP Reward Banner -->
+      <div class="session-footer__xp">
+        <div class="xp-reward">
+          <span class="xp-reward__label">Session Reward</span>
+          <span class="xp-reward__value">+{{ s.experienceGained }} XP</span>
+        </div>
+      </div>
+    </footer>
+  }
+</article>
