@@ -27,15 +27,15 @@
   },
 
   "resources": {
-    "health": { "current": 182, "max": 200 },
-    "armorHp": { "current": 31, "max": 65 },
-    "stamina": { "current": 180, "max": 185 },
+    "health": { "current": 200, "max": 200 },
+    "armorHp": { "current": 65, "max": 65 },
+    "stamina": { "current": 185, "max": 185 },
     "sanity": { "current": 144, "max": 144 }
   },
 
   "components": {
-    "focusPoints": { "current": 6, "max": 8 },
-    "voidShards": { "current": 4, "max": 6 }
+    "focusPoints": { "current": 8, "max": 8 },
+    "voidShards": { "current": 6, "max": 6 }
   },
 
   "combat": {
@@ -122,6 +122,8 @@
   "relationships": [],
   
   "sessionLog": [
-    { "session": 1, "date": null, "xpGained": 150 }
+    { "session": 0, "date": "12-20-2025", "xpGained": 100 },
+    { "session": 1, "date": "01-03-2026", "xpGained": 200 },
+    { "session": 2, "date": "01-10-2026", "xpGained": 300 }
   ]
 }

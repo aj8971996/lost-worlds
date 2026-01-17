@@ -119,6 +119,8 @@
   "relationships": [],
   
   "sessionLog": [
-    { "session": 1, "date": null, "xpGained": 150 }
+    { "session": 0, "date": "12-20-2025", "xpGained": 100 },
+    { "session": 1, "date": "01-03-2026", "xpGained": 200 },
+    { "session": 2, "date": "01-10-2026", "xpGained": 300 }
   ]
 }
