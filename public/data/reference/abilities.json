@@ -126,5 +126,139 @@
     "isRitual": false,
     "isSustained": false,
     "notes": "Run rabbit."
+  },
+  "predators-senses": {
+    "id": "predators-senses",
+    "name": "Predator's Senses",
+    "source": {
+      "type": "physical",
+      "college": "earthly",
+      "focus": "beasts",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "componentCost": [
+      { "type": "FP", "amount": 1 }
+    ],
+    "range": "60 Ft",
+    "target": "self",
+    "duration": "1 Hour",
+    "description": "+2 D20 perception, tracking advantage, detect invisible within 10 ft",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "You get ears!"
+  },
+  "power-strike": {
+    "id": "power-strike",
+    "name": "Power Strike",
+    "source": {
+      "type": "physical",
+      "college": "earthly",
+      "focus": "strength",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "componentCost": [
+      { "type": "FP", "amount": 1 }
+    ],
+    "range": "melee",
+    "target": "Enemy",
+    "duration": "Activated",
+    "description": "3D8 + MIT Modifier physical damage. Target is pushed back 10 ft.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "BAM!"
+  },
+  "verdant-sense": {
+    "id": "verdant-sense",
+    "name": "Verdant Sense",
+    "source": {
+      "type": "physical",
+      "college": "earthly",
+      "focus": "plants",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "componentCost": [
+      { "type": "LS", "amount": 1 }
+    ],
+    "range": "self",
+    "target": "self",
+    "duration": "1 Hour",
+    "description": "Sense creatures within 60 ft. on natural ground. Cannot be surprised. +2 D20 perception.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "One with nature."
+  },
+  "iron-grip": {
+    "id": "iron-grip",
+    "name": "Iron Grip",
+    "source": {
+      "type": "physical",
+      "college": "earthly",
+      "focus": "strength",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "componentCost": [
+      { "type": "FP", "amount": 1 }
+    ],
+    "range": "5 Ft",
+    "target": "Enemy",
+    "duration": "1 Turn",
+    "description": "Grapple a target. They cannot move and must make opposed MIT check each turn to escape. While grappled, you can use Crush (1 AP) for 2D6 damage.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": true,
+    "notes": "Choke Em'"
+  },
+  "aspect-of-the-beast": {
+    "id": "aspect-of-the-beast",
+    "name": "Aspect of the Beast",
+    "source": {
+      "type": "physical",
+      "college": "earthly",
+      "focus": "weaponArts",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "staminaCost": 5,
+    "componentCost": [
+      { "type": "LS", "amount": 2 }
+    ],
+    "range": "self",
+    "target": "self",
+    "duration": "10 Minutes",
+    "description": "Choose: Wolf (+10 ft., pack tactics), Bear (+2 GRT, +10 temp HP), Hawk (+20 ft. range, +2 D20 perception), Cat (+2 D20 stealth, no fall damage).",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "So many animals!"
+  },
+  "colossal-guard": {
+    "id": "colossal-guard",
+    "name": "Colossal Guard",
+    "source": {
+      "type": "physical",
+      "college": "earthly",
+      "focus": "weaponArts",
+      "requiredLevel": 1
+    },
+    "apCost": 3,
+    "staminaCost": 10,
+    "componentCost": [
+      { "type": "FP", "amount": 3 }
+    ],
+    "range": "touch",
+    "target": "Up to 2 Allies",
+    "duration": "2 Rounds",
+    "description": "Choose up to 2 allies within 10 ft. Any attacks targeting them can be redirected to you. You gain +1 D20 defensive rolls",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "Run rabbit."
   }
 }
