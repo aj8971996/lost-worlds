@@ -5,9 +5,20 @@
     "type": "dagger",
     "damage": "1D6 + SPD",
     "range": "30 ft",
-    "apCost": 2,
-    "baseHp": 10,
-    "special": "Quick Draw: Draw and throw costs 2 AP total",
+    "apCost": 1,
+    "baseHp": 6,
+    "special": "Draw and throw costs 2 AP total",
+    "notes": "Stackable throwing weapon"
+  },
+  "throwing-star": {
+    "id": "throwing-star",
+    "name": "Throwing Star",
+    "type": "thrown",
+    "damage": "2D4 + SPD",
+    "range": "45 ft",
+    "apCost": 1,
+    "baseHp": 4,
+    "special": "Draw and throw costs 2 AP total",
     "notes": "Stackable throwing weapon"
   }
 }
