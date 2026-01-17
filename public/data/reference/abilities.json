@@ -38,5 +38,93 @@
     "isPassive": true,
     "isRitual": false,
     "isSustained": false
+  },
+  "void-sight": {
+    "id": "void-sight",
+    "name": "Void Sight",
+    "source": {
+      "type": "magic",
+      "college": "cosmic",
+      "focus": "concealment",
+      "requiredLevel": 1
+    },
+    "apCost": 1,
+    "componentCost": [
+      { "type": "VS", "amount": 1 }
+    ],
+    "range": "self",
+    "target": "self",
+    "duration": "10 Minutes",
+    "description": "Caster can see invisible creatures and objects, see through magical illusions, and gains +2 D20 on checks to detect hidden doors or traps.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "Can see all that is hidden"
+  },
+  "weapon-bond": {
+    "id": "weapon-bond",
+    "name": "Weapon Bond",
+    "source": {
+      "type": "physical",
+      "college": "earthly",
+      "focus": "weaponArts",
+      "requiredLevel": 1
+    },
+    "apCost": 1,
+    "componentCost": [
+      { "type": "FP", "amount": 1 }
+    ],
+    "range": "touch",
+    "target": "object or weapon",
+    "duration": "1 Hour",
+    "description": "Choose one weapon you're holding. Gain +1 D20 on attack rolls with it. Cannot be disarmed of this weapon. Can recall weapon within 50ft",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "The weapon has a heart"
+  },
+  "precise-cut": {
+    "id": "precise-cut",
+    "name": "Precise Cut",
+    "source": {
+      "type": "physical",
+      "college": "earthly",
+      "focus": "weaponArts",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "componentCost": [
+      { "type": "FP", "amount": 1 }
+    ],
+    "range": "Weapon Range",
+    "target": "Enemy",
+    "duration": "1 Hour",
+    "description": "2D8 + SPD Modifier damage. Ignores 2 points of damage reduction. +1 D20 on attack roll.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "This'll sting."
+  },
+  "burst-of-speed": {
+    "id": "burst-of-speed",
+    "name": "Burst of Speed",
+    "source": {
+      "type": "physical",
+      "college": "earthly",
+      "focus": "weaponArts",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "componentCost": [
+      { "type": "FP", "amount": 1 }
+    ],
+    "range": "self",
+    "target": "self",
+    "duration": "1 Turn",
+    "description": "Your movement speed doubles this turn. Gain +1 D20 on SPD checks. At turn's end, lose 5 ST from exertion.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "Run rabbit."
   }
 }
