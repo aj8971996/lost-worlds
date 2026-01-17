@@ -1,0 +1,117 @@
+<div class="session-list">
+  <!-- Header -->
+  <header class="session-list__header">
+    <div class="session-list__title-group">
+      <h1 class="session-list__title">Session Notes</h1>
+      <p class="session-list__subtitle">Chronicle of your adventures</p>
+    </div>
+    
+    @if (hasSessions()) {
+      <div class="session-list__stats">
+        <div class="stat-badge">
+          <span class="stat-badge__value">{{ totalSessions() }}</span>
+          <span class="stat-badge__label">Sessions</span>
+        </div>
+        <div class="stat-badge stat-badge--accent">
+          <span class="stat-badge__value">{{ totalXP() | number }}</span>
+          <span class="stat-badge__label">Total XP</span>
+        </div>
+      </div>
+    }
+  </header>
+
+  <!-- Loading State -->
+  @if (loading()) {
+    <div class="session-list__loading">
+      <div class="loading-spinner"></div>
+      <p>Loading session notes...</p>
+    </div>
+  }
+
+  <!-- Error State -->
+  @if (error()) {
+    <div class="session-list__error">
+      <span class="error-icon">⚠️</span>
+      <p>{{ error() }}</p>
+      <button class="btn btn--secondary" (click)="loadSessions()">
+        Try Again
+      </button>
+    </div>
+  }
+
+  <!-- Empty State -->
+  @if (!loading() && !error() && !hasSessions()) {
+    <div class="session-list__empty">
+      <div class="empty-icon">📜</div>
+      <h2>No Sessions Yet</h2>
+      <p>Your adventure awaits! Session notes will appear here once you begin your journey.</p>
+    </div>
+  }
+
+  <!-- Session List -->
+  @if (!loading() && !error() && hasSessions()) {
+    <div class="session-list__controls">
+      <button 
+        class="btn btn--ghost"
+        (click)="toggleSortOrder()"
+        [attr.aria-label]="sortOrder() === 'desc' ? 'Sort oldest first' : 'Sort newest first'"
+      >
+        @if (sortOrder() === 'desc') {
+          <span class="sort-icon">↓</span> Newest First
+        } @else {
+          <span class="sort-icon">↑</span> Oldest First
+        }
+      </button>
+    </div>
+
+    <ul class="session-list__grid" role="list">
+      @for (session of sortedSessions(); track trackBySessionId($index, session)) {
+        <li class="session-card" [class.session-card--first]="session.sessionNumber === 0">
+          <a 
+            [routerLink]="['/sessions', session.id]" 
+            class="session-card__link"
+            [attr.aria-label]="'View ' + getSessionTitle(session)"
+          >
+            <!-- Session Number Badge -->
+            <div class="session-card__number">
+              @if (session.sessionNumber === 0) {
+                <span class="session-card__number-text">Zero</span>
+              } @else {
+                <span class="session-card__number-text">{{ session.sessionNumber }}</span>
+              }
+            </div>
+
+            <!-- Session Content -->
+            <div class="session-card__content">
+              <h2 class="session-card__title">{{ getSessionTitle(session) }}</h2>
+              
+              <div class="session-card__meta">
+                <time class="session-card__date" [attr.datetime]="session.sessionDate">
+                  {{ formatDate(session.sessionDate) }}
+                </time>
+                
+                @if (session.playerIds.length > 0) {
+                  <span class="session-card__players">
+                    <span class="players-icon">👥</span>
+                    {{ session.playerIds.length }} {{ session.playerIds.length === 1 ? 'player' : 'players' }}
+                  </span>
+                }
+              </div>
+
+              <div class="session-card__xp">
+                <span class="xp-badge">
+                  +{{ session.experienceGained }} XP
+                </span>
+              </div>
+            </div>
+
+            <!-- Arrow indicator -->
+            <div class="session-card__arrow">
+              <span aria-hidden="true">→</span>
+            </div>
+          </a>
+        </li>
+      }
+    </ul>
+  }
+</div>

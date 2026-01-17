@@ -1,0 +1,485 @@
+@use '../../../../../styles/abstracts/variables' as *;
+@use '../../../../../styles/abstracts/mixins' as *;
+
+// ============================================================================
+// SESSION DETAIL COMPONENT
+// ============================================================================
+
+.session-detail {
+  min-height: 100vh;
+  background-color: var(--color-bg);
+
+  // ============================================================================
+  // STATES
+  // ============================================================================
+
+  &__loading,
+  &__error {
+    @include flex-column-center;
+    min-height: 60vh;
+    padding: $spacing-8;
+    text-align: center;
+  }
+
+  &__loading {
+    color: var(--color-text-muted);
+
+    p {
+      margin-top: $spacing-4;
+    }
+  }
+
+  &__error {
+    h1 {
+      @include heading($font-size-2xl);
+      margin: $spacing-4 0 $spacing-2;
+    }
+
+    p {
+      color: var(--color-text-muted);
+      margin-bottom: $spacing-6;
+    }
+
+    .error-icon {
+      font-size: $font-size-5xl;
+    }
+  }
+}
+
+// ============================================================================
+// HERO HEADER
+// ============================================================================
+
+.session-hero {
+  position: relative;
+  padding: $spacing-8 $spacing-4 $spacing-12;
+  background: var(--gradient-hero);
+  color: white;
+  overflow: hidden;
+
+  @include respond-to('md') {
+    padding: $spacing-12 $spacing-8 $spacing-16;
+  }
+
+  &__backdrop {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.1) 0%,
+      rgba(0, 0, 0, 0.4) 100%
+    );
+    pointer-events: none;
+  }
+
+  &__content {
+    position: relative;
+    @include container;
+    max-width: $breakpoint-lg;
+  }
+
+  &__breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    margin-bottom: $spacing-6;
+    font-size: $font-size-sm;
+    opacity: 0.9;
+  }
+
+  &__number {
+    display: inline-block;
+    padding: $spacing-2 $spacing-4;
+    background-color: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    border-radius: $border-radius-full;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: $spacing-4;
+  }
+
+  &__title {
+    font-family: $font-family-display;
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    line-height: $line-height-tight;
+    margin: 0 0 $spacing-6;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+    @include respond-to('md') {
+      font-size: $font-size-5xl;
+    }
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-4 $spacing-6;
+    margin-bottom: $spacing-6;
+  }
+
+  &__players {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $spacing-3;
+    padding-top: $spacing-4;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
+}
+
+.breadcrumb-link {
+  color: inherit;
+  text-decoration: none;
+  @include transition(opacity);
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.breadcrumb-separator {
+  opacity: 0.5;
+}
+
+.breadcrumb-current {
+  opacity: 0.7;
+}
+
+.meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-2;
+  font-size: $font-size-base;
+  opacity: 0.9;
+}
+
+.meta-icon {
+  font-size: $font-size-lg;
+}
+
+.players-label {
+  font-size: $font-size-sm;
+  opacity: 0.8;
+}
+
+.player-avatars {
+  display: flex;
+  gap: $spacing-2;
+}
+
+.player-avatar {
+  @include flex-center;
+  width: 40px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  text-decoration: none;
+  color: white;
+  @include transition(transform, background-color);
+
+  &:hover {
+    transform: scale(1.1);
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+
+  &__initials {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    letter-spacing: 0.02em;
+  }
+}
+
+.players-names {
+  font-size: $font-size-sm;
+  opacity: 0.8;
+
+  @include respond-below('md') {
+    width: 100%;
+  }
+}
+
+.player-name {
+  color: inherit;
+  text-decoration: none;
+  @include transition(opacity);
+
+  &:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+  }
+}
+
+// ============================================================================
+// NARRATIVE SECTIONS
+// ============================================================================
+
+.session-narrative {
+  @include container;
+  max-width: $breakpoint-md;
+  padding-top: $spacing-12;
+  padding-bottom: $spacing-12;
+}
+
+.narrative-section {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: $spacing-6;
+  margin-bottom: $spacing-8;
+
+  @include respond-to('md') {
+    gap: $spacing-8;
+  }
+
+  &__marker {
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 64px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: calc(100% - 48px);
+      background: linear-gradient(
+        180deg,
+        var(--color-border) 0%,
+        transparent 100%
+      );
+    }
+  }
+
+  &:last-child &__marker::after {
+    display: none;
+  }
+
+  &__content {
+    padding-top: $spacing-2;
+  }
+
+  &__title {
+    @include heading($font-size-xl);
+    margin: 0 0 $spacing-4;
+    color: var(--color-primary);
+
+    @include respond-to('md') {
+      font-size: $font-size-2xl;
+    }
+  }
+
+  &__text {
+    font-size: $font-size-base;
+    line-height: $line-height-relaxed;
+    color: var(--color-text);
+
+    @include respond-to('md') {
+      font-size: $font-size-lg;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    p + p {
+      margin-top: $spacing-4;
+    }
+  }
+
+  // Section-specific title colors
+  &--preface &__title {
+    color: var(--color-info);
+  }
+
+  &--combat &__title {
+    color: var(--color-error);
+  }
+
+  &--end &__title {
+    color: var(--color-success);
+  }
+}
+
+.marker-icon {
+  @include flex-center;
+  width: 48px;
+  height: 48px;
+  background-color: var(--color-surface);
+  border: $border-width-base solid var(--color-border);
+  border-radius: 50%;
+  font-size: $font-size-xl;
+
+  @include respond-to('md') {
+    width: 56px;
+    height: 56px;
+    font-size: $font-size-2xl;
+  }
+}
+
+// ============================================================================
+// NARRATIVE DIVIDER
+// ============================================================================
+
+.narrative-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-4;
+  padding: $spacing-6 0;
+  margin: $spacing-4 0;
+}
+
+.divider-line {
+  flex: 1;
+  max-width: 100px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-border) 50%,
+    transparent 100%
+  );
+}
+
+.divider-icon {
+  font-size: $font-size-lg;
+  color: var(--color-text-subtle);
+}
+
+// ============================================================================
+// EMPTY STATE
+// ============================================================================
+
+.narrative-empty {
+  @include flex-column-center;
+  padding: $spacing-16 $spacing-4;
+  text-align: center;
+  color: var(--color-text-muted);
+
+  .empty-icon {
+    font-size: $font-size-5xl;
+    margin-bottom: $spacing-4;
+  }
+
+  p {
+    font-style: italic;
+    max-width: 300px;
+  }
+}
+
+// ============================================================================
+// FOOTER
+// ============================================================================
+
+.session-footer {
+  background-color: var(--color-surface);
+  border-top: $border-width-thin solid var(--color-border);
+  padding: $spacing-6 0;
+
+  &__nav {
+    @include container;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: $spacing-4;
+    flex-wrap: wrap;
+  }
+
+  &__xp {
+    @include container;
+    margin-top: $spacing-6;
+    padding-top: $spacing-6;
+    border-top: $border-width-thin solid var(--color-border);
+    text-align: center;
+  }
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-2;
+  padding: $spacing-3 $spacing-4;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  text-decoration: none;
+  color: var(--color-text);
+  border-radius: $border-radius-base;
+  @include transition(background-color, color);
+
+  &:hover:not(&--disabled) {
+    background-color: var(--color-surface-alt);
+    color: var(--color-primary);
+  }
+
+  &--all {
+    color: var(--color-primary);
+    font-weight: $font-weight-semibold;
+  }
+
+  &--disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  &__arrow {
+    font-size: $font-size-lg;
+  }
+}
+
+.xp-reward {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-1;
+  padding: $spacing-4 $spacing-8;
+  background: linear-gradient(135deg, var(--color-success-subtle), var(--color-surface));
+  border: $border-width-thin solid var(--color-success);
+  border-radius: $border-radius-xl;
+
+  &__label {
+    font-size: $font-size-xs;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+  }
+
+  &__value {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: var(--color-success);
+  }
+}
+
+// ============================================================================
+// BUTTON STYLES
+// ============================================================================
+
+.btn {
+  @include button-base;
+
+  &--primary {
+    @include button-primary;
+  }
+}
+
+// ============================================================================
+// LOADING SPINNER
+// ============================================================================
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
