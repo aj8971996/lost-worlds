@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed, OnInit, input } from '@angular/core';
+import { Component, inject, signal, computed, effect, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 // Adjust these import paths based on your project structure
@@ -19,7 +19,7 @@ import { CharacterSummary } from '../../../../core/models/character.model';
   templateUrl: './session-details.html',
   styleUrl: './session-details.scss',
 })
-export class SessionDetailsComponent implements OnInit {
+export class SessionDetailsComponent {
   private readonly sessionService = inject(SessionService);
 
   // Route param (using signal-based input)
@@ -42,20 +42,23 @@ export class SessionDetailsComponent implements OnInit {
   readonly previousSessionId = signal<string | null>(null);
   readonly nextSessionId = signal<string | null>(null);
 
-  ngOnInit(): void {
-    this.loadSession();
+  constructor() {
+    // Effect to reload session whenever sessionId changes
+    effect(() => {
+      const id = this.sessionId();
+      if (id) {
+        this.loadSession(id);
+      }
+    });
   }
 
-  private loadSession(): void {
-    const id = this.sessionId();
-    if (!id) {
-      this.error.set('No session ID provided');
-      this.loading.set(false);
-      return;
-    }
-
+  private loadSession(id: string): void {
     this.loading.set(true);
     this.error.set(null);
+    
+    // Reset navigation while loading
+    this.previousSessionId.set(null);
+    this.nextSessionId.set(null);
 
     this.sessionService.getResolvedSession(id).subscribe({
       next: (session) => {
@@ -76,20 +79,25 @@ export class SessionDetailsComponent implements OnInit {
   }
 
   private loadAdjacentSessions(currentNumber: number, campaignId: string): void {
-    this.sessionService.getSessionListByCampaign(campaignId).subscribe(sessions => {
-      const sorted = [...sessions].sort((a, b) => a.sessionNumber - b.sessionNumber);
-      const currentIndex = sorted.findIndex(s => s.sessionNumber === currentNumber);
-      
-      if (currentIndex > 0) {
-        this.previousSessionId.set(sorted[currentIndex - 1].id);
-      } else {
-        this.previousSessionId.set(null);
-      }
-      
-      if (currentIndex < sorted.length - 1) {
-        this.nextSessionId.set(sorted[currentIndex + 1].id);
-      } else {
-        this.nextSessionId.set(null);
+    this.sessionService.getSessionListByCampaign(campaignId).subscribe({
+      next: (sessions) => {
+        const sorted = [...sessions].sort((a, b) => a.sessionNumber - b.sessionNumber);
+        const currentIndex = sorted.findIndex(s => s.sessionNumber === currentNumber);
+        
+        if (currentIndex > 0) {
+          this.previousSessionId.set(sorted[currentIndex - 1].id);
+        } else {
+          this.previousSessionId.set(null);
+        }
+        
+        if (currentIndex >= 0 && currentIndex < sorted.length - 1) {
+          this.nextSessionId.set(sorted[currentIndex + 1].id);
+        } else {
+          this.nextSessionId.set(null);
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load adjacent sessions:', err);
       }
     });
   }
