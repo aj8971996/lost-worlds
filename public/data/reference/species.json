@@ -1,7 +1,7 @@
 {
   "cosmo-goblin": {
     "id": "cosmo-goblin",
-    "name": "Cosmo-Goblin",
+    "name": "Cosmokin Goblin",
     "description": "Goblins touched by cosmic energies, often found in the spaces between realms.",
     "statBonuses": {
       "SPD": 10,
@@ -16,7 +16,7 @@
   },
   "fairy-giant": {
     "id": "fairy-giant",
-    "name": "Fairy/Giant",
+    "name": "Fairy Giant",
     "description": "A rare hybrid of fairy and giant ancestry, combining delicate wings with formidable strength.",
     "statBonuses": {
       "MIT": 10,
