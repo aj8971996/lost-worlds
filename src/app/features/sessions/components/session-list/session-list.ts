@@ -12,6 +12,7 @@ import { SessionSummary, formatSessionDate } from '../../../../core/models/sessi
   templateUrl: './session-list.html',
   styleUrl: './session-list.scss',
 })
+
 export class SessionListComponent implements OnInit {
   private readonly sessionService = inject(SessionService);
 
