@@ -23,7 +23,29 @@
             "rosemary-alderwood"
         ],
         "experience-gained": 200
+    },
+    "session-two": {
+        "session_number": 3,
+        "session_date": "2026-01-11",
+        "session_notes_preface": "[Placeholder]",
+        "session_notes_combat": "[Placeholder]",
+        "session_notes_end": "[Placeholder]",
+        "players": [
+            "holden-green",
+            "rosemary-alderwood"
+        ],
+        "experience-gained": 300
+    },
+    "session-three": {
+        "session_number": 4,
+        "session_date": "2026-01-18",
+        "session_notes_preface": "[Placeholder]",
+        "session_notes_combat": "[Placeholder]",
+        "session_notes_end": "[Placeholder]",
+        "players": [
+            "holden-green",
+            "rosemary-alderwood"
+        ],
+        "experience-gained": 0
     }
-
-
 }
