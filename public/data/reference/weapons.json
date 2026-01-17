@@ -20,5 +20,39 @@
     "baseHp": 4,
     "special": "Draw and throw costs 2 AP total",
     "notes": "Stackable throwing weapon"
+  },
+  "shard-of-endless-want": {
+    "id": "shard-of-endless-want",
+    "name": "Shard of Endless Want",
+    "type": "Magical Dagger",
+    "damage": "2D6 + MAG",
+    "range": "50 ft",
+    "apCost": 1,
+    "baseHp": 20,
+    "special": "Insatiable; damage increases by +1 each consecutive round in combat.",
+    "notes": "Insatiable resets on rest"
+
+  },
+  "club": {
+    "id": "club",
+    "name": "Club",
+    "type": "Blunt Weapon",
+    "damage": "1D6 + MIT",
+    "range": "Melee",
+    "apCost": 1,
+    "baseHp": 20,
+    "special": "Simple",
+    "notes": "A wooden club"
+  },
+  "weighted-meteor-hammer": {
+    "id": "weighted-meteor-hammer",
+    "name": "Weighted Meteor Hammer",
+    "type": "Meteor Hammer",
+    "damage": "2D12 + MIT",
+    "range": "15 Ft",
+    "apCost": 1,
+    "baseHp": 30,
+    "special": "Target makes GRT check (Diff 30) or is knocked Prone.",
+    "notes": "Cool Meteor Hammer"
   }
 }

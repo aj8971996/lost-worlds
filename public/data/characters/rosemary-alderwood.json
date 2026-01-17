@@ -28,7 +28,7 @@
 
   "resources": {
     "health": { "current": 181, "max": 181 },
-    "armorHp": { "current": 50, "max": 50 },
+    "armorHp": { "current": 80, "max": 80 },
     "stamina": { "current": 175, "max": 175 },
     "sanity": { "current": 143, "max": 143 }
   },
@@ -73,14 +73,14 @@
 
   "equipment": {
     "weapons": [
-      { "refId": "club", "currentHp": 15 },
-      { "refId": "weighted-meteor-hammer", "currentHp": 20 }
+      { "refId": "club", "currentHp": 20 },
+      { "refId": "weighted-meteor-hammer", "currentHp": 30 }
     ],
     "armor": {
-      "chest": { "refId": "beast-handler-chest", "currentHp": 15 },
-      "shoulders": { "refId": "beast-handler-shoulders", "currentHp": 10 },
+      "chest": { "refId": "beast-handler-chest", "currentHp": 25 },
+      "shoulders": { "refId": "beast-handler-shoulders", "currentHp": 15 },
       "gloves": { "refId": "beast-handler-gloves", "currentHp": 10 },
-      "boots": { "refId": "beast-handler-boots", "currentHp": 10 },
+      "boots": { "refId": "beast-handler-boots", "currentHp": 15 },
       "arms": { "refId": "elementalist-armguard", "currentHp": 5 },
       "legs": { "refId": "elementalist-legs", "currentHp": 10 }
     },

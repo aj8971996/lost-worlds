@@ -19,5 +19,170 @@
       "usesPerCooldown": 1
     },
     "notes": "Part of the Elementalist armor set. Holden's version is styled as a trench coat."
+  },
+  "elementalist-gloves": {
+    "id": "elementalist-gloves",
+    "name": "Elementalist's Gloves",
+    "slot": "gloves",
+    "set": "elementalist",
+    "baseHp": 5,
+    "damageReduction": {
+      "dice": "1D4",
+      "check": {
+        "stats": ["MAG", "FRS"],
+        "difficulty": 10
+      }
+    },
+    "special": {
+      "name": "Take a Breather",
+      "effect": "Recover 1 D6 Sanity",
+      "cooldown": "1 Hour",
+      "usesPerCooldown": 1
+    },
+    "notes": "Part of the Elementalist armor set."
+  },
+  "elementalist-armguard": {
+    "id": "elementalist-armguard",
+    "name": "Elementalist's Armguard",
+    "slot": "arms",
+    "set": "elementalist",
+    "baseHp": 5,
+    "damageReduction": {
+      "dice": "1D4",
+      "check": {
+        "stats": ["MAG", "FRS"],
+        "difficulty": 10
+      }
+    },
+    "special": {
+      "name": "Dig Deep",
+      "effect": "Recover 3 Components",
+      "cooldown": "12 Hours",
+      "usesPerCooldown": 1
+    },
+    "notes": "Part of the Elementalist armor set."
+  },
+  "elementalist-shoulders": {
+    "id": "elementalist-shoulders",
+    "name": "Elementalist's Shoulders",
+    "slot": "shoulders",
+    "set": "elementalist",
+    "baseHp": 10,
+    "damageReduction": {
+      "dice": "1D4",
+      "check": {
+        "stats": ["MAG", "FRS"],
+        "difficulty": 10
+      }
+    },
+    "special": {
+      "name": "Slight Recovery",
+      "effect": "Recover 1 D10 Health",
+      "cooldown": "12 Hours",
+      "usesPerCooldown": 1
+    },
+    "notes": "Part of the Elementalist armor set."
+  },
+  "elementalist-legs": {
+    "id": "elementalist-legs",
+    "name": "Elementalist's Leg Guards",
+    "slot": "legs",
+    "set": "elementalist",
+    "baseHp": 10,
+    "damageReduction": {
+      "dice": "1D4",
+      "check": {
+        "stats": ["MAG", "FRS"],
+        "difficulty": 10
+      }
+    },
+    "special": {
+      "name": "Speed Increase",
+      "effect": "Add 5 SPD",
+      "cooldown": "Passive",
+      "usesPerCooldown": 1
+    },
+    "notes": "Part of the Elementalist armor set."
+  },
+  "elementalist-boots": {
+    "id": "elementalist-boots",
+    "name": "Elementalist's Boots",
+    "slot": "boots",
+    "set": "elementalist",
+    "baseHp": 10,
+    "damageReduction": {
+      "dice": "1D4",
+      "check": {
+        "stats": ["MAG", "FRS"],
+        "difficulty": 10
+      }
+    },
+    "special": {
+      "name": "Speed Increase",
+      "effect": "Add 5 SPD",
+      "cooldown": "Passive",
+      "usesPerCooldown": 1
+    },
+    "notes": "Part of the Elementalist armor set."
+  },
+  "beast-handler-chest": {
+    "id": "beast-handler-chest",
+    "name": "Beast Handler's Chest Piece",
+    "slot": "chest",
+    "set": "beast-handler",
+    "baseHp": 25,
+    "damageReduction": {
+      "dice": "1D8",
+      "check": {
+        "stats": ["SPD", "MIT"],
+        "difficulty": 10
+      }
+    },
+    "notes": "Part of the Beast Handler's armor set. Holden's version is styled as a trench coat."
+  },
+  "beast-handler-shoulders": {
+    "id": "beast-handler-shoulders",
+    "name": "Beast Handler's Shoulder Straps",
+    "slot": "shoulders",
+    "set": "beast-handler",
+    "baseHp": 15,
+    "damageReduction": {
+      "dice": "1D8",
+      "check": {
+        "stats": ["SPD", "MIT"],
+        "difficulty": 10
+      }
+    },
+    "notes": "Part of the Beast Handler's armor set. Holden's version is styled as a trench coat."
+  },
+  "beast-handler-gloves": {
+    "id": "beast-handler-gloves",
+    "name": "Beast Handler's Gloves",
+    "slot": "gloves",
+    "set": "beast-handler",
+    "baseHp": 10,
+    "damageReduction": {
+      "dice": "1D8",
+      "check": {
+        "stats": ["SPD", "MIT"],
+        "difficulty": 10
+      }
+    },
+    "notes": "Part of the Beast Handler's armor set. Holden's version is styled as a trench coat."
+  },
+  "beast-handler-boots": {
+    "id": "beast-handler-boots",
+    "name": "Beast Handler's Boots",
+    "slot": "boots",
+    "set": "beast-handler",
+    "baseHp": 15,
+    "damageReduction": {
+      "dice": "1D8",
+      "check": {
+        "stats": ["SPD", "MIT"],
+        "difficulty": 10
+      }
+    },
+    "notes": "Part of the Beast Handler's armor set. Holden's version is styled as a trench coat."
   }
 }

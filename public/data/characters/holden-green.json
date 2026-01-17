@@ -76,7 +76,8 @@
   "equipment": {
     "weapons": [
       { "refId": "throwing-knife", "quantity": 10, "currentHp": 6 },
-      { "refId": "throwing-star", "quantity": 10, "currentHp": 4}
+      { "refId": "throwing-star", "quantity": 10, "currentHp": 4},
+      { "refId": "shard-of-endless-want", "quantity": 1, "currentHp": 20}
     ],
     "armor": {
       "chest": { "refId": "elementalist-robes", "currentHp": 15 },
