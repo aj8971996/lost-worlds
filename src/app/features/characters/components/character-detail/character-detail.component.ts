@@ -1,315 +1,19 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CharacterService } from '@core/services/character.service';
-import { ResolvedCharacter } from '@core/models';
+import { ResolvedCharacter, OverallAlignment } from '@core/models/character.model';
+import { ArmorSlot } from '@core/models/equipment.model';
+import { AbilitySource } from '@core/models/ability.model';
+import { calculateMod, calculateDice } from '@core/models/stats.model';
+import { calculateCollegeProgression, FocusLevels, MagicCollege } from '@core/models/magic.model';
 
 @Component({
   selector: 'app-character-detail',
   standalone: true,
   imports: [CommonModule, RouterLink],
-  template: `
-    <div class="character-detail-page">
-      <!-- Back Navigation -->
-      <nav class="back-nav">
-        <a routerLink="/characters" class="back-link">
-          <span class="material-symbols-outlined">arrow_back</span>
-          <span>Back to Repository</span>
-        </a>
-      </nav>
-
-      <!-- Loading State -->
-      @if (isLoading()) {
-        <div class="loading-state">
-          <div class="loading-spinner">
-            <span class="material-symbols-outlined">progress_activity</span>
-          </div>
-          <p>Loading character sheet...</p>
-        </div>
-      }
-
-      <!-- Error State -->
-      @else if (error()) {
-        <div class="error-state">
-          <span class="material-symbols-outlined">error</span>
-          <h2>Character Not Found</h2>
-          <p>{{ error() }}</p>
-          <a routerLink="/characters" class="btn btn-primary">
-            Return to Repository
-          </a>
-        </div>
-      }
-
-      <!-- Character Sheet (Placeholder) -->
-      @else if (character()) {
-        <div class="character-sheet">
-          <header class="sheet-header">
-            <h1 class="character-name">{{ character()!.name }}</h1>
-            <div class="character-meta">
-              <span class="meta-item">
-                <span class="label">Level</span>
-                <span class="value">{{ character()!.level }}</span>
-              </span>
-              <span class="meta-item">
-                <span class="label">Species</span>
-                <span class="value">{{ character()!.species.name }}</span>
-              </span>
-              <span class="meta-item">
-                <span class="label">XP</span>
-                <span class="value">{{ character()!.xp }}</span>
-              </span>
-            </div>
-          </header>
-
-          <div class="sheet-placeholder">
-            <span class="material-symbols-outlined">construction</span>
-            <h2>Character Sheet Coming Soon</h2>
-            <p>
-              The full character sheet layout is under construction. 
-              For now, here's a preview of {{ character()!.name }}'s data.
-            </p>
-          </div>
-
-          <!-- Quick Stats Preview -->
-          <div class="stats-preview">
-            <div class="stat-group">
-              <h3>Physical Stats</h3>
-              <div class="stat-row">
-                <span class="stat-name">Might</span>
-                <span class="stat-value">{{ character()!.stats.physical.might.value }}</span>
-              </div>
-              <div class="stat-row">
-                <span class="stat-name">Grit</span>
-                <span class="stat-value">{{ character()!.stats.physical.grit.value }}</span>
-              </div>
-              <div class="stat-row">
-                <span class="stat-name">Speed</span>
-                <span class="stat-value">{{ character()!.stats.physical.speed.value }}</span>
-              </div>
-            </div>
-
-            <div class="stat-group">
-              <h3>Resources</h3>
-              <div class="stat-row">
-                <span class="stat-name">Health</span>
-                <span class="stat-value">{{ character()!.resources.health.current }} / {{ character()!.resources.health.max }}</span>
-              </div>
-              <div class="stat-row">
-                <span class="stat-name">Stamina</span>
-                <span class="stat-value">{{ character()!.resources.stamina.current }} / {{ character()!.resources.stamina.max }}</span>
-              </div>
-              <div class="stat-row">
-                <span class="stat-name">Sanity</span>
-                <span class="stat-value">{{ character()!.resources.sanity.current }} / {{ character()!.resources.sanity.max }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      }
-    </div>
-  `,
-  styles: [`
-    @use 'styles/abstracts/variables' as *;
-    @use 'styles/abstracts/mixins' as *;
-
-    .character-detail-page {
-      min-height: 100vh;
-      padding: $spacing-4;
-      background-color: var(--color-bg);
-
-      @include respond-to('md') {
-        padding: $spacing-6;
-      }
-    }
-
-    // Back Navigation
-    .back-nav {
-      max-width: $breakpoint-lg;
-      margin: 0 auto $spacing-6;
-    }
-
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: $spacing-2;
-      padding: $spacing-2 $spacing-3;
-      font-size: $font-size-sm;
-      font-weight: $font-weight-medium;
-      color: var(--color-text-muted);
-      text-decoration: none;
-      background: var(--color-surface);
-      border: $border-width-thin solid var(--color-border);
-      border-radius: $border-radius-base;
-      @include transition(color, border-color, background-color);
-
-      &:hover {
-        color: var(--color-text);
-        border-color: var(--color-border-strong);
-        background: var(--color-surface-alt);
-      }
-
-      .material-symbols-outlined {
-        font-size: 18px;
-      }
-    }
-
-    // Loading & Error States
-    .loading-state,
-    .error-state {
-      @include flex-column-center;
-      padding: $spacing-16;
-      text-align: center;
-
-      .material-symbols-outlined {
-        font-size: 48px;
-        color: var(--color-primary);
-        margin-bottom: $spacing-4;
-      }
-
-      h2 {
-        margin: 0 0 $spacing-2;
-        font-size: $font-size-xl;
-        color: var(--color-text);
-      }
-
-      p {
-        margin: 0 0 $spacing-6;
-        color: var(--color-text-muted);
-      }
-    }
-
-    .loading-spinner .material-symbols-outlined {
-      animation: spin 1.5s linear infinite;
-    }
-
-    .error-state .material-symbols-outlined {
-      color: var(--color-error);
-    }
-
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    // Character Sheet
-    .character-sheet {
-      max-width: $breakpoint-lg;
-      margin: 0 auto;
-      background: var(--color-surface);
-      border: $border-width-thin solid var(--color-border);
-      border-radius: $border-radius-xl;
-      overflow: hidden;
-    }
-
-    .sheet-header {
-      padding: $spacing-8;
-      background: var(--gradient-hero);
-      text-align: center;
-    }
-
-    .character-name {
-      margin: 0 0 $spacing-4;
-      font-family: $font-family-display;
-      font-size: $font-size-4xl;
-      font-weight: $font-weight-bold;
-      color: #fff;
-    }
-
-    .character-meta {
-      display: flex;
-      justify-content: center;
-      gap: $spacing-8;
-      flex-wrap: wrap;
-    }
-
-    .meta-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-
-      .label {
-        font-size: $font-size-xs;
-        font-weight: $font-weight-medium;
-        color: rgba(255, 255, 255, 0.7);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-      }
-
-      .value {
-        font-size: $font-size-xl;
-        font-weight: $font-weight-bold;
-        color: var(--color-accent);
-      }
-    }
-
-    // Placeholder
-    .sheet-placeholder {
-      @include flex-column-center;
-      padding: $spacing-12;
-      text-align: center;
-      border-bottom: $border-width-thin solid var(--color-border);
-
-      .material-symbols-outlined {
-        font-size: 48px;
-        color: var(--color-accent);
-        margin-bottom: $spacing-4;
-      }
-
-      h2 {
-        margin: 0 0 $spacing-2;
-        font-size: $font-size-xl;
-        font-weight: $font-weight-semibold;
-        color: var(--color-text);
-      }
-
-      p {
-        margin: 0;
-        max-width: 400px;
-        color: var(--color-text-muted);
-      }
-    }
-
-    // Stats Preview
-    .stats-preview {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: $spacing-6;
-      padding: $spacing-6;
-    }
-
-    .stat-group {
-      h3 {
-        margin: 0 0 $spacing-3;
-        font-size: $font-size-sm;
-        font-weight: $font-weight-semibold;
-        color: var(--color-text-muted);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-      }
-    }
-
-    .stat-row {
-      display: flex;
-      justify-content: space-between;
-      padding: $spacing-2 0;
-      border-bottom: $border-width-thin solid var(--color-border);
-
-      &:last-child {
-        border-bottom: none;
-      }
-    }
-
-    .stat-name {
-      font-size: $font-size-sm;
-      color: var(--color-text);
-    }
-
-    .stat-value {
-      font-size: $font-size-sm;
-      font-weight: $font-weight-semibold;
-      color: var(--color-primary);
-    }
-  `]
+  templateUrl: './character-detail.component.html',
+  styleUrl: './character-detail.component.scss'
 })
 export class CharacterDetailComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
@@ -318,6 +22,19 @@ export class CharacterDetailComponent implements OnInit {
   character = signal<ResolvedCharacter | null>(null);
   isLoading = signal(true);
   error = signal<string | null>(null);
+
+  readonly armorSlots: ArmorSlot[] = ['head', 'shoulders', 'chest', 'arms', 'gloves', 'legs', 'boots'];
+
+  // Computed values for magic focuses
+  cosmicFocuses = computed(() => this.getFocusesArray(this.character()?.magic.cosmic));
+  earthlyFocuses = computed(() => this.getFocusesArray(this.character()?.magic.earthly));
+  deadFocuses = computed(() => this.getFocusesArray(this.character()?.magic.dead));
+
+  trainedSkillsCount = computed(() => {
+    const char = this.character();
+    if (!char) return 0;
+    return char.resolvedSkills.filter(s => s.level > 0).length;
+  });
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -345,5 +62,115 @@ export class CharacterDetailComponent implements OnInit {
         this.isLoading.set(false);
       }
     });
+  }
+
+  // =========================================================================
+  // UTILITY METHODS
+  // =========================================================================
+
+  getResourcePercent(current: number, max: number): number {
+    if (max <= 0) return 0;
+    return Math.min(100, Math.max(0, (current / max) * 100));
+  }
+
+  getMod(value: number): number {
+    return calculateMod(value);
+  }
+
+  getDice(value: number): number {
+    return calculateDice(value);
+  }
+
+  formatMod(value: number): string {
+    return value >= 0 ? `+${value}` : `${value}`;
+  }
+
+  hasComponents(): boolean {
+    const char = this.character();
+    if (!char) return false;
+    return !!(char.components.focusPoints || char.components.lifeSeeds || char.components.voidShards);
+  }
+
+  hasMagicFocuses(): boolean {
+    return this.cosmicFocuses().length > 0 || 
+           this.earthlyFocuses().length > 0 || 
+           this.deadFocuses().length > 0;
+  }
+
+  private getFocusesArray(focuses: FocusLevels | undefined): { id: string; level: number }[] {
+    if (!focuses) return [];
+    return Object.entries(focuses)
+      .filter(([_, level]) => level > 0)
+      .map(([id, level]) => ({ id, level }));
+  }
+
+  getCollegeDegree(college: MagicCollege): string {
+    const char = this.character();
+    if (!char) return 'None';
+    
+    const focuses = char.magic[college];
+    const progression = calculateCollegeProgression(focuses);
+    
+    const degreeNames: Record<string, string> = {
+      'none': 'None',
+      'associates': "Associate's",
+      'bachelors': "Bachelor's",
+      'masters': "Master's",
+      'doctorate': 'Doctorate'
+    };
+    
+    return degreeNames[progression.degree] || 'None';
+  }
+
+  getAlignmentIcon(alignment: OverallAlignment): string {
+    const icons: Record<OverallAlignment, string> = {
+      'hero': 'shield_person',
+      'villain': 'skull',
+      'undecided': 'help'
+    };
+    return icons[alignment] || 'help';
+  }
+
+  formatAlignment(alignment: OverallAlignment): string {
+    const names: Record<OverallAlignment, string> = {
+      'hero': 'Hero',
+      'villain': 'Villain',
+      'undecided': 'Undecided'
+    };
+    return names[alignment] || alignment;
+  }
+
+  formatWeaponType(type: string): string {
+    return type.split('-').map(word => 
+      word.charAt(0).toUpperCase() + word.slice(1)
+    ).join(' ');
+  }
+
+  formatArmorSlot(slot: ArmorSlot): string {
+    return slot.charAt(0).toUpperCase() + slot.slice(1);
+  }
+
+  formatFocusName(id: string): string {
+    return id.split(/(?=[A-Z])/).join(' ')
+      .split('-').map(word => 
+        word.charAt(0).toUpperCase() + word.slice(1)
+      ).join(' ');
+  }
+
+  formatAbilitySource(source: AbilitySource): string {
+    switch (source.type) {
+      case 'magic':
+        return `${source.college.charAt(0).toUpperCase() + source.college.slice(1)} Magic - ${source.focus}`;
+      case 'skill':
+        return `Skill: ${source.skillId}`;
+      case 'species':
+        return `Species: ${source.speciesId}`;
+      case 'item':
+        return `Item: ${source.itemId}`;
+      case 'innate':
+        return 'Innate Ability';
+      default:
+        return 'Unknown Source';
+    }
   }
 }

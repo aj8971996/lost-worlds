@@ -1,0 +1,762 @@
+<div class="character-detail-page">
+  <!-- Breadcrumb Navigation -->
+  <nav class="breadcrumb-nav">
+    <a routerLink="/" class="breadcrumb-link">
+      <span class="material-symbols-outlined">home</span>
+      <span>Home</span>
+    </a>
+    <span class="breadcrumb-separator material-symbols-outlined">chevron_right</span>
+    <a routerLink="/characters" class="breadcrumb-link">Characters</a>
+    @if (character()) {
+      <span class="breadcrumb-separator material-symbols-outlined">chevron_right</span>
+      <span class="breadcrumb-current">{{ character()!.name }}</span>
+    }
+  </nav>
+
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="loading-state">
+      <div class="loading-spinner">
+        <span class="material-symbols-outlined">progress_activity</span>
+      </div>
+      <p>Loading character sheet...</p>
+    </div>
+  }
+
+  <!-- Error State -->
+  @else if (error()) {
+    <div class="error-state">
+      <span class="material-symbols-outlined">error</span>
+      <h2>Character Not Found</h2>
+      <p>{{ error() }}</p>
+      <a routerLink="/characters" class="btn btn-primary">Return to Repository</a>
+    </div>
+  }
+
+  <!-- Character Sheet -->
+  @else if (character()) {
+    <div class="character-sheet">
+      <!-- ================================================================ -->
+      <!-- HEADER SECTION -->
+      <!-- ================================================================ -->
+      <header class="sheet-header">
+        <div class="header-portrait">
+          <div class="portrait-frame">
+            <span class="portrait-initial">{{ character()!.name.charAt(0) }}</span>
+          </div>
+          <div class="portrait-glow"></div>
+        </div>
+        
+        <div class="header-info">
+          <h1 class="character-name">{{ character()!.name }}</h1>
+          <div class="character-subtitle">
+            <span class="species-badge">{{ character()!.species.name }}</span>
+            <span class="level-badge">Level {{ character()!.level }}</span>
+          </div>
+          <div class="header-details">
+            <span class="detail-item">
+              <span class="material-symbols-outlined">cake</span>
+              {{ character()!.age }} years
+            </span>
+            <span class="detail-item">
+              <span class="material-symbols-outlined">straighten</span>
+              {{ character()!.height }}
+            </span>
+            <span class="detail-item">
+              <span class="material-symbols-outlined">star</span>
+              {{ character()!.xp }} XP
+            </span>
+          </div>
+        </div>
+
+        <div class="header-alignment">
+          <div class="alignment-badge" [class]="'alignment--' + character()!.alignment.overall">
+            <span class="alignment-icon material-symbols-outlined">
+              {{ getAlignmentIcon(character()!.alignment.overall) }}
+            </span>
+            <span class="alignment-label">{{ formatAlignment(character()!.alignment.overall) }}</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- ================================================================ -->
+      <!-- MAIN CONTENT GRID -->
+      <!-- ================================================================ -->
+      <div class="sheet-content">
+        <!-- LEFT COLUMN -->
+        <div class="column column--left">
+          
+          <!-- VITALS PANEL -->
+          <section class="panel panel--vitals">
+            <h2 class="panel__title">
+              <span class="material-symbols-outlined">favorite</span>
+              Vitals
+            </h2>
+            <div class="vitals-grid">
+              <div class="resource-bar resource-bar--health">
+                <div class="resource-bar__header">
+                  <span class="resource-bar__name">Health</span>
+                  <span class="resource-bar__values">
+                    {{ character()!.resources.health.current }} / {{ character()!.resources.health.max }}
+                  </span>
+                </div>
+                <div class="resource-bar__track">
+                  <div class="resource-bar__fill" 
+                       [style.width.%]="getResourcePercent(character()!.resources.health.current, character()!.resources.health.max)">
+                  </div>
+                </div>
+              </div>
+
+              <div class="resource-bar resource-bar--armor">
+                <div class="resource-bar__header">
+                  <span class="resource-bar__name">Armor HP</span>
+                  <span class="resource-bar__values">
+                    {{ character()!.resources.armorHp.current }} / {{ character()!.resources.armorHp.max }}
+                  </span>
+                </div>
+                <div class="resource-bar__track">
+                  <div class="resource-bar__fill" 
+                       [style.width.%]="getResourcePercent(character()!.resources.armorHp.current, character()!.resources.armorHp.max)">
+                  </div>
+                </div>
+              </div>
+
+              <div class="resource-bar resource-bar--stamina">
+                <div class="resource-bar__header">
+                  <span class="resource-bar__name">Stamina</span>
+                  <span class="resource-bar__values">
+                    {{ character()!.resources.stamina.current }} / {{ character()!.resources.stamina.max }}
+                  </span>
+                </div>
+                <div class="resource-bar__track">
+                  <div class="resource-bar__fill" 
+                       [style.width.%]="getResourcePercent(character()!.resources.stamina.current, character()!.resources.stamina.max)">
+                  </div>
+                </div>
+              </div>
+
+              <div class="resource-bar resource-bar--sanity">
+                <div class="resource-bar__header">
+                  <span class="resource-bar__name">Sanity</span>
+                  <span class="resource-bar__values">
+                    {{ character()!.resources.sanity.current }} / {{ character()!.resources.sanity.max }}
+                  </span>
+                </div>
+                <div class="resource-bar__track">
+                  <div class="resource-bar__fill" 
+                       [style.width.%]="getResourcePercent(character()!.resources.sanity.current, character()!.resources.sanity.max)">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ATTRIBUTES PANEL -->
+          <section class="panel panel--stats">
+            <h2 class="panel__title">
+              <span class="material-symbols-outlined">query_stats</span>
+              Attributes
+            </h2>
+            
+            <!-- Physical -->
+            <div class="stat-category">
+              <h3 class="stat-category__title stat-category__title--physical">Physical</h3>
+              <div class="stat-row">
+                <div class="stat-block">
+                  <span class="stat-block__abbr">MIT</span>
+                  <span class="stat-block__value">{{ character()!.stats.physical.might.value }}</span>
+                  <span class="stat-block__mod" [class.positive]="getMod(character()!.stats.physical.might.value) > 0">
+                    {{ formatMod(getMod(character()!.stats.physical.might.value)) }}
+                  </span>
+                  <span class="stat-block__dice">{{ getDice(character()!.stats.physical.might.value) }}D20</span>
+                  <span class="stat-block__name">Might</span>
+                </div>
+                <div class="stat-block">
+                  <span class="stat-block__abbr">GRT</span>
+                  <span class="stat-block__value">{{ character()!.stats.physical.grit.value }}</span>
+                  <span class="stat-block__mod" [class.positive]="getMod(character()!.stats.physical.grit.value) > 0">
+                    {{ formatMod(getMod(character()!.stats.physical.grit.value)) }}
+                  </span>
+                  <span class="stat-block__dice">{{ getDice(character()!.stats.physical.grit.value) }}D20</span>
+                  <span class="stat-block__name">Grit</span>
+                </div>
+                <div class="stat-block">
+                  <span class="stat-block__abbr">SPD</span>
+                  <span class="stat-block__value">{{ character()!.stats.physical.speed.value }}</span>
+                  <span class="stat-block__mod" [class.positive]="getMod(character()!.stats.physical.speed.value) > 0">
+                    {{ formatMod(getMod(character()!.stats.physical.speed.value)) }}
+                  </span>
+                  <span class="stat-block__dice">{{ getDice(character()!.stats.physical.speed.value) }}D20</span>
+                  <span class="stat-block__name">Speed</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mental -->
+            <div class="stat-category">
+              <h3 class="stat-category__title stat-category__title--mental">Mental</h3>
+              <div class="stat-row stat-row--4col">
+                <div class="stat-block">
+                  <span class="stat-block__abbr">KNW</span>
+                  <span class="stat-block__value">{{ character()!.stats.mental.knowledge.value }}</span>
+                  <span class="stat-block__mod" [class.positive]="getMod(character()!.stats.mental.knowledge.value) > 0">
+                    {{ formatMod(getMod(character()!.stats.mental.knowledge.value)) }}
+                  </span>
+                  <span class="stat-block__dice">{{ getDice(character()!.stats.mental.knowledge.value) }}D20</span>
+                  <span class="stat-block__name">Knowledge</span>
+                </div>
+                <div class="stat-block">
+                  <span class="stat-block__abbr">FRS</span>
+                  <span class="stat-block__value">{{ character()!.stats.mental.foresight.value }}</span>
+                  <span class="stat-block__mod" [class.positive]="getMod(character()!.stats.mental.foresight.value) > 0">
+                    {{ formatMod(getMod(character()!.stats.mental.foresight.value)) }}
+                  </span>
+                  <span class="stat-block__dice">{{ getDice(character()!.stats.mental.foresight.value) }}D20</span>
+                  <span class="stat-block__name">Foresight</span>
+                </div>
+                <div class="stat-block">
+                  <span class="stat-block__abbr">COR</span>
+                  <span class="stat-block__value">{{ character()!.stats.mental.courage.value }}</span>
+                  <span class="stat-block__mod" [class.positive]="getMod(character()!.stats.mental.courage.value) > 0">
+                    {{ formatMod(getMod(character()!.stats.mental.courage.value)) }}
+                  </span>
+                  <span class="stat-block__dice">{{ getDice(character()!.stats.mental.courage.value) }}D20</span>
+                  <span class="stat-block__name">Courage</span>
+                </div>
+                <div class="stat-block">
+                  <span class="stat-block__abbr">DET</span>
+                  <span class="stat-block__value">{{ character()!.stats.mental.determination.value }}</span>
+                  <span class="stat-block__mod" [class.positive]="getMod(character()!.stats.mental.determination.value) > 0">
+                    {{ formatMod(getMod(character()!.stats.mental.determination.value)) }}
+                  </span>
+                  <span class="stat-block__dice">{{ getDice(character()!.stats.mental.determination.value) }}D20</span>
+                  <span class="stat-block__name">Determination</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Magical -->
+            <div class="stat-category">
+              <h3 class="stat-category__title stat-category__title--magical">Magical</h3>
+              <div class="stat-row">
+                <div class="stat-block">
+                  <span class="stat-block__abbr">AST</span>
+                  <span class="stat-block__value">{{ character()!.stats.magical.astrology.value }}</span>
+                  <span class="stat-block__mod" [class.positive]="getMod(character()!.stats.magical.astrology.value) > 0">
+                    {{ formatMod(getMod(character()!.stats.magical.astrology.value)) }}
+                  </span>
+                  <span class="stat-block__dice">{{ getDice(character()!.stats.magical.astrology.value) }}D20</span>
+                  <span class="stat-block__name">Astrology</span>
+                </div>
+                <div class="stat-block">
+                  <span class="stat-block__abbr">MAG</span>
+                  <span class="stat-block__value">{{ character()!.stats.magical.magiks.value }}</span>
+                  <span class="stat-block__mod" [class.positive]="getMod(character()!.stats.magical.magiks.value) > 0">
+                    {{ formatMod(getMod(character()!.stats.magical.magiks.value)) }}
+                  </span>
+                  <span class="stat-block__dice">{{ getDice(character()!.stats.magical.magiks.value) }}D20</span>
+                  <span class="stat-block__name">Magiks</span>
+                </div>
+                <div class="stat-block">
+                  <span class="stat-block__abbr">NAT</span>
+                  <span class="stat-block__value">{{ character()!.stats.magical.nature.value }}</span>
+                  <span class="stat-block__mod" [class.positive]="getMod(character()!.stats.magical.nature.value) > 0">
+                    {{ formatMod(getMod(character()!.stats.magical.nature.value)) }}
+                  </span>
+                  <span class="stat-block__dice">{{ getDice(character()!.stats.magical.nature.value) }}D20</span>
+                  <span class="stat-block__name">Nature</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- COMBAT PANEL -->
+          <section class="panel panel--combat">
+            <h2 class="panel__title">
+              <span class="material-symbols-outlined">swords</span>
+              Combat
+            </h2>
+            
+            <div class="combat-stats">
+              <div class="combat-stat">
+                <span class="combat-stat__value">{{ character()!.combat.actionPoints }}</span>
+                <span class="combat-stat__label">Action Points</span>
+              </div>
+              <div class="combat-stat">
+                <span class="combat-stat__value">{{ character()!.combat.baseMovement }} ft</span>
+                <span class="combat-stat__label">Movement</span>
+              </div>
+              <div class="combat-stat">
+                <span class="combat-stat__value">{{ formatMod(character()!.combat.initiativeMod) }}</span>
+                <span class="combat-stat__label">Initiative</span>
+              </div>
+            </div>
+
+            <div class="combat-bonuses">
+              <div class="bonus-section">
+                <h4 class="bonus-section__title">Attack</h4>
+                <div class="bonus-row">
+                  <span class="bonus-row__type">Physical</span>
+                  <span class="bonus-row__value">{{ formatMod(character()!.computed.attackBonuses.physical) }}</span>
+                </div>
+                <div class="bonus-row">
+                  <span class="bonus-row__type">Ranged</span>
+                  <span class="bonus-row__value">{{ formatMod(character()!.computed.attackBonuses.ranged) }}</span>
+                </div>
+                <div class="bonus-row">
+                  <span class="bonus-row__type">Magical</span>
+                  <span class="bonus-row__value">{{ formatMod(character()!.computed.attackBonuses.magical) }}</span>
+                </div>
+              </div>
+              <div class="bonus-section">
+                <h4 class="bonus-section__title">Defense</h4>
+                <div class="bonus-row">
+                  <span class="bonus-row__type">Physical</span>
+                  <span class="bonus-row__value">{{ formatMod(character()!.computed.defenseBonuses.physical) }}</span>
+                </div>
+                <div class="bonus-row">
+                  <span class="bonus-row__type">Ranged</span>
+                  <span class="bonus-row__value">{{ formatMod(character()!.computed.defenseBonuses.ranged) }}</span>
+                </div>
+                <div class="bonus-row">
+                  <span class="bonus-row__type">Magical</span>
+                  <span class="bonus-row__value">{{ formatMod(character()!.computed.defenseBonuses.magical) }}</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- COMPONENTS PANEL -->
+          @if (hasComponents()) {
+            <section class="panel panel--components">
+              <h2 class="panel__title">
+                <span class="material-symbols-outlined">auto_awesome</span>
+                Components
+              </h2>
+              <div class="components-list">
+                @if (character()!.components.focusPoints) {
+                  <div class="component-item component-item--focus">
+                    <span class="component-item__icon material-symbols-outlined">adjust</span>
+                    <div class="component-item__info">
+                      <span class="component-item__name">Focus Points</span>
+                      <span class="component-item__value">
+                        {{ character()!.components.focusPoints!.current }} / {{ character()!.components.focusPoints!.max }}
+                      </span>
+                    </div>
+                  </div>
+                }
+                @if (character()!.components.lifeSeeds) {
+                  <div class="component-item component-item--life">
+                    <span class="component-item__icon material-symbols-outlined">eco</span>
+                    <div class="component-item__info">
+                      <span class="component-item__name">Life Seeds</span>
+                      <span class="component-item__value">
+                        {{ character()!.components.lifeSeeds!.current }} / {{ character()!.components.lifeSeeds!.max }}
+                      </span>
+                    </div>
+                  </div>
+                }
+                @if (character()!.components.voidShards) {
+                  <div class="component-item component-item--void">
+                    <span class="component-item__icon material-symbols-outlined">dark_mode</span>
+                    <div class="component-item__info">
+                      <span class="component-item__name">Void Shards</span>
+                      <span class="component-item__value">
+                        {{ character()!.components.voidShards!.current }} / {{ character()!.components.voidShards!.max }}
+                      </span>
+                    </div>
+                  </div>
+                }
+              </div>
+            </section>
+          }
+        </div>
+
+        <!-- CENTER COLUMN -->
+        <div class="column column--center">
+          
+          <!-- EQUIPMENT PANEL -->
+          <section class="panel panel--equipment">
+            <h2 class="panel__title">
+              <span class="material-symbols-outlined">shield</span>
+              Equipment
+            </h2>
+
+            <!-- Weapons -->
+            <div class="equipment-section">
+              <h3 class="equipment-section__title">
+                <span class="material-symbols-outlined">swords</span>
+                Weapons
+              </h3>
+              @if (character()!.equipment.weapons.length > 0) {
+                <div class="equipment-list">
+                  @for (weapon of character()!.equipment.weapons; track weapon.id) {
+                    <div class="weapon-card">
+                      <div class="weapon-card__header">
+                        <span class="weapon-card__name">{{ weapon.customName || weapon.name }}</span>
+                        <span class="weapon-card__type">{{ formatWeaponType(weapon.type) }}</span>
+                      </div>
+                      <div class="weapon-card__stats">
+                        <span class="weapon-card__stat">
+                          <span class="weapon-card__stat-label">DMG</span>
+                          <span class="weapon-card__stat-value">{{ weapon.damage }}</span>
+                        </span>
+                        <span class="weapon-card__stat">
+                          <span class="weapon-card__stat-label">RNG</span>
+                          <span class="weapon-card__stat-value">{{ weapon.range }}</span>
+                        </span>
+                        <span class="weapon-card__stat">
+                          <span class="weapon-card__stat-label">AP</span>
+                          <span class="weapon-card__stat-value">{{ weapon.apCost }}</span>
+                        </span>
+                      </div>
+                      <div class="weapon-card__hp">
+                        <div class="weapon-card__hp-bar">
+                          <div class="weapon-card__hp-fill" [style.width.%]="getResourcePercent(weapon.currentHp, weapon.maxHp)"></div>
+                        </div>
+                        <span class="weapon-card__hp-text">{{ weapon.currentHp }}/{{ weapon.maxHp }} HP</span>
+                      </div>
+                      @if (weapon.special) {
+                        <p class="weapon-card__special">{{ weapon.special }}</p>
+                      }
+                    </div>
+                  }
+                </div>
+              } @else {
+                <p class="empty-message">No weapons equipped</p>
+              }
+            </div>
+
+            <!-- Armor -->
+            <div class="equipment-section">
+              <h3 class="equipment-section__title">
+                <span class="material-symbols-outlined">shield_person</span>
+                Armor
+                <span class="equipment-section__meta">Total: {{ character()!.computed.totalArmorHp }} HP</span>
+              </h3>
+              <div class="armor-grid">
+                @for (slot of armorSlots; track slot) {
+                  <div class="armor-slot" [class.armor-slot--empty]="!character()!.equipment.armor[slot]">
+                    <span class="armor-slot__label">{{ formatArmorSlot(slot) }}</span>
+                    @if (character()!.equipment.armor[slot]; as armor) {
+                      <div class="armor-slot__info">
+                        <span class="armor-slot__name">{{ armor.name }}</span>
+                        <span class="armor-slot__dr">DR: {{ armor.damageReduction.dice }}</span>
+                        <div class="armor-slot__hp-bar">
+                          <div class="armor-slot__hp-fill" [style.width.%]="getResourcePercent(armor.currentHp, armor.maxHp)"></div>
+                        </div>
+                        <span class="armor-slot__hp-text">{{ armor.currentHp }}/{{ armor.maxHp }}</span>
+                      </div>
+                    } @else {
+                      <span class="armor-slot__empty">Empty</span>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- Accessories -->
+            @if (character()!.equipment.accessories.length > 0) {
+              <div class="equipment-section">
+                <h3 class="equipment-section__title">
+                  <span class="material-symbols-outlined">diamond</span>
+                  Accessories
+                </h3>
+                <div class="accessories-list">
+                  @for (accessory of character()!.equipment.accessories; track accessory.id) {
+                    <div class="accessory-card">
+                      <span class="accessory-card__name">{{ accessory.name }}</span>
+                      <span class="accessory-card__effect">{{ accessory.effect }}</span>
+                      <span class="accessory-card__hp">{{ accessory.currentHp }}/{{ accessory.maxHp }} HP</span>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          </section>
+
+          <!-- ABILITIES PANEL -->
+          <section class="panel panel--abilities">
+            <h2 class="panel__title">
+              <span class="material-symbols-outlined">bolt</span>
+              Prepared Abilities
+              <span class="panel__title-meta">{{ character()!.abilities.prepared.length }} / {{ character()!.abilities.maxPrepared }}</span>
+            </h2>
+            @if (character()!.abilities.prepared.length > 0) {
+              <div class="abilities-list">
+                @for (ability of character()!.abilities.prepared; track ability.id) {
+                  <div class="ability-card" [class.ability-card--passive]="ability.isPassive">
+                    <div class="ability-card__header">
+                      <span class="ability-card__name">{{ ability.name }}</span>
+                      <div class="ability-card__badges">
+                        @if (ability.isPassive) {
+                          <span class="badge badge--passive">Passive</span>
+                        }
+                        @if (ability.isRitual) {
+                          <span class="badge badge--ritual">Ritual</span>
+                        }
+                        @if (ability.isSustained) {
+                          <span class="badge badge--sustained">Sustained</span>
+                        }
+                      </div>
+                    </div>
+                    <div class="ability-card__meta">
+                      @if (ability.apCost !== null) {
+                        <span class="ability-card__meta-item">
+                          <span class="material-symbols-outlined">schedule</span>
+                          {{ ability.apCost }} AP
+                        </span>
+                      }
+                      <span class="ability-card__meta-item">
+                        <span class="material-symbols-outlined">straighten</span>
+                        {{ ability.range }}
+                      </span>
+                      <span class="ability-card__meta-item">
+                        <span class="material-symbols-outlined">target</span>
+                        {{ ability.target }}
+                      </span>
+                      <span class="ability-card__meta-item">
+                        <span class="material-symbols-outlined">timer</span>
+                        {{ ability.duration }}
+                      </span>
+                    </div>
+                    @if (ability.damage) {
+                      <div class="ability-card__damage">
+                        <span class="material-symbols-outlined">local_fire_department</span>
+                        {{ ability.damage }}
+                      </div>
+                    }
+                    @if (ability.healing) {
+                      <div class="ability-card__healing">
+                        <span class="material-symbols-outlined">healing</span>
+                        {{ ability.healing }}
+                      </div>
+                    }
+                    <p class="ability-card__description">{{ ability.description }}</p>
+                    <span class="ability-card__source">{{ formatAbilitySource(ability.source) }}</span>
+                  </div>
+                }
+              </div>
+            } @else {
+              <p class="empty-message">No abilities prepared</p>
+            }
+          </section>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="column column--right">
+          
+          <!-- SKILLS PANEL -->
+          <section class="panel panel--skills">
+            <h2 class="panel__title">
+              <span class="material-symbols-outlined">school</span>
+              Skills
+            </h2>
+            @if (trainedSkillsCount() > 0) {
+              <div class="skills-list">
+                @for (skill of character()!.resolvedSkills; track skill.id) {
+                  @if (skill.level > 0) {
+                    <div class="skill-row">
+                      <span class="skill-row__name">{{ skill.name }}</span>
+                      <div class="skill-row__level">
+                        <div class="skill-row__pips">
+                          @for (pip of [1,2,3,4,5,6,7,8,9,10]; track pip) {
+                            <span class="skill-row__pip" [class.skill-row__pip--filled]="pip <= skill.level"></span>
+                          }
+                        </div>
+                        <span class="skill-row__bonus">+{{ skill.bonusDice }}D20</span>
+                      </div>
+                    </div>
+                  }
+                }
+              </div>
+            } @else {
+              <p class="empty-message">No trained skills</p>
+            }
+          </section>
+
+          <!-- MAGIC PANEL -->
+          @if (hasMagicFocuses()) {
+            <section class="panel panel--magic">
+              <h2 class="panel__title">
+                <span class="material-symbols-outlined">magic_button</span>
+                Magic
+              </h2>
+              
+              @if (cosmicFocuses().length > 0) {
+                <div class="magic-college magic-college--cosmic">
+                  <div class="magic-college__header">
+                    <span class="magic-college__name">Cosmic</span>
+                    <span class="magic-college__degree">{{ getCollegeDegree('cosmic') }}</span>
+                  </div>
+                  <div class="magic-college__focuses">
+                    @for (focus of cosmicFocuses(); track focus.id) {
+                      <div class="focus-item">
+                        <span class="focus-item__name">{{ formatFocusName(focus.id) }}</span>
+                        <span class="focus-item__level">Lv. {{ focus.level }}</span>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+
+              @if (earthlyFocuses().length > 0) {
+                <div class="magic-college magic-college--earthly">
+                  <div class="magic-college__header">
+                    <span class="magic-college__name">Earthly</span>
+                    <span class="magic-college__degree">{{ getCollegeDegree('earthly') }}</span>
+                  </div>
+                  <div class="magic-college__focuses">
+                    @for (focus of earthlyFocuses(); track focus.id) {
+                      <div class="focus-item">
+                        <span class="focus-item__name">{{ formatFocusName(focus.id) }}</span>
+                        <span class="focus-item__level">Lv. {{ focus.level }}</span>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+
+              @if (deadFocuses().length > 0) {
+                <div class="magic-college magic-college--dead">
+                  <div class="magic-college__header">
+                    <span class="magic-college__name">Dead</span>
+                    <span class="magic-college__degree">{{ getCollegeDegree('dead') }}</span>
+                  </div>
+                  <div class="magic-college__focuses">
+                    @for (focus of deadFocuses(); track focus.id) {
+                      <div class="focus-item">
+                        <span class="focus-item__name">{{ formatFocusName(focus.id) }}</span>
+                        <span class="focus-item__level">Lv. {{ focus.level }}</span>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </section>
+          }
+
+          <!-- INVENTORY PANEL -->
+          <section class="panel panel--inventory">
+            <h2 class="panel__title">
+              <span class="material-symbols-outlined">inventory_2</span>
+              Inventory
+            </h2>
+            
+            <!-- Currency -->
+            <div class="currency-display">
+              <span class="material-symbols-outlined">paid</span>
+              <span class="currency-display__amount">{{ character()!.currency.wealth | number }}</span>
+              <span class="currency-display__era">{{ character()!.currency.era }}</span>
+            </div>
+
+            @if (character()!.inventory.consumables.length > 0) {
+              <div class="inventory-section">
+                <h4 class="inventory-section__title">Consumables</h4>
+                <ul class="item-list">
+                  @for (item of character()!.inventory.consumables; track item.id) {
+                    <li class="item-list__item">
+                      <span class="item-list__name">{{ item.customName || item.name }}</span>
+                      <span class="item-list__qty">×{{ item.quantity }}</span>
+                    </li>
+                  }
+                </ul>
+              </div>
+            }
+
+            @if (character()!.inventory.general.length > 0) {
+              <div class="inventory-section">
+                <h4 class="inventory-section__title">General</h4>
+                <ul class="item-list">
+                  @for (item of character()!.inventory.general; track item.id) {
+                    <li class="item-list__item">
+                      <span class="item-list__name">{{ item.customName || item.name }}</span>
+                      @if (item.stackable && item.quantity > 1) {
+                        <span class="item-list__qty">×{{ item.quantity }}</span>
+                      }
+                    </li>
+                  }
+                </ul>
+              </div>
+            }
+
+            @if (character()!.inventory.consumables.length === 0 && character()!.inventory.general.length === 0) {
+              <p class="empty-message">Inventory is empty</p>
+            }
+          </section>
+
+          <!-- SESSION LOG -->
+          @if (character()!.sessionLog.length > 0) {
+            <section class="panel panel--sessions">
+              <h2 class="panel__title">
+                <span class="material-symbols-outlined">event_note</span>
+                Session Log
+              </h2>
+              <div class="session-log">
+                @for (entry of character()!.sessionLog; track entry.session) {
+                  <div class="session-entry">
+                    <div class="session-entry__header">
+                      <span class="session-entry__number">Session {{ entry.session }}</span>
+                      @if (entry.date) {
+                        <span class="session-entry__date">{{ entry.date }}</span>
+                      }
+                      <span class="session-entry__xp">+{{ entry.xpGained }} XP</span>
+                    </div>
+                    @if (entry.notes) {
+                      <p class="session-entry__notes">{{ entry.notes }}</p>
+                    }
+                  </div>
+                }
+              </div>
+            </section>
+          }
+        </div>
+      </div>
+
+      <!-- ================================================================ -->
+      <!-- NARRATIVE SECTION (Full Width) -->
+      <!-- ================================================================ -->
+      <div class="sheet-narrative">
+        @if (character()!.backstory) {
+          <section class="panel panel--backstory">
+            <h2 class="panel__title">
+              <span class="material-symbols-outlined">history_edu</span>
+              Backstory
+            </h2>
+            <div class="narrative-text">{{ character()!.backstory }}</div>
+          </section>
+        }
+
+        @if (character()!.appearance) {
+          <section class="panel panel--appearance">
+            <h2 class="panel__title">
+              <span class="material-symbols-outlined">face</span>
+              Appearance
+            </h2>
+            <div class="narrative-text">{{ character()!.appearance }}</div>
+          </section>
+        }
+
+        @if (character()!.relationships.length > 0) {
+          <section class="panel panel--relationships">
+            <h2 class="panel__title">
+              <span class="material-symbols-outlined">group</span>
+              Relationships
+            </h2>
+            <div class="relationships-grid">
+              @for (rel of character()!.relationships; track rel.name) {
+                <div class="relationship-card" [class]="'relationship-card--' + rel.type">
+                  <span class="relationship-card__type">{{ rel.type }}</span>
+                  <span class="relationship-card__name">{{ rel.name }}</span>
+                  @if (rel.notes) {
+                    <span class="relationship-card__notes">{{ rel.notes }}</span>
+                  }
+                </div>
+              }
+            </div>
+          </section>
+        }
+      </div>
+    </div>
+  }
+</div>

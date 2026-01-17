@@ -1,5 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { CharacterService } from '@core/services/character.service';
 import { CharacterSummary } from '@core/models';
 import { CharacterCardComponent } from './components/character-card/character-card.component';
@@ -7,9 +8,21 @@ import { CharacterCardComponent } from './components/character-card/character-ca
 @Component({
   selector: 'app-characters',
   standalone: true,
-  imports: [CommonModule, CharacterCardComponent],
+  imports: [CommonModule, RouterLink, CharacterCardComponent],
   template: `
     <div class="characters-page">
+      <!-- Breadcrumb Navigation -->
+      <nav class="breadcrumb-nav">
+        <div class="breadcrumb-container">
+          <a routerLink="/" class="breadcrumb-link">
+            <span class="material-symbols-outlined">home</span>
+            <span>Home</span>
+          </a>
+          <span class="breadcrumb-separator material-symbols-outlined">chevron_right</span>
+          <span class="breadcrumb-current">Characters</span>
+        </div>
+      </nav>
+
       <!-- Hero Header -->
       <header class="page-header">
         <div class="header-content">
@@ -88,17 +101,77 @@ import { CharacterCardComponent } from './components/character-card/character-ca
     }
 
     // =========================================================================
+    // BREADCRUMB NAVIGATION
+    // =========================================================================
+
+    .breadcrumb-nav {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      padding: $spacing-4;
+
+      @include respond-to('md') {
+        padding: $spacing-6;
+      }
+    }
+
+    .breadcrumb-container {
+      display: flex;
+      align-items: center;
+      gap: $spacing-2;
+      max-width: $breakpoint-lg;
+      margin: 0 auto;
+    }
+
+    .breadcrumb-link {
+      display: inline-flex;
+      align-items: center;
+      gap: $spacing-1;
+      padding: $spacing-1 $spacing-2;
+      font-size: $font-size-sm;
+      font-weight: $font-weight-medium;
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      border-radius: $border-radius-sm;
+      @include transition(color, background-color);
+
+      &:hover {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .material-symbols-outlined {
+        font-size: 18px;
+      }
+    }
+
+    .breadcrumb-separator {
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .breadcrumb-current {
+      font-size: $font-size-sm;
+      font-weight: $font-weight-medium;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    // =========================================================================
     // HEADER
     // =========================================================================
 
     .page-header {
       position: relative;
       padding: $spacing-12 $spacing-4 $spacing-10;
+      padding-top: $spacing-16; // Extra padding for breadcrumb
       background: var(--gradient-hero);
       overflow: hidden;
 
       @include respond-to('md') {
         padding: $spacing-16 $spacing-6 $spacing-12;
+        padding-top: $spacing-20; // Extra padding for breadcrumb
       }
     }
 
