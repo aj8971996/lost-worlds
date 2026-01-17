@@ -7,7 +7,7 @@
     </div>
   }
 
-    <!-- Error State -->
+  <!-- Error State -->
   @if (error()) {
     <div class="session-detail__error">
       <span class="error-icon material-symbols-outlined" aria-hidden="true">warning</span>
@@ -20,7 +20,6 @@
     </div>
   }
 
-
   <!-- Session Content -->
   @if (!loading() && !error() && session(); as s) {
     <!-- Hero Header -->
@@ -28,10 +27,19 @@
       <div class="session-hero__backdrop"></div>
       <div class="session-hero__content">
         <nav class="session-hero__breadcrumb">
+          <a routerLink="/" class="breadcrumb-link">Home</a>
+          <span class="breadcrumb-separator">/</span>
           <a routerLink="/sessions" class="breadcrumb-link">Sessions</a>
           <span class="breadcrumb-separator">/</span>
           <span class="breadcrumb-current">{{ sessionTitle() }}</span>
         </nav>
+
+        <!-- Campaign Badge -->
+        @if (s.campaign) {
+          <div class="session-hero__campaign">
+            <span class="campaign-tag">{{ s.campaign.name }}</span>
+          </div>
+        }
 
         <div class="session-hero__number">
           @if (s.sessionNumber === 0) {
@@ -60,8 +68,27 @@
               {{ s.computed.wordCount }} words
             </span>
           }
-        </div>
 
+          @if (s.computed.totalNpcs > 0) {
+            <span class="meta-item">
+              <span class="meta-icon material-symbols-outlined" aria-hidden="true">person</span>
+              {{ s.computed.totalNpcs }} {{ s.computed.totalNpcs === 1 ? 'NPC' : 'NPCs' }}
+              @if (s.computed.newNpcs > 0) {
+                <span class="meta-new">({{ s.computed.newNpcs }} new)</span>
+              }
+            </span>
+          }
+
+          @if (s.computed.totalLocations > 0) {
+            <span class="meta-item">
+              <span class="meta-icon material-symbols-outlined" aria-hidden="true">location_on</span>
+              {{ s.computed.totalLocations }} {{ s.computed.totalLocations === 1 ? 'location' : 'locations' }}
+              @if (s.computed.newLocations > 0) {
+                <span class="meta-new">({{ s.computed.newLocations }} new)</span>
+              }
+            </span>
+          }
+        </div>
 
         <!-- Players -->
         @if (s.players.length > 0) {
@@ -91,66 +118,168 @@
       </div>
     </header>
 
-    <!-- Session Narrative -->
-    <div class="session-narrative">
-      <!-- Preface Section -->
-      @if (s.sessionNotesPreface) {
-        <section class="narrative-section narrative-section--preface">
-          <h2 class="narrative-section__title">Session Preface</h2>
-          <p class="narrative-section__text">
-            {{ s.sessionNotesPreface }}
-          </p>
-        </section>
-      }
+    <!-- Main Content Area -->
+    <div class="session-content">
+      <!-- Session Narrative -->
+      <div class="session-narrative">
+        <!-- Preface Section -->
+        @if (s.sessionNotesPreface) {
+          <section class="narrative-section narrative-section--preface">
+            <h2 class="narrative-section__title">
+              <span class="section-icon material-symbols-outlined" aria-hidden="true">menu_book</span>
+              Session Preface
+            </h2>
+            <div class="narrative-section__text">
+              <p>{{ s.sessionNotesPreface }}</p>
+            </div>
+          </section>
+        }
 
-      <!-- Divider -->
-      @if (s.sessionNotesPreface && s.sessionNotesCombat) {
-        <div class="narrative-divider">
-          <span class="divider-line"></span>
-          <span class="divider-icon material-symbols-outlined" aria-hidden="true">sports_martial_arts</span>
-          <span class="divider-line"></span>
-        </div>
-      }
+        <!-- Divider -->
+        @if (s.sessionNotesPreface && s.sessionNotesCombat) {
+          <div class="narrative-divider">
+            <span class="divider-line"></span>
+            <span class="divider-icon material-symbols-outlined" aria-hidden="true">sports_martial_arts</span>
+            <span class="divider-line"></span>
+          </div>
+        }
 
-      <!-- Combat Section -->
-      @if (s.sessionNotesCombat) {
-        <section class="narrative-section narrative-section--combat">
-          <h2 class="narrative-section__title">Session Conflict</h2>
-          <p class="narrative-section__text">
-            {{ s.sessionNotesCombat }}
-          </p>
-        </section>
-      }
+        <!-- Combat Section -->
+        @if (s.sessionNotesCombat) {
+          <section class="narrative-section narrative-section--combat">
+            <h2 class="narrative-section__title">
+              <span class="section-icon material-symbols-outlined" aria-hidden="true">swords</span>
+              Session Conflict
+            </h2>
+            <div class="narrative-section__text">
+              <p>{{ s.sessionNotesCombat }}</p>
+            </div>
+          </section>
+        }
 
-      <!-- Divider -->
-      @if (s.sessionNotesPreface && s.sessionNotesCombat) {
-        <div class="narrative-divider">
-          <span class="divider-line"></span>
-          <span class="divider-icon material-symbols-outlined" aria-hidden="true">sports_martial_arts</span>
-          <span class="divider-line"></span>
-        </div>
-      }
+        <!-- Divider -->
+        @if (s.sessionNotesCombat && s.sessionNotesEnd) {
+          <div class="narrative-divider">
+            <span class="divider-line"></span>
+            <span class="divider-icon material-symbols-outlined" aria-hidden="true">flag</span>
+            <span class="divider-line"></span>
+          </div>
+        }
 
-      <!-- End Section -->
-      @if (s.sessionNotesEnd) {
-        <section class="narrative-section narrative-section--end">
-          <h2 class="narrative-section__title">Session Closing</h2>
-          <p class="narrative-section__text">
-            {{ s.sessionNotesEnd }}
-          </p>
-        </section>
-      }
+        <!-- End Section -->
+        @if (s.sessionNotesEnd) {
+          <section class="narrative-section narrative-section--end">
+            <h2 class="narrative-section__title">
+              <span class="section-icon material-symbols-outlined" aria-hidden="true">auto_stories</span>
+              Session Closing
+            </h2>
+            <div class="narrative-section__text">
+              <p>{{ s.sessionNotesEnd }}</p>
+            </div>
+          </section>
+        }
 
-      <!-- Empty State if no content -->
-      @if (!s.sessionNotesPreface && !s.sessionNotesCombat && !s.sessionNotesEnd) {
-        <div class="narrative-empty">
-          <span class="empty-icon">📜</span>
-          <p>The chronicles of this session have yet to be written...</p>
-        </div>
-      }
+        <!-- Empty State if no content -->
+        @if (!s.sessionNotesPreface && !s.sessionNotesCombat && !s.sessionNotesEnd) {
+          <div class="narrative-empty">
+            <span class="empty-icon material-symbols-outlined" aria-hidden="true">history_edu</span>
+            <p>The chronicles of this session have yet to be written...</p>
+          </div>
+        }
+      </div>
+
+      <!-- Sidebar: NPCs and Locations -->
+      <aside class="session-sidebar">
+        <!-- NPCs Met -->
+        @if (s.npcsMet && s.npcsMet.length > 0) {
+          <section class="sidebar-section sidebar-section--npcs">
+            <h3 class="sidebar-section__title">
+              <span class="section-icon material-symbols-outlined" aria-hidden="true">groups</span>
+              NPCs Met
+            </h3>
+            <ul class="npc-list">
+              @for (npc of s.npcsMet; track npc.id) {
+                <li class="npc-card" [class.npc-card--new]="npc.firstAppearance">
+                  <div class="npc-card__header">
+                    <span class="npc-card__name">{{ npc.name }}</span>
+                    @if (npc.firstAppearance) {
+                      <span class="npc-card__badge npc-card__badge--new">New</span>
+                    }
+                    @if (npc.disposition && npc.disposition !== 'unknown') {
+                      <span 
+                        class="npc-card__badge" 
+                        [class.npc-card__badge--friendly]="npc.disposition === 'friendly'"
+                        [class.npc-card__badge--hostile]="npc.disposition === 'hostile'"
+                        [class.npc-card__badge--neutral]="npc.disposition === 'neutral'"
+                      >
+                        {{ getDispositionLabel(npc.disposition) }}
+                      </span>
+                    }
+                  </div>
+                  @if (npc.affiliation) {
+                    <span class="npc-card__affiliation">{{ npc.affiliation }}</span>
+                  }
+                  @if (npc.description) {
+                    <p class="npc-card__description">{{ npc.description }}</p>
+                  }
+                </li>
+              }
+            </ul>
+          </section>
+        }
+
+        <!-- Locations Visited -->
+        @if (s.locationsVisited && s.locationsVisited.length > 0) {
+          <section class="sidebar-section sidebar-section--locations">
+            <h3 class="sidebar-section__title">
+              <span class="section-icon material-symbols-outlined" aria-hidden="true">map</span>
+              Locations Visited
+            </h3>
+            <ul class="location-list">
+              @for (location of s.locationsVisited; track location.id) {
+                <li class="location-card" [class.location-card--new]="location.firstVisit">
+                  <div class="location-card__header">
+                    <span class="location-card__name">{{ location.name }}</span>
+                    @if (location.firstVisit) {
+                      <span class="location-card__badge location-card__badge--new">New</span>
+                    }
+                  </div>
+                  @if (location.region) {
+                    <span class="location-card__region">
+                      <span class="region-icon material-symbols-outlined" aria-hidden="true">place</span>
+                      {{ location.region }}
+                    </span>
+                  }
+                  @if (location.type) {
+                    <span class="location-card__type">{{ getLocationTypeLabel(location.type) }}</span>
+                  }
+                  @if (location.description) {
+                    <p class="location-card__description">{{ location.description }}</p>
+                  }
+                </li>
+              }
+            </ul>
+          </section>
+        }
+
+        <!-- Items Acquired -->
+        @if (s.itemsAcquired && s.itemsAcquired.length > 0) {
+          <section class="sidebar-section sidebar-section--items">
+            <h3 class="sidebar-section__title">
+              <span class="section-icon material-symbols-outlined" aria-hidden="true">inventory_2</span>
+              Items Acquired
+            </h3>
+            <ul class="item-list">
+              @for (item of s.itemsAcquired; track item) {
+                <li class="item-tag">{{ item }}</li>
+              }
+            </ul>
+          </section>
+        }
+      </aside>
     </div>
 
-        <!-- Session Footer with Navigation -->
+    <!-- Session Footer with Navigation -->
     <footer class="session-footer">
       <div class="session-footer__nav">
         @if (previousSessionId()) {
@@ -168,11 +297,9 @@
           </span>
         }
 
-        <span class="nav-link nav-link--all">
-          <a routerLink="/sessions">
-            <span class="nav-link__text">All Sessions</span>
-          </a>
-        </span>
+        <a routerLink="/sessions" class="nav-link nav-link--all">
+          <span class="nav-link__text">All Sessions</span>
+        </a>
 
         @if (nextSessionId()) {
           <a 

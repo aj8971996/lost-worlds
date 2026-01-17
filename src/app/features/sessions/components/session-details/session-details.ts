@@ -3,7 +3,13 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 // Adjust these import paths based on your project structure
 import { SessionService } from '../../../../core/services/session.service';
-import { ResolvedSession } from '../../../../core/models/session.model';
+import { 
+  ResolvedSession, 
+  NpcDisposition, 
+  LocationType,
+  getDispositionLabel,
+  getLocationTypeLabel 
+} from '../../../../core/models/session.model';
 import { CharacterSummary } from '../../../../core/models/character.model';
 
 @Component({
@@ -55,7 +61,7 @@ export class SessionDetailsComponent implements OnInit {
       next: (session) => {
         if (session) {
           this.session.set(session);
-          this.loadAdjacentSessions(session.sessionNumber);
+          this.loadAdjacentSessions(session.sessionNumber, session.campaign.id);
         } else {
           this.error.set('Session not found');
         }
@@ -69,8 +75,8 @@ export class SessionDetailsComponent implements OnInit {
     });
   }
 
-  private loadAdjacentSessions(currentNumber: number): void {
-    this.sessionService.getSessionList().subscribe(sessions => {
+  private loadAdjacentSessions(currentNumber: number, campaignId: string): void {
+    this.sessionService.getSessionListByCampaign(campaignId).subscribe(sessions => {
       const sorted = [...sessions].sort((a, b) => a.sessionNumber - b.sessionNumber);
       const currentIndex = sorted.findIndex(s => s.sessionNumber === currentNumber);
       
@@ -99,5 +105,13 @@ export class SessionDetailsComponent implements OnInit {
 
   trackByPlayerId(_index: number, player: CharacterSummary): string {
     return player.id;
+  }
+
+  getDispositionLabel(disposition: NpcDisposition): string {
+    return getDispositionLabel(disposition);
+  }
+
+  getLocationTypeLabel(type: LocationType): string {
+    return getLocationTypeLabel(type);
   }
 }

@@ -1,9 +1,25 @@
 <div class="session-list">
+  <!-- Navigation Bar -->
+  <nav class="session-list__nav">
+    <a routerLink="/" class="nav-back">
+      <span class="nav-back__icon material-symbols-outlined" aria-hidden="true">arrow_back</span>
+      <span class="nav-back__text">Home</span>
+    </a>
+  </nav>
+
   <!-- Header -->
   <header class="session-list__header">
     <div class="session-list__title-group">
       <h1 class="session-list__title">Session Notes</h1>
-      <p class="session-list__subtitle">Chronicle of your adventures</p>
+      @if (currentCampaign(); as campaign) {
+        <p class="session-list__campaign">
+          <span class="campaign-badge" [class.campaign-badge--active]="campaign.status === 'active'">
+            {{ campaign.name }}
+          </span>
+        </p>
+      } @else {
+        <p class="session-list__subtitle">Chronicle of your adventures</p>
+      }
     </div>
     
     @if (hasSessions()) {
@@ -15,6 +31,14 @@
         <div class="stat-badge stat-badge--accent">
           <span class="stat-badge__value">{{ totalXP() | number }}</span>
           <span class="stat-badge__label">Total XP</span>
+        </div>
+        <div class="stat-badge stat-badge--info">
+          <span class="stat-badge__value">{{ totalNpcs() }}</span>
+          <span class="stat-badge__label">NPCs Met</span>
+        </div>
+        <div class="stat-badge stat-badge--success">
+          <span class="stat-badge__value">{{ totalLocations() }}</span>
+          <span class="stat-badge__label">Locations</span>
         </div>
       </div>
     }
@@ -31,7 +55,7 @@
   <!-- Error State -->
   @if (error()) {
     <div class="session-list__error">
-      <span class="error-icon">⚠️</span>
+      <span class="error-icon material-symbols-outlined" aria-hidden="true">warning</span>
       <p>{{ error() }}</p>
       <button class="btn btn--secondary" (click)="loadSessions()">
         Try Again
@@ -56,17 +80,16 @@
         (click)="toggleSortOrder()"
         [attr.aria-label]="sortOrder() === 'desc' ? 'Sort oldest first' : 'Sort newest first'"
       >
-        @if (sortOrder() === 'desc') {
-          <span class="sort-icon">↓</span> Newest First
-        } @else {
-          <span class="sort-icon">↑</span> Oldest First
-        }
+        <span class="sort-icon material-symbols-outlined" aria-hidden="true">
+          {{ sortOrder() === 'desc' ? 'arrow_downward' : 'arrow_upward' }}
+        </span>
+        {{ sortOrder() === 'desc' ? 'Newest First' : 'Oldest First' }}
       </button>
     </div>
 
     <ul class="session-list__grid" role="list">
       @for (session of sortedSessions(); track trackBySessionId($index, session)) {
-        <li class="session-card" [class.session-card--first]="session.sessionNumber === 0">
+        <li class="session-card" [class.session-card--first]="session.sessionNumber === 1">
           <a 
             [routerLink]="['/sessions', session.id]" 
             class="session-card__link"
@@ -87,19 +110,35 @@
               
               <div class="session-card__meta">
                 <time class="session-card__date" [attr.datetime]="session.sessionDate">
+                  <span class="meta-icon material-symbols-outlined" aria-hidden="true">calendar_month</span>
                   {{ formatDate(session.sessionDate) }}
                 </time>
                 
                 @if (session.playerIds.length > 0) {
                   <span class="session-card__players">
-                    <span class="players-icon">👥</span>
+                    <span class="meta-icon material-symbols-outlined" aria-hidden="true">group</span>
                     {{ session.playerIds.length }} {{ session.playerIds.length === 1 ? 'player' : 'players' }}
+                  </span>
+                }
+
+                @if (session.npcCount && session.npcCount > 0) {
+                  <span class="session-card__npcs">
+                    <span class="meta-icon material-symbols-outlined" aria-hidden="true">person</span>
+                    {{ session.npcCount }} {{ session.npcCount === 1 ? 'NPC' : 'NPCs' }}
+                  </span>
+                }
+
+                @if (session.locationCount && session.locationCount > 0) {
+                  <span class="session-card__locations">
+                    <span class="meta-icon material-symbols-outlined" aria-hidden="true">location_on</span>
+                    {{ session.locationCount }} {{ session.locationCount === 1 ? 'location' : 'locations' }}
                   </span>
                 }
               </div>
 
               <div class="session-card__xp">
                 <span class="xp-badge">
+                  <span class="xp-icon material-symbols-outlined" aria-hidden="true">auto_awesome</span>
                   +{{ session.experienceGained }} XP
                 </span>
               </div>
@@ -107,7 +146,7 @@
 
             <!-- Arrow indicator -->
             <div class="session-card__arrow">
-              <span aria-hidden="true">→</span>
+              <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
             </div>
           </a>
         </li>
