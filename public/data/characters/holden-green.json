@@ -75,7 +75,8 @@
 
   "equipment": {
     "weapons": [
-      { "refId": "throwing-knife", "quantity": 10, "currentHp": 10 }
+      { "refId": "throwing-knife", "quantity": 10, "currentHp": 6 },
+      { "refId": "throwing-star", "quantity": 10, "currentHp": 4}
     ],
     "armor": {
       "chest": { "refId": "elementalist-robes", "currentHp": 15 },
