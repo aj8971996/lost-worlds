@@ -121,7 +121,7 @@
   "tailor": {
     "id": "tailor",
     "name": "Tailor",
-    "description": "Utilize basic materials to repair bloth items.",
+    "description": "Utilize basic materials to repair cloth items.",
     "category": "craftsman",
     "associatedStat": "KNW"
   }
