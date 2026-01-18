@@ -117,5 +117,12 @@
     "description": "Knowledge of etiquette, heraldry, and navigating high society.",
     "category": "social",
     "associatedStat": "COR"
+  },
+  "tailor": {
+    "id": "tailor",
+    "name": "Tailor",
+    "description": "Utilize basic materials to repair bloth items.",
+    "category": "craftsman",
+    "associatedStat": "KNW"
   }
 }
