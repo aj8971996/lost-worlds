@@ -260,5 +260,26 @@
     "isRitual": false,
     "isSustained": false,
     "notes": "Run rabbit."
+  },
+  "greater-enchant": {
+    "id": "greater-enchant",
+    "name": "Greater Enchant",
+    "source": {
+      "college": "earthly",
+      "focus": "enchantment",
+      "requiredLevel": 3
+    },
+    "apCost": 4,
+    "staminaCost": 10,
+    "componentCost": [
+      {"type": "CP", "amount": 3}
+    ],
+    "range": "touch",
+    "target": "object",
+    "duration": "1 Hour for 2 Properties or 8 for 1",
+    "isPassive": false,
+    "isRitual": true,
+    "isSustained": false,
+    "notes": "Make it look cool"
   }
 }

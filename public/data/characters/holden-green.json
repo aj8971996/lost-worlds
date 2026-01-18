@@ -1,8 +1,8 @@
 {
   "id": "holden-green",
   "name": "Holden Green",
-  "level": 3,
-  "xp": 150,
+  "level": 4,
+  "xp": 0,
   "speciesId": "cosmo-goblin",
   "age": 45,
   "height": "6.5 ft",
@@ -15,12 +15,12 @@
     },
     "mental": {
       "knowledge": { "bonus": 0, "value": 20 },
-      "foresight": { "bonus": 0, "value": 10 },
+      "foresight": { "bonus": 0, "value": 20 },
       "courage": { "bonus": 0, "value": 0 },
       "determination": { "bonus": 0, "value": 0 }
     },
     "magical": {
-      "astrology": { "bonus": 0, "value": 15 },
+      "astrology": { "bonus": 0, "value": 20 },
       "magiks": { "bonus": 0, "value": 10 },
       "nature": { "bonus": 0, "value": -10 }
     }
@@ -47,7 +47,9 @@
   "skills": {
     "great-performer": 3,
     "bandaid-maker": 1,
-    "codebreaker": 2
+    "codebreaker": 2,
+    "vehicular-variety": 1,
+    "cosmic-diagnoser": 1
   },
 
   "magic": {
@@ -57,7 +59,7 @@
     "earthly": {
       "speed": 1,
       "weaponArts": 2,
-      "enchantment": 1
+      "enchantment": 3
     },
     "dead": {}
   },
@@ -69,13 +71,14 @@
       "weapon-bond",
       "precise-cut",
       "weapon-mastery",
-      "burst-of-speed"
+      "burst-of-speed",
+      "greater-enchant"
     ]
   },
 
   "equipment": {
     "weapons": [
-      { "refId": "throwing-knife", "quantity": 10, "currentHp": 6 },
+      { "refId": "throwing-knife", "quantity": 9, "currentHp": 6 },
       { "refId": "throwing-star", "quantity": 10, "currentHp": 4},
       { "refId": "shard-of-endless-want", "quantity": 1, "currentHp": 20}
     ],
