@@ -622,7 +622,7 @@
   &--focus { border-color: var(--color-info); }
   &--life { border-color: var(--color-success); }
   &--void { border-color: #9b59b6; }
-  &--craft { border-color: var(--color-warning); }  // Orange/amber to match crafting theme
+  &--craft { border-color: var(--color-warning); }
 
   &__icon {
     font-size: 24px;
@@ -1135,6 +1135,13 @@
     font-style: italic;
   }
 
+  &__schools {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-1;
+  }
+
+  // Keep for backward compatibility if needed
   &__focuses {
     display: flex;
     flex-direction: column;
@@ -1142,6 +1149,28 @@
   }
 }
 
+// School item - aggregated view
+.school-item {
+  display: flex;
+  justify-content: space-between;
+  padding: $spacing-2 $spacing-3;
+  background: var(--color-surface);
+  border-radius: $border-radius-sm;
+
+  &__name {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: var(--color-text);
+  }
+
+  &__level {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: var(--color-primary);
+  }
+}
+
+// Focus item - individual focus view (kept for backward compatibility)
 .focus-item {
   display: flex;
   justify-content: space-between;

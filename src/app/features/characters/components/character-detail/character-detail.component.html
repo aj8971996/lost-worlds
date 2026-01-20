@@ -608,51 +608,51 @@
                 Magic
               </h2>
               
-              @if (cosmicFocuses().length > 0) {
+              @if (cosmicSchools().length > 0) {
                 <div class="magic-college magic-college--cosmic">
                   <div class="magic-college__header">
                     <span class="magic-college__name">Cosmic</span>
                     <span class="magic-college__degree">{{ getCollegeDegree('cosmic') }}</span>
                   </div>
-                  <div class="magic-college__focuses">
-                    @for (focus of cosmicFocuses(); track focus.id) {
-                      <div class="focus-item">
-                        <span class="focus-item__name">{{ formatFocusName(focus.id) }}</span>
-                        <span class="focus-item__level">Lv. {{ focus.level }}</span>
+                  <div class="magic-college__schools">
+                    @for (school of cosmicSchools(); track school.schoolId) {
+                      <div class="school-item">
+                        <span class="school-item__name">{{ school.schoolName }}</span>
+                        <span class="school-item__level">{{ school.totalLevels }} Focus Levels</span>
                       </div>
                     }
                   </div>
                 </div>
               }
 
-              @if (earthlyFocuses().length > 0) {
+              @if (earthlySchools().length > 0) {
                 <div class="magic-college magic-college--earthly">
                   <div class="magic-college__header">
                     <span class="magic-college__name">Earthly</span>
                     <span class="magic-college__degree">{{ getCollegeDegree('earthly') }}</span>
                   </div>
-                  <div class="magic-college__focuses">
-                    @for (focus of earthlyFocuses(); track focus.id) {
-                      <div class="focus-item">
-                        <span class="focus-item__name">{{ formatFocusName(focus.id) }}</span>
-                        <span class="focus-item__level">Lv. {{ focus.level }}</span>
+                  <div class="magic-college__schools">
+                    @for (school of earthlySchools(); track school.schoolId) {
+                      <div class="school-item">
+                        <span class="school-item__name">{{ school.schoolName }}</span>
+                        <span class="school-item__level">{{ school.totalLevels }} Focus Levels</span>
                       </div>
                     }
                   </div>
                 </div>
               }
 
-              @if (deadFocuses().length > 0) {
+              @if (deadSchools().length > 0) {
                 <div class="magic-college magic-college--dead">
                   <div class="magic-college__header">
                     <span class="magic-college__name">Dead</span>
                     <span class="magic-college__degree">{{ getCollegeDegree('dead') }}</span>
                   </div>
-                  <div class="magic-college__focuses">
-                    @for (focus of deadFocuses(); track focus.id) {
-                      <div class="focus-item">
-                        <span class="focus-item__name">{{ formatFocusName(focus.id) }}</span>
-                        <span class="focus-item__level">Lv. {{ focus.level }}</span>
+                  <div class="magic-college__schools">
+                    @for (school of deadSchools(); track school.schoolId) {
+                      <div class="school-item">
+                        <span class="school-item__name">{{ school.schoolName }}</span>
+                        <span class="school-item__level">{{ school.totalLevels }} Focus Levels</span>
                       </div>
                     }
                   </div>

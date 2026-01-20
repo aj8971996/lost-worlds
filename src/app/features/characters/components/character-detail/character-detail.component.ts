@@ -8,6 +8,14 @@ import { AbilitySource, ResolvedAbility } from '@core/models/ability.model';
 import { calculateMod, calculateDice } from '@core/models/stats.model';
 import { calculateCollegeProgression, FocusLevels, MagicCollege } from '@core/models/magic.model';
 
+// Interface for aggregated school levels
+interface SchoolLevel {
+  schoolId: string;
+  schoolName: string;
+  totalLevels: number;
+  focuses: { id: string; level: number }[];
+}
+
 @Component({
   selector: 'app-character-detail',
   standalone: true,
@@ -25,10 +33,78 @@ export class CharacterDetailComponent implements OnInit {
 
   readonly armorSlots: ArmorSlot[] = ['head', 'shoulders', 'chest', 'arms', 'gloves', 'legs', 'boots'];
 
-  // Computed values for magic focuses
-  cosmicFocuses = computed(() => this.getFocusesArray(this.character()?.magic.cosmic));
-  earthlyFocuses = computed(() => this.getFocusesArray(this.character()?.magic.earthly));
-  deadFocuses = computed(() => this.getFocusesArray(this.character()?.magic.dead));
+  // Focus to School mapping
+  private readonly focusToSchool: Record<string, { school: string; schoolName: string }> = {
+    // Cosmic - Stars
+    divination: { school: 'stars', schoolName: 'School of Stars' },
+    fate: { school: 'stars', schoolName: 'School of Stars' },
+    prophecy: { school: 'stars', schoolName: 'School of Stars' },
+    constellations: { school: 'stars', schoolName: 'School of Stars' },
+    // Cosmic - Light
+    radiance: { school: 'light', schoolName: 'School of Light' },
+    protection: { school: 'light', schoolName: 'School of Light' },
+    purification: { school: 'light', schoolName: 'School of Light' },
+    // Cosmic - Time
+    acceleration: { school: 'time', schoolName: 'School of Time' },
+    delay: { school: 'time', schoolName: 'School of Time' },
+    future: { school: 'time', schoolName: 'School of Time' },
+    past: { school: 'time', schoolName: 'School of Time' },
+    // Cosmic - Void
+    shadow: { school: 'void', schoolName: 'School of Void' },
+    emptiness: { school: 'void', schoolName: 'School of Void' },
+    concealment: { school: 'void', schoolName: 'School of Void' },
+    // Cosmic - Realms
+    plasma: { school: 'realms', schoolName: 'School of Realms' },
+    aether: { school: 'realms', schoolName: 'School of Realms' },
+    gravity: { school: 'realms', schoolName: 'School of Realms' },
+    ether: { school: 'realms', schoolName: 'School of Realms' },
+    // Earthly - Elements
+    earth: { school: 'elements', schoolName: 'School of Elements' },
+    water: { school: 'elements', schoolName: 'School of Elements' },
+    fire: { school: 'elements', schoolName: 'School of Elements' },
+    air: { school: 'elements', schoolName: 'School of Elements' },
+    // Earthly - Life
+    healing: { school: 'life', schoolName: 'School of Life' },
+    growth: { school: 'life', schoolName: 'School of Life' },
+    plants: { school: 'life', schoolName: 'School of Life' },
+    beasts: { school: 'life', schoolName: 'School of Life' },
+    // Earthly - Speech
+    performance: { school: 'speech', schoolName: 'School of Speech' },
+    rhetoric: { school: 'speech', schoolName: 'School of Speech' },
+    jest: { school: 'speech', schoolName: 'School of Speech' },
+    verse: { school: 'speech', schoolName: 'School of Speech' },
+    // Earthly - Body
+    strength: { school: 'body', schoolName: 'School of Body' },
+    speed: { school: 'body', schoolName: 'School of Body' },
+    endurance: { school: 'body', schoolName: 'School of Body' },
+    weaponArts: { school: 'body', schoolName: 'School of Body' },
+    martialArts: { school: 'body', schoolName: 'School of Body' },
+    senses: { school: 'body', schoolName: 'School of Body' },
+    // Earthly - Craft
+    weapons: { school: 'craft', schoolName: 'School of Craft' },
+    wards: { school: 'craft', schoolName: 'School of Craft' },
+    tools: { school: 'craft', schoolName: 'School of Craft' },
+    items: { school: 'craft', schoolName: 'School of Craft' },
+    enchantment: { school: 'craft', schoolName: 'School of Craft' },
+    // Dead - Decay
+    disease: { school: 'decay', schoolName: 'School of Decay' },
+    entropy: { school: 'decay', schoolName: 'School of Decay' },
+    withering: { school: 'decay', schoolName: 'School of Decay' },
+    rot: { school: 'decay', schoolName: 'School of Decay' },
+    // Dead - Damned
+    pacts: { school: 'damned', schoolName: 'School of Damned' },
+    corruption: { school: 'damned', schoolName: 'School of Damned' },
+    infernal: { school: 'damned', schoolName: 'School of Damned' },
+    // Dead - Endings
+    passage: { school: 'endings', schoolName: 'School of Endings' },
+    finality: { school: 'endings', schoolName: 'School of Endings' },
+    reaper: { school: 'endings', schoolName: 'School of Endings' },
+  };
+
+  // Computed values for magic schools (aggregated from focuses)
+  cosmicSchools = computed(() => this.getSchoolLevels(this.character()?.magic.cosmic));
+  earthlySchools = computed(() => this.getSchoolLevels(this.character()?.magic.earthly));
+  deadSchools = computed(() => this.getSchoolLevels(this.character()?.magic.dead));
 
   trainedSkillsCount = computed(() => {
     const char = this.character();
@@ -93,16 +169,40 @@ export class CharacterDetailComponent implements OnInit {
   }
 
   hasMagicFocuses(): boolean {
-    return this.cosmicFocuses().length > 0 || 
-           this.earthlyFocuses().length > 0 || 
-           this.deadFocuses().length > 0;
+    return this.cosmicSchools().length > 0 || 
+           this.earthlySchools().length > 0 || 
+           this.deadSchools().length > 0;
   }
 
-  private getFocusesArray(focuses: FocusLevels | undefined): { id: string; level: number }[] {
+  /**
+   * Aggregates focus levels into school-level totals
+   */
+  private getSchoolLevels(focuses: FocusLevels | undefined): SchoolLevel[] {
     if (!focuses) return [];
-    return Object.entries(focuses)
-      .filter(([_, level]) => level > 0)
-      .map(([id, level]) => ({ id, level }));
+    
+    const schoolMap = new Map<string, SchoolLevel>();
+    
+    for (const [focusId, level] of Object.entries(focuses)) {
+      if (level <= 0) continue;
+      
+      const schoolInfo = this.focusToSchool[focusId];
+      if (!schoolInfo) continue;
+      
+      const existing = schoolMap.get(schoolInfo.school);
+      if (existing) {
+        existing.totalLevels += level;
+        existing.focuses.push({ id: focusId, level });
+      } else {
+        schoolMap.set(schoolInfo.school, {
+          schoolId: schoolInfo.school,
+          schoolName: schoolInfo.schoolName,
+          totalLevels: level,
+          focuses: [{ id: focusId, level }]
+        });
+      }
+    }
+    
+    return Array.from(schoolMap.values());
   }
 
   getCollegeDegree(college: MagicCollege): string {
@@ -207,7 +307,8 @@ export class CharacterDetailComponent implements OnInit {
       'SY': 'Sanity',
       'FP': 'Focus Points',
       'LS': 'Life Seeds',
-      'VS': 'Void Shards'
+      'VS': 'Void Shards',
+      'CP': 'Craft Points'
     };
     return names[type] || type;
   }
