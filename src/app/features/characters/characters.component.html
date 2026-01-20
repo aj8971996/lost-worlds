@@ -1,0 +1,80 @@
+<div class="characters-page">
+  <!-- Breadcrumb Navigation -->
+  <nav class="breadcrumb-nav">
+    <div class="breadcrumb-container">
+      <a routerLink="/" class="breadcrumb-link">
+        <span class="material-symbols-outlined">home</span>
+        <span>Home</span>
+      </a>
+      <span class="breadcrumb-separator material-symbols-outlined">chevron_right</span>
+      <span class="breadcrumb-current">Characters</span>
+    </div>
+  </nav>
+
+  <!-- Hero Header -->
+  <header class="page-header">
+    <div class="header-content">
+      <div class="header-icon" aria-hidden="true">
+        <span class="material-symbols-outlined">auto_stories</span>
+      </div>
+      <h1 class="page-title">Character Repository</h1>
+      <p class="page-subtitle">
+        The heroes and wanderers traversing the Lost Worlds
+      </p>
+    </div>
+    <div class="header-decoration" aria-hidden="true"></div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="page-content">
+    <!-- Loading State -->
+    @if (isLoading()) {
+      <div class="loading-state">
+        <div class="loading-spinner" aria-hidden="true">
+          <span class="material-symbols-outlined">progress_activity</span>
+        </div>
+        <p>Summoning characters from the void...</p>
+      </div>
+    }
+
+    <!-- Empty State -->
+    @else if (characters().length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon" aria-hidden="true">
+          <span class="material-symbols-outlined">person_off</span>
+        </div>
+        <h2>No Characters Found</h2>
+        <p>The repository is empty. Characters will appear here once added to the data files.</p>
+      </div>
+    }
+
+    <!-- Character Grid -->
+    @else {
+      <div class="characters-grid stagger-children">
+        @for (character of characters(); track character.id) {
+          <app-character-card [character]="character" />
+        }
+      </div>
+    }
+  </main>
+
+  <!-- Stats Footer -->
+  @if (characters().length > 0) {
+    <footer class="page-footer">
+      <div class="stat-item">
+        <span class="stat-value">{{ characters().length }}</span>
+        <span class="stat-label">Total Characters</span>
+      </div>
+      <div class="divider" aria-hidden="true"></div>
+      <div class="stat-item">
+        <span class="stat-value">{{ uniqueSpeciesCount() }}</span>
+        <span class="stat-label">Species</span>
+      </div>
+      <div class="divider" aria-hidden="true"></div>
+      <div class="stat-item">
+        <span class="stat-value">{{ averageLevel() }}</span>
+        <span class="stat-label">Avg Level</span>
+      </div>
+    </footer>
+  }
+</div>

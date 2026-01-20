@@ -1,0 +1,306 @@
+@use 'styles/abstracts/variables' as *;
+@use 'styles/abstracts/mixins' as *;
+
+// =========================================================================
+// PAGE LAYOUT
+// =========================================================================
+
+.characters-page {
+  min-height: 100vh;
+  background-color: var(--color-bg);
+}
+
+// =========================================================================
+// BREADCRUMB NAVIGATION
+// =========================================================================
+
+.breadcrumb-nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  padding: $spacing-4;
+
+  @include respond-to('md') {
+    padding: $spacing-6;
+  }
+}
+
+.breadcrumb-container {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  max-width: $breakpoint-lg;
+  margin: 0 auto;
+}
+
+.breadcrumb-link {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-1;
+  padding: $spacing-1 $spacing-2;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  border-radius: $border-radius-sm;
+  @include transition(color, background-color);
+
+  &:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .material-symbols-outlined {
+    font-size: 18px;
+  }
+}
+
+.breadcrumb-separator {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.breadcrumb-current {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+// =========================================================================
+// HEADER
+// =========================================================================
+
+.page-header {
+  position: relative;
+  padding: $spacing-12 $spacing-4 $spacing-10;
+  padding-top: $spacing-16; // Extra padding for breadcrumb
+  background: var(--gradient-hero);
+  overflow: hidden;
+
+  @include respond-to('md') {
+    padding: $spacing-16 $spacing-6 $spacing-12;
+    padding-top: $spacing-20; // Extra padding for breadcrumb
+  }
+}
+
+.header-content {
+  position: relative;
+  z-index: 1;
+  max-width: $breakpoint-lg;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.header-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin-bottom: $spacing-4;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: $border-radius-xl;
+  backdrop-filter: blur(8px);
+
+  .material-symbols-outlined {
+    font-size: 32px;
+    color: var(--color-accent);
+  }
+}
+
+.page-title {
+  margin: 0 0 $spacing-3;
+  font-family: $font-family-display;
+  font-size: $font-size-4xl;
+  font-weight: $font-weight-bold;
+  color: #fff;
+  letter-spacing: -0.02em;
+
+  @include respond-to('md') {
+    font-size: $font-size-5xl;
+  }
+}
+
+.page-subtitle {
+  margin: 0;
+  font-size: $font-size-lg;
+  color: rgba(255, 255, 255, 0.8);
+
+  @include respond-to('md') {
+    font-size: $font-size-xl;
+  }
+}
+
+.header-decoration {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(to top, var(--color-bg), transparent);
+  pointer-events: none;
+}
+
+// =========================================================================
+// CONTENT
+// =========================================================================
+
+.page-content {
+  @include container;
+  padding-top: $spacing-8;
+  padding-bottom: $spacing-12;
+
+  @include respond-to('md') {
+    padding-top: $spacing-10;
+    padding-bottom: $spacing-16;
+  }
+}
+
+// =========================================================================
+// CHARACTER GRID
+// =========================================================================
+
+.characters-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: $spacing-6;
+
+  @include respond-to('sm') {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include respond-to('lg') {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @include respond-to('xl') {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+// =========================================================================
+// LOADING STATE
+// =========================================================================
+
+.loading-state {
+  @include flex-column-center;
+  padding: $spacing-16 $spacing-4;
+  color: var(--color-text-muted);
+
+  p {
+    margin: $spacing-4 0 0;
+    font-size: $font-size-lg;
+  }
+}
+
+.loading-spinner {
+  @include flex-center;
+  width: 64px;
+  height: 64px;
+
+  .material-symbols-outlined {
+    font-size: 48px;
+    color: var(--color-primary);
+    animation: spin 1.5s linear infinite;
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+// =========================================================================
+// EMPTY STATE
+// =========================================================================
+
+.empty-state {
+  @include flex-column-center;
+  padding: $spacing-16 $spacing-4;
+  text-align: center;
+
+  h2 {
+    margin: $spacing-4 0 $spacing-2;
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-semibold;
+    color: var(--color-text);
+  }
+
+  p {
+    margin: 0;
+    max-width: 400px;
+    color: var(--color-text-muted);
+  }
+}
+
+.empty-icon {
+  @include flex-center;
+  width: 80px;
+  height: 80px;
+  background: var(--color-surface-alt);
+  border-radius: $border-radius-xl;
+
+  .material-symbols-outlined {
+    font-size: 40px;
+    color: var(--color-text-subtle);
+  }
+}
+
+// =========================================================================
+// FOOTER STATS
+// =========================================================================
+
+.page-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: $spacing-6;
+  padding: $spacing-6 $spacing-4;
+  background: var(--color-surface);
+  border-top: $border-width-thin solid var(--color-border);
+
+  @include respond-to('md') {
+    gap: $spacing-10;
+    padding: $spacing-8 $spacing-6;
+  }
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-bold;
+  color: var(--color-accent);
+  line-height: 1;
+
+  @include respond-to('md') {
+    font-size: $font-size-3xl;
+  }
+}
+
+.stat-label {
+  margin-top: $spacing-1;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  @include respond-to('md') {
+    font-size: $font-size-sm;
+  }
+}
+
+.divider {
+  width: 1px;
+  height: 40px;
+  background: var(--color-border);
+}

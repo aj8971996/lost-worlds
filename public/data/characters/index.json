@@ -2,15 +2,15 @@
   {
     "id": "holden-green",
     "name": "Holden Green",
-    "level": 3,
+    "level": 4,
     "speciesId": "cosmo-goblin",
-    "player": "Player 1"
+    "player": "The Magnificent Green Blade"
   },
   {
     "id": "rosemary-alderwood",
     "name": "RoseMary Alderwood",
-    "level": 3,
+    "level": 4,
     "speciesId": "fairy-giant",
-    "player": "Player 2"
+    "player": "Golden Nuggets Newest Cook"
   }
 ]
