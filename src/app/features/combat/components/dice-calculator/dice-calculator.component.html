@@ -1,0 +1,327 @@
+<section class="dice-calculator">
+  <!-- Header -->
+  <header class="calculator-header">
+    <h2 class="calculator-title">
+      <span class="material-symbols-outlined">casino</span>
+      Dice Calculator
+    </h2>
+    <p class="calculator-subtitle">Calculate and roll your dice pools</p>
+  </header>
+
+  <!-- Character Selection -->
+  <div class="character-select-section">
+    <label for="character-select" class="form-label">Select Character</label>
+    <select 
+      id="character-select" 
+      class="form-input character-select"
+      (change)="onCharacterSelect($event)"
+    >
+      <option value="">-- Choose a character --</option>
+      @for (char of characters(); track char.id) {
+        <option [value]="char.id">{{ char.name }} (Level {{ char.level }})</option>
+      }
+    </select>
+  </div>
+
+  @if (selectedCharacter(); as character) {
+    <!-- Mode Toggle -->
+    <div class="mode-toggle">
+      <button 
+        class="mode-btn"
+        [class.active]="mode() === 'simple'"
+        (click)="setMode('simple')"
+      >
+        <span class="material-symbols-outlined">target</span>
+        Simple Roll
+      </button>
+      <button 
+        class="mode-btn"
+        [class.active]="mode() === 'combat'"
+        (click)="setMode('combat')"
+      >
+        <span class="material-symbols-outlined">swords</span>
+        Combat Roll
+      </button>
+    </div>
+
+    <div class="calculator-content">
+      <!-- Left Panel: Selection -->
+      <div class="selection-panel">
+        @if (mode() === 'simple') {
+          <!-- Simple Mode: Stat Selection -->
+          <div class="stat-selection">
+            <h3 class="section-title">Select Stat to Roll</h3>
+            
+            @for (category of statCategories; track category) {
+              <div class="stat-category">
+                <h4 class="category-label">{{ getStatCategoryLabel(category) }}</h4>
+                <div class="stat-grid">
+                  @for (stat of getStatsForCategory(category); track stat.abbr) {
+                    <button 
+                      class="stat-btn"
+                      [class.selected]="selectedStat() === stat.abbr"
+                      (click)="selectStat(stat.abbr)"
+                    >
+                      <span class="stat-abbr">{{ stat.abbr }}</span>
+                      <span class="stat-name">{{ stat.name }}</span>
+                      <span class="stat-value">{{ stat.value }}</span>
+                      <span class="stat-dice">{{ stat.dice }}D20 {{ formatModifier(stat.mod) }}</span>
+                    </button>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <!-- Combat Mode: Attack/Defense Selection -->
+          <div class="combat-selection">
+            <!-- Combat Tab Toggle -->
+            <div class="combat-tabs">
+              <button 
+                class="combat-tab"
+                [class.active]="combatTab() === 'attack'"
+                (click)="setCombatTab('attack')"
+              >
+                <span class="material-symbols-outlined">bolt</span>
+                Attack
+              </button>
+              <button 
+                class="combat-tab"
+                [class.active]="combatTab() === 'defense'"
+                (click)="setCombatTab('defense')"
+              >
+                <span class="material-symbols-outlined">shield</span>
+                Defense
+              </button>
+            </div>
+
+            <!-- Attack/Defense Type Selection -->
+            <div class="combat-type-grid">
+              @if (combatTab() === 'attack') {
+                @for (formula of attackFormulas(); track formula.type) {
+                  <button 
+                    class="combat-type-btn"
+                    [class.selected]="selectedAttackType() === formula.type"
+                    (click)="selectAttackType(formula.type)"
+                  >
+                    <span class="combat-type-icon material-symbols-outlined">
+                      @switch (formula.type) {
+                        @case ('physical') { sports_martial_arts }
+                        @case ('ranged') { keyboard_double_arrow_right }
+                        @case ('magical') { auto_fix_high }
+                      }
+                    </span>
+                    <span class="combat-type-label">{{ formula.label }}</span>
+                    <span class="combat-type-stats">{{ formula.primaryStat }} + {{ formula.secondaryStat }}</span>
+                    <span class="combat-type-desc">{{ formula.description }}</span>
+                  </button>
+                }
+              } @else {
+                @for (formula of defenseFormulas(); track formula.type) {
+                  <button 
+                    class="combat-type-btn"
+                    [class.selected]="selectedAttackType() === formula.type"
+                    (click)="selectAttackType(formula.type)"
+                  >
+                    <span class="combat-type-icon material-symbols-outlined">
+                      @switch (formula.type) {
+                        @case ('physical') { security }
+                        @case ('ranged') { motion_blur }
+                        @case ('magical') { shield_with_heart }
+                      }
+                    </span>
+                    <span class="combat-type-label">{{ formula.label }}</span>
+                    <span class="combat-type-stats">{{ formula.primaryStat }} + {{ formula.secondaryStat }}</span>
+                    <span class="combat-type-desc">{{ formula.description }}</span>
+                  </button>
+                }
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Skills Section -->
+        @if (skillOptions().length > 0) {
+          <div class="skills-section">
+            <h3 class="section-title">
+              <span class="material-symbols-outlined">school</span>
+              Apply Skills
+            </h3>
+            <div class="skills-grid">
+              @for (skill of skillOptions(); track skill.id) {
+                <button 
+                  class="skill-btn"
+                  [class.selected]="skill.selected"
+                  (click)="toggleSkill(skill.id)"
+                >
+                  <span class="skill-name">{{ skill.name }}</span>
+                  <span class="skill-level">+{{ skill.level }}D20</span>
+                </button>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Bonus Modifiers -->
+        <div class="bonus-section">
+          <h3 class="section-title">
+            <span class="material-symbols-outlined">tune</span>
+            Adjustments
+          </h3>
+          <div class="bonus-controls">
+            <div class="bonus-control">
+              <label>Bonus Dice</label>
+              <div class="bonus-input">
+                <button class="bonus-btn" (click)="adjustBonusDice(-1)" [disabled]="bonusDice() <= 0">−</button>
+                <span class="bonus-value">{{ bonusDice() }}D20</span>
+                <button class="bonus-btn" (click)="adjustBonusDice(1)">+</button>
+              </div>
+            </div>
+            <div class="bonus-control">
+              <label>Modifier</label>
+              <div class="bonus-input">
+                <button class="bonus-btn" (click)="adjustBonusModifier(-1)">−</button>
+                <span class="bonus-value">{{ formatModifier(bonusModifier()) }}</span>
+                <button class="bonus-btn" (click)="adjustBonusModifier(1)">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Panel: Results -->
+      <div class="results-panel">
+        <!-- Calculation Preview -->
+        @if (currentCalculation(); as calc) {
+          <div class="calculation-preview">
+            <h3 class="section-title">Roll Summary</h3>
+            <div class="calc-breakdown">
+              <!-- Primary Stat -->
+              @if (calc.primaryStat; as primary) {
+                <div class="calc-row">
+                  <span class="calc-label">{{ primary.name }} ({{ primary.abbr }})</span>
+                  <span class="calc-value">{{ primary.dice }}D20 {{ formatModifier(primary.mod) }}</span>
+                </div>
+              }
+              <!-- Secondary Stat (Combat only) -->
+              @if (calc.secondaryStat; as secondary) {
+                <div class="calc-row">
+                  <span class="calc-label">{{ secondary.name }} ({{ secondary.abbr }})</span>
+                  <span class="calc-value">{{ secondary.dice }}D20 {{ formatModifier(secondary.mod) }}</span>
+                </div>
+              }
+              <!-- Skills -->
+              @for (skill of calc.skills; track skill.id) {
+                <div class="calc-row skill-row">
+                  <span class="calc-label">{{ skill.name }}</span>
+                  <span class="calc-value">+{{ skill.bonusDice }}D20</span>
+                </div>
+              }
+              <!-- Bonus Dice -->
+              @if (bonusDice() > 0) {
+                <div class="calc-row bonus-row">
+                  <span class="calc-label">Bonus Dice</span>
+                  <span class="calc-value">+{{ bonusDice() }}D20</span>
+                </div>
+              }
+              <!-- Bonus Modifier -->
+              @if (bonusModifier() !== 0) {
+                <div class="calc-row bonus-row">
+                  <span class="calc-label">Bonus Modifier</span>
+                  <span class="calc-value">{{ formatModifier(bonusModifier()) }}</span>
+                </div>
+              }
+              <!-- Total -->
+              <div class="calc-total">
+                <span class="total-dice">{{ calc.dicePool.totalDice }}D20</span>
+                <span class="total-mod">{{ formatModifier(calc.dicePool.modifier) }}</span>
+              </div>
+            </div>
+
+            <!-- Roll Button -->
+            <button 
+              class="roll-btn"
+              [class.rolling]="isRolling()"
+              [disabled]="!canRoll() || isRolling()"
+              (click)="roll()"
+            >
+              @if (isRolling()) {
+                <span class="roll-btn-content">
+                  <span class="dice-animation">🎲</span>
+                  Rolling...
+                </span>
+              } @else {
+                <span class="roll-btn-content">
+                  <span class="material-symbols-outlined">casino</span>
+                  Roll {{ calc.dicePool.totalDice }}D20
+                </span>
+              }
+            </button>
+          </div>
+        } @else {
+          <div class="no-selection">
+            <span class="material-symbols-outlined">info</span>
+            <p>Select a {{ mode() === 'simple' ? 'stat' : 'combat type' }} to calculate your dice pool</p>
+          </div>
+        }
+
+        <!-- Roll Result -->
+        @if (rollResult(); as result) {
+          <div class="roll-result" [class.critical]="result.isCritical" [class.fumble]="result.isFumble">
+            <div class="result-header">
+              @if (result.isCritical) {
+                <span class="result-badge critical">Critical!</span>
+              }
+              @if (result.isFumble) {
+                <span class="result-badge fumble">Fumble!</span>
+              }
+            </div>
+            <div class="result-dice">
+              @for (die of result.rolls; track $index) {
+                <span class="die-result" [class.nat20]="die === 20" [class.nat1]="die === 1">
+                  {{ die }}
+                </span>
+              }
+            </div>
+            <div class="result-calculation">
+              <span class="dice-total">{{ result.total }}</span>
+              <span class="modifier">{{ formatModifier(result.modifier) }}</span>
+              <span class="equals">=</span>
+              <span class="final-result">{{ result.finalResult }}</span>
+            </div>
+          </div>
+        }
+
+        <!-- Roll History -->
+        @if (rollHistory().length > 0) {
+          <div class="roll-history">
+            <div class="history-header">
+              <h3 class="section-title">
+                <span class="material-symbols-outlined">history</span>
+                Roll History
+              </h3>
+              <button class="clear-btn" (click)="clearHistory()">Clear</button>
+            </div>
+            <div class="history-list">
+              @for (entry of rollHistory(); track $index) {
+                <div class="history-entry">
+                  <span class="history-desc">{{ entry.calculation.description }}</span>
+                  <span class="history-dice">{{ entry.calculation.dicePool.totalDice }}D20</span>
+                  <span class="history-result" [class.critical]="entry.result.isCritical">
+                    {{ entry.result.finalResult }}
+                  </span>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  } @else {
+    <!-- No Character Selected -->
+    <div class="no-character">
+      <span class="material-symbols-outlined icon-xl">person_search</span>
+      <p>Select a character to begin calculating dice pools</p>
+    </div>
+  }
+</section>

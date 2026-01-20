@@ -1,0 +1,104 @@
+// ============================================================================
+// COMBAT PAGE STYLES
+// ============================================================================
+
+.combat-page {
+  padding: 2rem 1rem;
+  min-height: 100vh;
+  background-color: var(--color-background);
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+// ============================================================================
+// PAGE HEADER
+// ============================================================================
+
+.page-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.page-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 0.5rem;
+
+  .material-symbols-outlined {
+    font-size: 2.5rem;
+    color: var(--color-primary);
+  }
+}
+
+.page-subtitle {
+  color: var(--color-text-muted);
+  font-size: 1.125rem;
+  margin: 0;
+}
+
+// ============================================================================
+// COMBAT GRID
+// ============================================================================
+
+.combat-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+
+  @media (min-width: 1100px) {
+    grid-template-columns: 1fr 400px;
+    align-items: start;
+  }
+}
+
+// ============================================================================
+// PANELS
+// ============================================================================
+
+.calculator-panel {
+  order: 1;
+
+  @media (min-width: 1100px) {
+    order: 0;
+  }
+}
+
+.initiative-panel {
+  order: 0;
+
+  @media (min-width: 1100px) {
+    order: 1;
+    position: sticky;
+    top: 1rem;
+  }
+}
+
+// ============================================================================
+// RESPONSIVE ADJUSTMENTS
+// ============================================================================
+
+@media (max-width: 600px) {
+  .combat-page {
+    padding: 1rem 0.5rem;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+
+    .material-symbols-outlined {
+      font-size: 2rem;
+    }
+  }
+
+  .page-subtitle {
+    font-size: 1rem;
+  }
+}
