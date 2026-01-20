@@ -622,6 +622,7 @@
   &--focus { border-color: var(--color-info); }
   &--life { border-color: var(--color-success); }
   &--void { border-color: #9b59b6; }
+  &--craft { border-color: var(--color-warning); }  // Orange/amber to match crafting theme
 
   &__icon {
     font-size: 24px;

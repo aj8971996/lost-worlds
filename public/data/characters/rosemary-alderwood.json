@@ -1,15 +1,15 @@
 {
   "id": "rosemary-alderwood",
   "name": "RoseMary Alderwood",
-  "level": 3,
-  "xp": 150,
+  "level": 4,
+  "xp": 200,
   "speciesId": "fairy-giant",
   "age": 23,
   "height": "4'0\"",
 
   "stats": {
     "physical": {
-      "might": { "bonus": 0, "value": 30 },
+      "might": { "bonus": 0, "value": 40 },
       "grit": { "bonus": 0, "value": 0 },
       "speed": { "bonus": 0, "value": 0 }
     },
@@ -29,12 +29,12 @@
   "resources": {
     "health": { "current": 181, "max": 181 },
     "armorHp": { "current": 80, "max": 80 },
-    "stamina": { "current": 175, "max": 175 },
+    "stamina": { "current": 180, "max": 180 },
     "sanity": { "current": 143, "max": 143 }
   },
 
   "components": {
-    "lifeSeeds": { "current": 9, "max": 9 },
+    "lifeSeeds": { "current": 15, "max": 15 },
     "focusPoints": { "current": 9, "max": 9 }
   },
 
@@ -46,8 +46,8 @@
 
   "skills": {
     "best-cook": 2,
-    "earthly-beast-master": 1,
-    "cosmic-beast-master": 1,
+    "earthly-beast-master": 2,
+    "cosmic-beast-master": 2,
     "tailor": 2
   },
 
@@ -56,7 +56,8 @@
     "earthly": {
       "plants": 1,
       "beasts": 2,
-      "strength": 3
+      "strength": 3,
+      "growth": 2
     },
     "dead": {}
   },
@@ -64,11 +65,12 @@
   "abilities": {
     "prepared": [
       "predators-senses",
-      "power-strike",
+      "rampage",
       "verdant-sense",
       "iron-grip",
       "aspect-of-the-beast",
-      "colossal-guard"
+      "colossal-guard",
+      "surge-of-strength"
     ]
   },
 
@@ -122,6 +124,7 @@
   "sessionLog": [
     { "session": 0, "date": "12-20-2025", "xpGained": 100 },
     { "session": 1, "date": "01-03-2026", "xpGained": 200 },
-    { "session": 2, "date": "01-10-2026", "xpGained": 300 }
+    { "session": 2, "date": "01-10-2026", "xpGained": 300 },
+    { "session": 3, "date": "01-18-2026", "xpGained": 550 }
   ]
 }

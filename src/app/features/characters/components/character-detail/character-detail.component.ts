@@ -88,7 +88,8 @@ export class CharacterDetailComponent implements OnInit {
   hasComponents(): boolean {
     const char = this.character();
     if (!char) return false;
-    return !!(char.components.focusPoints || char.components.lifeSeeds || char.components.voidShards);
+    return !!(char.components.focusPoints || char.components.lifeSeeds || 
+              char.components.voidShards || char.components.craftPoints);
   }
 
   hasMagicFocuses(): boolean {
@@ -189,7 +190,8 @@ export class CharacterDetailComponent implements OnInit {
       'SY': 'psychology',
       'FP': 'adjust',
       'LS': 'eco',
-      'VS': 'dark_mode'
+      'VS': 'dark_mode',
+      'CP': 'construction',
     };
     return icons[type] || 'toll';
   }

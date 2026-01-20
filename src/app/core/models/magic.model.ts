@@ -128,6 +128,6 @@ export function calculateCollegeProgression(focusLevels: FocusLevels): CollegePr
 // Component types associated with each college
 export const COLLEGE_COMPONENTS: Record<MagicCollege, string[]> = {
   cosmic: ['voidShards'],
-  earthly: ['focusPoints', 'lifeSeeds'],
+  earthly: ['focusPoints', 'lifeSeeds', 'craftPoints'],
   dead: ['deathEssence']  // Placeholder - adjust based on your system
 };

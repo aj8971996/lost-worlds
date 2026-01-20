@@ -34,8 +34,9 @@
   },
 
   "components": {
-    "focusPoints": { "current": 8, "max": 8 },
-    "voidShards": { "current": 6, "max": 6 }
+    "focusPoints": { "current": 9, "max": 9 },
+    "voidShards": { "current": 6, "max": 6 },
+    "craftPoints": { "current": 9, "max": 9 }
   },
 
   "combat": {
@@ -128,6 +129,7 @@
   "sessionLog": [
     { "session": 0, "date": "12-20-2025", "xpGained": 100 },
     { "session": 1, "date": "01-03-2026", "xpGained": 200 },
-    { "session": 2, "date": "01-10-2026", "xpGained": 300 }
+    { "session": 2, "date": "01-10-2026", "xpGained": 300 },
+    { "session": 3, "date": "01-18-2026", "xpGained": 550 }
   ]
 }

@@ -12,7 +12,7 @@
       "Darkvision 60 ft",
       "Cosmic Affinity"
     ],
-    "componentAccess": ["voidShards", "focusPoints"]
+    "componentAccess": ["voidShards", "focusPoints", "craftPoints"]
   },
   "fairy-giant": {
     "id": "fairy-giant",

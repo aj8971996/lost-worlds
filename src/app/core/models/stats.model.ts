@@ -77,6 +77,7 @@ export interface CharacterComponents {
   focusPoints?: Resource;   // Earthly magic
   lifeSeeds?: Resource;     // Earthly magic (School of Life)
   voidShards?: Resource;    // Cosmic magic
+  craftPoints?: Resource;  // Earthly Magic
   // Dead magic components can be added as needed
 }
 

@@ -356,6 +356,17 @@
                     </div>
                   </div>
                 }
+                @if (character()!.components.craftPoints) {
+                  <div class="component-item component-item--craft">
+                    <span class="component-item__icon material-symbols-outlined">construction</span>
+                    <div class="component-item__info">
+                      <span class="component-item__name">Craft Points</span>
+                      <span class="component-item__value">
+                        {{ character()!.components.craftPoints!.current }} / {{ character()!.components.craftPoints!.max }}
+                      </span>
+                    </div>
+                  </div>
+                }
                 @if (character()!.components.voidShards) {
                   <div class="component-item component-item--void">
                     <span class="component-item__icon material-symbols-outlined">dark_mode</span>
