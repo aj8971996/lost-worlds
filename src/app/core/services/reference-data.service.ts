@@ -22,6 +22,26 @@ export class ReferenceDataService {
   private readonly http = inject(HttpClient);
   private readonly basePath = 'data/reference';
 
+  // Ability files organized by college/school
+  private readonly abilityFiles = [
+    // Cosmic College
+    'abilities/cosmic/stars',
+    'abilities/cosmic/light',
+    'abilities/cosmic/time',
+    'abilities/cosmic/void',
+    'abilities/cosmic/realms',
+    // Earthly College
+    'abilities/earthly/elements',
+    'abilities/earthly/life',
+    'abilities/earthly/speech',
+    'abilities/earthly/body',
+    'abilities/earthly/craft',
+    // Dead College
+    'abilities/dead/decay',
+    'abilities/dead/damned',
+    'abilities/dead/endings'
+  ];
+
   // Cached observables (shareReplay ensures single load)
   private weapons$?: Observable<Record<string, WeaponReference>>;
   private armor$?: Observable<Record<string, ArmorReference>>;
@@ -72,9 +92,13 @@ export class ReferenceDataService {
     return this.items$;
   }
 
+  /**
+   * Load all abilities from multiple school files and merge them.
+   * Files are organized by college/school for maintainability.
+   */
   getAbilities(): Observable<Record<string, AbilityReference>> {
     if (!this.abilities$) {
-      this.abilities$ = this.loadJson<Record<string, AbilityReference>>('abilities').pipe(
+      this.abilities$ = this.loadAllAbilities().pipe(
         shareReplay(1)
       );
     }
@@ -162,8 +186,95 @@ export class ReferenceDataService {
   }
 
   // ============================================================================
+  // ABILITY-SPECIFIC HELPERS
+  // ============================================================================
+
+  /**
+   * Get abilities filtered by college
+   */
+  getAbilitiesByCollege(college: 'cosmic' | 'earthly' | 'dead'): Observable<Record<string, AbilityReference>> {
+    return this.getAbilities().pipe(
+      map(abilities => {
+        const filtered: Record<string, AbilityReference> = {};
+        for (const [id, ability] of Object.entries(abilities)) {
+          if (ability.source.type === 'magic' || ability.source.type === 'physical') {
+            if (ability.source.college === college) {
+              filtered[id] = ability;
+            }
+          }
+        }
+        return filtered;
+      })
+    );
+  }
+
+  /**
+   * Get abilities filtered by focus
+   */
+  getAbilitiesByFocus(focus: string): Observable<Record<string, AbilityReference>> {
+    return this.getAbilities().pipe(
+      map(abilities => {
+        const filtered: Record<string, AbilityReference> = {};
+        for (const [id, ability] of Object.entries(abilities)) {
+          if (ability.source.type === 'magic' || ability.source.type === 'physical') {
+            if (ability.source.focus === focus) {
+              filtered[id] = ability;
+            }
+          }
+        }
+        return filtered;
+      })
+    );
+  }
+
+  /**
+   * Get abilities available at a specific focus level
+   */
+  getAbilitiesAtLevel(focus: string, level: number): Observable<Record<string, AbilityReference>> {
+    return this.getAbilities().pipe(
+      map(abilities => {
+        const filtered: Record<string, AbilityReference> = {};
+        for (const [id, ability] of Object.entries(abilities)) {
+          if (ability.source.type === 'magic' || ability.source.type === 'physical') {
+            if (ability.source.focus === focus && ability.source.requiredLevel <= level) {
+              filtered[id] = ability;
+            }
+          }
+        }
+        return filtered;
+      })
+    );
+  }
+
+  // ============================================================================
   // PRIVATE HELPERS
   // ============================================================================
+
+  /**
+   * Load all ability files and merge them into a single record
+   */
+  private loadAllAbilities(): Observable<Record<string, AbilityReference>> {
+    const abilityLoaders = this.abilityFiles.map(file =>
+      this.loadJson<Record<string, AbilityReference>>(file).pipe(
+        catchError(error => {
+          // Log but don't fail - file might not exist yet
+          console.warn(`Ability file not found: ${file}.json`);
+          return of({} as Record<string, AbilityReference>);
+        })
+      )
+    );
+
+    return forkJoin(abilityLoaders).pipe(
+      map(abilityRecords => {
+        // Merge all ability records into one
+        const merged: Record<string, AbilityReference> = {};
+        for (const record of abilityRecords) {
+          Object.assign(merged, record);
+        }
+        return merged;
+      })
+    );
+  }
 
   private loadJson<T>(filename: string): Observable<T> {
     return this.http.get<T>(`${this.basePath}/${filename}.json`).pipe(

@@ -1,0 +1,69 @@
+{
+  "predators-senses": {
+    "id": "predators-senses",
+    "name": "Predator's Senses",
+    "source": {
+      "type": "physical",
+      "college": "earthly",
+      "focus": "beasts",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "componentCost": [
+      { "type": "LS", "amount": 1 }
+    ],
+    "range": "self",
+    "target": "self",
+    "duration": "1 hour",
+    "description": "+2 D20 perception, tracking advantage, detect invisible within 10 ft.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "You get ears!"
+  },
+  "aspect-of-the-beast": {
+    "id": "aspect-of-the-beast",
+    "name": "Aspect of the Beast",
+    "source": {
+      "type": "physical",
+      "college": "earthly",
+      "focus": "beasts",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "staminaCost": 5,
+    "componentCost": [
+      { "type": "LS", "amount": 2 }
+    ],
+    "range": "self",
+    "target": "self",
+    "duration": "10 minutes",
+    "description": "Choose: Wolf (+10 ft., pack tactics), Bear (+2 GRT, +10 temp HP), Hawk (+20 ft. range, +2 D20 perception), Cat (+2 D20 stealth, no fall damage).",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "So many animals!"
+  },
+  "verdant-sense": {
+    "id": "verdant-sense",
+    "name": "Verdant Sense",
+    "source": {
+      "type": "physical",
+      "college": "earthly",
+      "focus": "plants",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "componentCost": [
+      { "type": "LS", "amount": 1 }
+    ],
+    "range": "self",
+    "target": "self",
+    "duration": "1 hour",
+    "description": "Sense creatures within 60 ft. on natural ground. Cannot be surprised. +2 D20 perception.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "One with nature."
+  }
+}

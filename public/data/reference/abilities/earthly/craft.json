@@ -1,0 +1,25 @@
+{
+  "greater-enchant": {
+    "id": "greater-enchant",
+    "name": "Greater Enchant",
+    "source": {
+      "type": "magic",
+      "college": "earthly",
+      "focus": "enchantment",
+      "requiredLevel": 3
+    },
+    "apCost": 4,
+    "staminaCost": 10,
+    "componentCost": [
+      { "type": "CP", "amount": 3 }
+    ],
+    "range": "touch",
+    "target": "object",
+    "duration": "1 hour for 2 properties or 8 hours for 1",
+    "description": "Enchant an object with magical properties. Duration depends on the number of properties applied.",
+    "isPassive": false,
+    "isRitual": true,
+    "isSustained": false,
+    "notes": "Make it look cool"
+  }
+}

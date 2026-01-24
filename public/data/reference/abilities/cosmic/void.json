@@ -1,0 +1,46 @@
+{
+  "void-sight": {
+    "id": "void-sight",
+    "name": "Void Sight",
+    "source": {
+      "type": "magic",
+      "college": "cosmic",
+      "focus": "concealment",
+      "requiredLevel": 1
+    },
+    "apCost": 1,
+    "componentCost": [
+      { "type": "VS", "amount": 1 }
+    ],
+    "range": "self",
+    "target": "self",
+    "duration": "10 minutes",
+    "description": "Caster can see invisible creatures and objects, see through magical illusions, and gains +2 D20 on checks to detect hidden doors or traps.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "Can see all that is hidden"
+  },
+  "veil-other": {
+    "id": "veil-other",
+    "name": "Veil Other",
+    "source": {
+      "type": "magic",
+      "college": "cosmic",
+      "focus": "concealment",
+      "requiredLevel": 2
+    },
+    "apCost": 2,
+    "componentCost": [
+      { "type": "VS", "amount": 2 }
+    ],
+    "range": "touch",
+    "target": "ally",
+    "duration": "30 minutes",
+    "description": "Grant one ally within touch range the effects of Fade for 30 minutes. If the ally attacks or casts offensive magic, only their concealment ends, yours remains.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "Requires Fade ability to be known. Effect mirrors Fade but on an ally."
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "weapon-mastery": {
+    "id": "weapon-mastery",
+    "name": "Weapon Mastery",
+    "source": {
+      "type": "magic",
+      "college": "earthly",
+      "focus": "weaponArts",
+      "requiredLevel": 1
+    },
+    "apCost": null,
+    "range": "self",
+    "target": "self",
+    "duration": "instant",
+    "description": "You are proficient with all weapons. When using a weapon for the first time in combat, gain +2 D20 on your first attack with it.",
+    "isPassive": true,
+    "isRitual": false,
+    "isSustained": false
+  },
+  "weapon-bond": {
+    "id": "weapon-bond",
+    "name": "Weapon Bond",
+    "source": {
+      "type": "physical",
+      "college": "earthly",
+      "focus": "weaponArts",
+      "requiredLevel": 1
+    },
+    "apCost": 1,
+    "componentCost": [
+      { "type": "FP", "amount": 1 }
+    ],
+    "range": "touch",
+    "target": "object",
+    "duration": "1 hour",
+    "description": "Choose one weapon you're holding. Gain +1 D20 on attack rolls with it. Cannot be disarmed of this weapon. Can recall weapon within 50 ft.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "The weapon has a heart"
+  },
+  "precise-cut": {
+    "id": "precise-cut",
+    "name": "Precise Cut",
+    "source": {
+      "type": "physical",
+      "college": "earthly",
+      "focus": "weaponArts",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "componentCost": [
+      { "type": "FP", "amount": 1 }
+    ],
+    "range": "melee",
+    "target": "enemy",
+    "damage": "2D8 + SPD",
+    "duration": "instant",
+    "description": "2D8 + SPD Modifier damage. Ignores 2 points of damage reduction. +1 D20 on attack roll.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "This'll sting."
+  },
+  "burst-of-speed": {
+    "id": "burst-of-speed",
+    "name": "Burst of Speed",
+    "source": {
+      "type": "physical",
+      "college": "earthly",
+      "focus": "speed",
+      "requiredLevel": 1
+    },
+    "apCost": 1,
+    "componentCost": [
+      { "type": "FP", "amount": 1 }
+    ],
+    "range": "self",
+    "target": "self",
+    "duration": "1 turn",
+    "description": "Your movement speed doubles this turn. Gain +1 D20 on SPD checks. At turn's end, lose 5 ST from exertion.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "Run rabbit."
+  },
+  "power-strike": {
+    "id": "power-strike",
+    "name": "Power Strike",
+    "source": {
+      "type": "physical",
+      "college": "earthly",
+      "focus": "strength",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "componentCost": [
+      { "type": "FP", "amount": 1 }
+    ],
+    "range": "melee",
+    "target": "enemy",
+    "damage": "3D8 + MIT",
+    "duration": "instant",
+    "description": "3D8 + MIT Modifier physical damage. Target is pushed back 10 ft.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "BAM!"
+  },
+  "iron-grip": {
+    "id": "iron-grip",
+    "name": "Iron Grip",
+    "source": {
+      "type": "physical",
+      "college": "earthly",
+      "focus": "strength",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "componentCost": [
+      { "type": "FP", "amount": 1 }
+    ],
+    "range": "5 ft",
+    "target": "enemy",
+    "duration": "sustained",
+    "description": "Grapple a target. They cannot move and must make opposed MIT check each turn to escape. While grappled, you can use Crush (1 AP) for 2D6 damage.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": true,
+    "notes": "Choke Em'"
+  },
+  "colossal-guard": {
+    "id": "colossal-guard",
+    "name": "Colossal Guard",
+    "source": {
+      "type": "physical",
+      "college": "earthly",
+      "focus": "strength",
+      "requiredLevel": 1
+    },
+    "apCost": 3,
+    "staminaCost": 10,
+    "componentCost": [
+      { "type": "FP", "amount": 3 }
+    ],
+    "range": "10 ft",
+    "target": "ally",
+    "duration": "2 rounds",
+    "description": "Choose up to 2 allies within 10 ft. Any attacks targeting them can be redirected to you. You gain +1 D20 defensive rolls.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "I'll protect you."
+  }
+}
