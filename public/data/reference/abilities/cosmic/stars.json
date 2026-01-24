@@ -13,7 +13,7 @@
       { "type": "SR", "amount": 1 }
     ],
     "range": "touch",
-    "target": "creature",
+    "target": "Enemy",
     "duration": "30 minutes",
     "description": "Connect with the celestial bodies that watch over a creature, granting them fragmented visions of incoming threats. Target gains +1 D20 when defending.",
     "isPassive": false,
@@ -58,7 +58,7 @@
       { "type": "SR", "amount": 1, "per": "10 words" }
     ],
     "range": "unlimited",
-    "target": "creature",
+    "target": "Enemy",
     "duration": "instant",
     "description": "Speak your words to a celestial body—the Sun, the Moon, a distant star—and it carries your message to one whose face you hold clearly in your mind. Telepathic message delivered to target you can visualize. The celestial body that will send the message must also be visible and have means of passing along the message.",
     "isPassive": false,
@@ -197,7 +197,7 @@
       { "type": "SR", "amount": 1 }
     ],
     "range": "30 ft",
-    "target": "creature",
+    "target": "Enemy",
     "duration": "instant",
     "description": "A gentle nudge to the threads of fate, just enough to turn a near-miss into a grazing success. Target rerolls 1 die that was just rolled. Take either result.",
     "isPassive": false,
@@ -335,7 +335,7 @@
     ],
     "sanityCost": 10,
     "range": "30 ft",
-    "target": "creature",
+    "target": "Enemy",
     "duration": "instant",
     "description": "Sharpen the moment. What would merely succeed now triumphs; what would merely fail now collapses. Declare before any roll is made by the target. Success causes any damage rolls to double, failure causes any damage rolls to halve.",
     "isPassive": false,
@@ -610,7 +610,7 @@
       { "type": "SR", "amount": 1 }
     ],
     "range": "touch",
-    "target": "creature",
+    "target": "Enemy",
     "duration": "1 turn",
     "description": "Touch a target and mark them with a stellar pattern. The stars remember them now. Target gains +1 D20 on attacks and +5 ft. movement. You always know their direction in relation to where you are facing.",
     "isPassive": false,
