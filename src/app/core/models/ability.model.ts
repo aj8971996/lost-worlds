@@ -16,10 +16,14 @@ import { MagicFocus, MagicCollege } from './magic.model';
 // Ability source - where does this ability come from?
 export type AbilitySource = 
   | { type: 'magic'; college: MagicCollege; focus: string; requiredLevel: number }
+  | { type: 'physical'; college: MagicCollege; focus: string; requiredLevel: number }
   | { type: 'skill'; skillId: string; requiredLevel: number }
   | { type: 'species'; speciesId: string }
   | { type: 'item'; itemId: string }
   | { type: 'innate' };  // Character-specific abilities
+
+// Source type literals for filtering/comparison
+export type AbilitySourceType = 'magic' | 'physical' | 'skill' | 'species' | 'item' | 'innate';
 
 // Range specification
 export type AbilityRange = 
@@ -119,6 +123,13 @@ export interface CharacterAbilities {
   
   // Optional: Track state for abilities that need it
   abilityStates?: Record<string, AbilityInstance>;
+}
+
+// Type guard to check if source has college/focus (magic or physical)
+export function hasCollegeAndFocus(source: AbilitySource): source is 
+  | { type: 'magic'; college: MagicCollege; focus: string; requiredLevel: number }
+  | { type: 'physical'; college: MagicCollege; focus: string; requiredLevel: number } {
+  return source.type === 'magic' || source.type === 'physical';
 }
 
 // Utility to check if character can prepare more abilities

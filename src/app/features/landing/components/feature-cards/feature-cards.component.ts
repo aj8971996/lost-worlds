@@ -102,8 +102,8 @@ interface FeatureCard {
       }
 
       @media (min-width: 1024px) {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 2rem;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
       }
     }
 
@@ -202,6 +202,13 @@ export class FeatureCardsComponent {
       icon: 'person',
       path: '/characters',
       accentColor: 'var(--color-primary)'
+    },
+    {
+      title: 'Ability Codex',
+      description: 'Browse and search all abilities across schools of magic. Filter by college, stats used, and ability type.',
+      icon: 'auto_fix_high',
+      path: '/abilities',
+      accentColor: '#9370db'
     },
     {
       title: 'Combat Tracker',

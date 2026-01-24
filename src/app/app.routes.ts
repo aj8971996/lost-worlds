@@ -20,6 +20,12 @@ export const routes: Routes = [
     title: 'Character Sheet | Lost Worlds'
   },
   {
+    path: 'abilities',
+    loadComponent: () => import('./features/abilities/abilities')
+      .then(m => m.AbilitiesComponent),
+    title: 'Ability Codex | Lost Worlds'
+  },
+  {
     path: 'combat',
     loadComponent: () => import('./features/combat/combat.component')
       .then(m => m.CombatComponent),

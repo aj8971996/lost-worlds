@@ -1,0 +1,864 @@
+@use 'styles/abstracts/variables' as *;
+@use 'styles/abstracts/mixins' as *;
+
+// =========================================================================
+// PAGE LAYOUT
+// =========================================================================
+
+.abilities-page {
+  min-height: 100vh;
+  padding: $spacing-4;
+  background-color: var(--color-bg);
+
+  @include respond-to('md') {
+    padding: $spacing-6;
+  }
+}
+
+// =========================================================================
+// BREADCRUMB
+// =========================================================================
+
+.breadcrumb-nav {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  max-width: 1600px;
+  margin: 0 auto $spacing-4;
+}
+
+.breadcrumb-link {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-1;
+  padding: $spacing-1 $spacing-2;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  border-radius: $border-radius-sm;
+  @include transition(color, background-color);
+
+  &:hover {
+    color: var(--color-text);
+    background: var(--color-surface-alt);
+  }
+
+  .material-symbols-outlined {
+    font-size: 18px;
+  }
+}
+
+.breadcrumb-separator {
+  font-size: 18px;
+  color: var(--color-text-subtle);
+}
+
+.breadcrumb-current {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: var(--color-text);
+}
+
+// =========================================================================
+// PAGE HEADER
+// =========================================================================
+
+.page-header {
+  max-width: 1600px;
+  margin: 0 auto $spacing-6;
+  padding: $spacing-6;
+  background: var(--gradient-hero);
+  border-radius: $border-radius-xl;
+
+  @include respond-to('md') {
+    padding: $spacing-8;
+  }
+}
+
+.header-content {
+  margin-bottom: $spacing-6;
+  text-align: center;
+
+  @include respond-to('md') {
+    text-align: left;
+  }
+}
+
+.page-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-3;
+  margin: 0 0 $spacing-2;
+  font-family: $font-family-display;
+  font-size: $font-size-3xl;
+  font-weight: $font-weight-bold;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+  @include respond-to('md') {
+    justify-content: flex-start;
+    font-size: $font-size-4xl;
+  }
+
+  .material-symbols-outlined {
+    font-size: 36px;
+    color: var(--color-accent);
+
+    @include respond-to('md') {
+      font-size: 42px;
+    }
+  }
+}
+
+.page-subtitle {
+  margin: 0;
+  font-size: $font-size-base;
+  color: rgba(255, 255, 255, 0.8);
+
+  @include respond-to('md') {
+    font-size: $font-size-lg;
+  }
+}
+
+// =========================================================================
+// SEARCH
+// =========================================================================
+
+.search-container {
+  position: relative;
+  max-width: 600px;
+  margin: 0 auto;
+
+  @include respond-to('md') {
+    margin: 0;
+  }
+}
+
+.search-icon {
+  position: absolute;
+  left: $spacing-4;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  color: var(--color-text-subtle);
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding: $spacing-3 $spacing-4 $spacing-3 $spacing-12;
+  font-size: $font-size-base;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: $border-width-thin solid var(--color-border);
+  border-radius: $border-radius-lg;
+  @include transition(border-color, box-shadow);
+
+  &::placeholder {
+    color: var(--color-text-subtle);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-subtle);
+  }
+}
+
+.search-clear {
+  position: absolute;
+  right: $spacing-3;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: var(--color-surface-alt);
+  border: none;
+  border-radius: $border-radius-full;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  @include transition(background-color, color);
+
+  &:hover {
+    background: var(--color-border);
+    color: var(--color-text);
+  }
+
+  .material-symbols-outlined {
+    font-size: 16px;
+  }
+}
+
+// =========================================================================
+// LOADING & ERROR STATES
+// =========================================================================
+
+.loading-state,
+.error-state {
+  @include flex-column-center;
+  padding: $spacing-16;
+  text-align: center;
+
+  .material-symbols-outlined {
+    font-size: 48px;
+    color: var(--color-primary);
+    margin-bottom: $spacing-4;
+  }
+
+  h2 {
+    margin: 0 0 $spacing-2;
+    font-size: $font-size-xl;
+    color: var(--color-text);
+  }
+
+  p {
+    margin: 0 0 $spacing-6;
+    color: var(--color-text-muted);
+  }
+}
+
+.loading-spinner .material-symbols-outlined {
+  animation: spin 1.5s linear infinite;
+}
+
+.error-state .material-symbols-outlined {
+  color: var(--color-error);
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+// =========================================================================
+// CONTENT LAYOUT
+// =========================================================================
+
+.content-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-6;
+  max-width: 1600px;
+  margin: 0 auto;
+
+  @include respond-to('lg') {
+    grid-template-columns: 280px 1fr;
+  }
+
+  @include respond-to('xl') {
+    grid-template-columns: 300px 1fr;
+  }
+}
+
+// =========================================================================
+// FILTERS SIDEBAR
+// =========================================================================
+
+.filters-sidebar {
+  background: var(--color-surface);
+  border: $border-width-thin solid var(--color-border);
+  border-radius: $border-radius-lg;
+  padding: $spacing-4;
+  height: fit-content;
+  position: sticky;
+  top: $spacing-4;
+
+  @include respond-to('lg') {
+    padding: $spacing-5;
+  }
+}
+
+.filters-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-4;
+  padding-bottom: $spacing-3;
+  border-bottom: $border-width-thin solid var(--color-border);
+}
+
+.filters-title {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: var(--color-text);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  .material-symbols-outlined {
+    font-size: 20px;
+    color: var(--color-accent);
+  }
+}
+
+.clear-all-btn {
+  padding: $spacing-1 $spacing-2;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  color: var(--color-error);
+  background: var(--color-error-subtle);
+  border: none;
+  border-radius: $border-radius-sm;
+  cursor: pointer;
+  @include transition(background-color);
+
+  &:hover {
+    background: var(--color-error);
+    color: #fff;
+  }
+}
+
+// =========================================================================
+// FILTER SECTIONS
+// =========================================================================
+
+.filter-section {
+  margin-bottom: $spacing-3;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.filter-section__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: $spacing-2 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text);
+  @include transition(color);
+
+  &:hover {
+    color: var(--color-primary);
+  }
+}
+
+.filter-section__title {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.filter-section__chevron {
+  font-size: 20px;
+  color: var(--color-text-muted);
+  @include transition(transform);
+
+  &.expanded {
+    transform: rotate(180deg);
+  }
+}
+
+.filter-section__content {
+  padding: $spacing-2 0;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+
+  &--grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-1;
+  }
+}
+
+// =========================================================================
+// FILTER CHECKBOXES
+// =========================================================================
+
+.filter-checkbox {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  padding: $spacing-2 $spacing-2;
+  border-radius: $border-radius-sm;
+  cursor: pointer;
+  @include transition(background-color);
+
+  &:hover {
+    background: var(--color-surface-alt);
+  }
+
+  input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  &--nested {
+    padding-left: $spacing-4;
+  }
+
+  &--compact {
+    padding: $spacing-1 $spacing-2;
+  }
+}
+
+.filter-checkbox__mark {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--color-border-strong);
+  border-radius: $border-radius-sm;
+  position: relative;
+  flex-shrink: 0;
+  @include transition(border-color, background-color);
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 5px;
+    width: 4px;
+    height: 8px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) scale(0);
+    @include transition(transform);
+  }
+}
+
+.filter-checkbox input:checked + .filter-checkbox__mark {
+  background: var(--college-color, var(--color-primary));
+  border-color: var(--college-color, var(--color-primary));
+
+  &::after {
+    transform: rotate(45deg) scale(1);
+  }
+}
+
+.filter-checkbox__label {
+  font-size: $font-size-sm;
+  color: var(--color-text);
+}
+
+// School groups
+.school-group {
+  margin-bottom: $spacing-2;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.school-group__label {
+  display: block;
+  padding: $spacing-1 $spacing-2;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+// =========================================================================
+// RESULTS AREA
+// =========================================================================
+
+.results-area {
+  min-width: 0;
+}
+
+.results-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $spacing-3;
+  margin-bottom: $spacing-4;
+}
+
+.results-count {
+  font-size: $font-size-sm;
+  color: var(--color-text-muted);
+
+  strong {
+    color: var(--color-text);
+    font-weight: $font-weight-semibold;
+  }
+}
+
+// =========================================================================
+// ACTIVE FILTER PILLS
+// =========================================================================
+
+.active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-2;
+}
+
+.filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-1;
+  padding: $spacing-1 $spacing-3;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  color: var(--color-text);
+  background: var(--color-surface-alt);
+  border: $border-width-thin solid var(--color-border);
+  border-radius: $border-radius-full;
+  cursor: pointer;
+  text-transform: capitalize;
+  @include transition(background-color, border-color);
+
+  &:hover {
+    background: var(--color-error-subtle);
+    border-color: var(--color-error);
+    color: var(--color-error);
+  }
+
+  .material-symbols-outlined {
+    font-size: 14px;
+  }
+
+  &--college {
+    background: color-mix(in srgb, var(--pill-color) 15%, transparent);
+    border-color: var(--pill-color);
+    color: var(--pill-color);
+
+    &:hover {
+      background: color-mix(in srgb, var(--pill-color) 25%, transparent);
+    }
+  }
+
+  &--stat {
+    background: var(--color-primary-subtle);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+}
+
+// =========================================================================
+// ABILITIES GRID
+// =========================================================================
+
+.abilities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: $spacing-4;
+
+  @include respond-to('xl') {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  }
+}
+
+// =========================================================================
+// ABILITY CARD
+// =========================================================================
+
+.ability-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border: $border-width-thin solid var(--color-border);
+  border-radius: $border-radius-lg;
+  padding: $spacing-5;
+  overflow: hidden;
+  @include transition(transform, box-shadow, border-color);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card);
+    border-color: var(--color-border-strong);
+  }
+
+  // College-specific styling
+  &[data-college="cosmic"] {
+    .ability-card__college-indicator { background: #9370db; }
+    .ability-card__source { color: #9370db; }
+  }
+
+  &[data-college="earthly"] {
+    .ability-card__college-indicator { background: var(--color-success); }
+    .ability-card__source { color: var(--color-success); }
+  }
+
+  &[data-college="dead"] {
+    .ability-card__college-indicator { background: #b71c1c; }
+    .ability-card__source { color: #b71c1c; }
+  }
+}
+
+.ability-card__college-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--color-border);
+}
+
+.ability-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: $spacing-3;
+  margin-bottom: $spacing-2;
+}
+
+.ability-card__name {
+  margin: 0;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: var(--color-text);
+  line-height: $line-height-tight;
+}
+
+.ability-card__ap-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+  background: var(--color-warning-subtle);
+  border: 2px solid var(--color-warning);
+  border-radius: $border-radius-base;
+  flex-shrink: 0;
+
+  .ap-value {
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    color: var(--color-warning);
+    line-height: 1;
+  }
+
+  .ap-label {
+    font-size: 9px;
+    font-weight: $font-weight-semibold;
+    color: var(--color-warning);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    line-height: 1;
+  }
+}
+
+.ability-card__source {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: $spacing-3;
+}
+
+.ability-card__description {
+  margin: 0 0 $spacing-4;
+  font-size: $font-size-sm;
+  color: var(--color-text);
+  line-height: $line-height-relaxed;
+  flex: 1;
+
+  // Clamp to 4 lines
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// =========================================================================
+// ABILITY STATS GRID
+// =========================================================================
+
+.ability-card__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-2;
+  padding: $spacing-3;
+  background: var(--color-surface-alt);
+  border-radius: $border-radius-base;
+  margin-bottom: $spacing-3;
+}
+
+.ability-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 2px;
+
+  .material-symbols-outlined {
+    font-size: 16px;
+    color: var(--color-text-subtle);
+  }
+
+  &__label {
+    font-size: 10px;
+    color: var(--color-text-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  &__value {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    color: var(--color-text);
+    text-transform: capitalize;
+  }
+}
+
+// =========================================================================
+// ABILITY COSTS
+// =========================================================================
+
+.ability-card__costs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-2;
+  margin-bottom: $spacing-3;
+}
+
+.cost-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-1;
+  padding: $spacing-1 $spacing-2;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  color: var(--color-text-muted);
+  background: var(--color-surface-alt);
+  border-radius: $border-radius-sm;
+
+  .material-symbols-outlined {
+    font-size: 14px;
+  }
+}
+
+// =========================================================================
+// ABILITY FOOTER
+// =========================================================================
+
+.ability-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing-2;
+  padding-top: $spacing-3;
+  border-top: $border-width-thin solid var(--color-border);
+  margin-top: auto;
+}
+
+.ability-card__tags {
+  display: flex;
+  gap: $spacing-1;
+}
+
+.ability-tag {
+  padding: 2px $spacing-2;
+  font-size: 10px;
+  font-weight: $font-weight-semibold;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-radius: $border-radius-sm;
+
+  &--passive {
+    background: var(--color-accent);
+    color: var(--color-text-inverse);
+  }
+
+  &--ritual {
+    background: #9b59b6;
+    color: #fff;
+  }
+
+  &--sustained {
+    background: var(--color-info);
+    color: #fff;
+  }
+}
+
+.ability-card__detected-stats {
+  display: flex;
+  gap: $spacing-1;
+}
+
+.stat-chip {
+  padding: 2px $spacing-2;
+  font-size: 10px;
+  font-weight: $font-weight-semibold;
+  color: var(--color-primary);
+  background: var(--color-primary-subtle);
+  border-radius: $border-radius-sm;
+}
+
+// =========================================================================
+// NO RESULTS
+// =========================================================================
+
+.no-results {
+  @include flex-column-center;
+  padding: $spacing-16;
+  text-align: center;
+  background: var(--color-surface);
+  border: $border-width-thin solid var(--color-border);
+  border-radius: $border-radius-lg;
+
+  .material-symbols-outlined {
+    font-size: 64px;
+    color: var(--color-text-subtle);
+    margin-bottom: $spacing-4;
+  }
+
+  h3 {
+    margin: 0 0 $spacing-2;
+    font-size: $font-size-xl;
+    color: var(--color-text);
+  }
+
+  p {
+    margin: 0 0 $spacing-6;
+    color: var(--color-text-muted);
+  }
+}
+
+// =========================================================================
+// BUTTONS
+// =========================================================================
+
+.btn {
+  @include button-base;
+}
+
+.btn-primary {
+  @include button-primary;
+}
+
+.btn-secondary {
+  @include button-secondary;
+}
+
+// =========================================================================
+// MOBILE ADJUSTMENTS
+// =========================================================================
+
+@include respond-below('lg') {
+  .filters-sidebar {
+    position: fixed;
+    inset: 0;
+    z-index: $z-index-modal;
+    border-radius: 0;
+    overflow-y: auto;
+    transform: translateX(-100%);
+    @include transition(transform);
+
+    &.is-open {
+      transform: translateX(0);
+    }
+  }
+
+  // Mobile filter toggle would be added via additional JS/Component logic
+}
