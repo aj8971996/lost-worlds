@@ -784,6 +784,9 @@
 }
 
 .armor-slot {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
   padding: $spacing-3;
   background: var(--color-surface-alt);
   border-radius: $border-radius-base;
@@ -793,52 +796,26 @@
     opacity: 0.5;
   }
 
-  &__label {
+  &__name {
     display: block;
     font-size: 10px;
     font-weight: $font-weight-semibold;
     color: var(--color-text-subtle);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    margin-bottom: $spacing-1;
   }
 
-  &__info {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  &__name {
+  &__item {
     font-size: $font-size-sm;
     font-weight: $font-weight-medium;
     color: var(--color-text);
     line-height: 1.2;
   }
 
-  &__dr {
+  &__hp {
     font-size: $font-size-xs;
     color: var(--color-primary);
     font-weight: $font-weight-semibold;
-  }
-
-  &__hp-bar {
-    height: 4px;
-    background: var(--color-surface);
-    border-radius: $border-radius-full;
-    overflow: hidden;
-    margin-top: $spacing-1;
-  }
-
-  &__hp-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--color-success), var(--color-success-hover));
-    border-radius: $border-radius-full;
-  }
-
-  &__hp-text {
-    font-size: 10px;
-    color: var(--color-text-subtle);
   }
 
   &__empty {
@@ -883,127 +860,631 @@
 }
 
 // =========================================================================
-// ABILITIES
+// ABILITIES - COLLEGE COLOR SYSTEM
+// =========================================================================
+
+$college-cosmic: #9370db;
+$college-earthly: #4caf50;
+$college-dead: #b71c1c;
+
+// =========================================================================
+// ABILITIES LIST (ROW-BASED)
 // =========================================================================
 
 .abilities-list {
   display: flex;
   flex-direction: column;
-  gap: $spacing-3;
+  gap: $spacing-2;
 }
 
-.ability-card {
-  padding: $spacing-4;
-  background: var(--color-surface-alt);
-  border-radius: $border-radius-base;
+.ability-row {
+  background: var(--color-surface);
   border: $border-width-thin solid var(--color-border);
-  border-left: 3px solid var(--color-primary);
+  border-radius: $border-radius-lg;
+  overflow: hidden;
+  @include transition(box-shadow, border-color);
 
-  &--passive {
-    border-left-color: var(--color-accent);
-    background: linear-gradient(90deg, var(--color-accent-subtle) 0%, var(--color-surface-alt) 100%);
+  &:hover {
+    border-color: var(--color-border-strong);
   }
 
-  &__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: $spacing-2;
-    gap: $spacing-2;
+  &.is-expanded {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 1px var(--color-primary);
+
+    .ability-row__chevron {
+      transform: rotate(180deg);
+    }
+
+    .ability-row__details {
+      grid-template-rows: 1fr;
+    }
   }
 
-  &__name {
+  // College-specific accent colors
+  &[data-college="cosmic"] {
+    .ability-row__college-bar { background: $college-cosmic; }
+    .ability-row__level { 
+      background: color-mix(in srgb, $college-cosmic 15%, transparent);
+      color: $college-cosmic;
+      border-color: color-mix(in srgb, $college-cosmic 30%, transparent);
+    }
+  }
+
+  &[data-college="earthly"] {
+    .ability-row__college-bar { background: $college-earthly; }
+    .ability-row__level { 
+      background: color-mix(in srgb, $college-earthly 15%, transparent);
+      color: $college-earthly;
+      border-color: color-mix(in srgb, $college-earthly 30%, transparent);
+    }
+  }
+
+  &[data-college="dead"] {
+    .ability-row__college-bar { background: $college-dead; }
+    .ability-row__level { 
+      background: color-mix(in srgb, $college-dead 15%, transparent);
+      color: $college-dead;
+      border-color: color-mix(in srgb, $college-dead 30%, transparent);
+    }
+  }
+}
+
+// =========================================================================
+// ABILITY ROW HEADER
+// =========================================================================
+
+.ability-row__header {
+  display: grid;
+  grid-template-columns: 4px 1fr auto auto auto auto;
+  align-items: center;
+  gap: $spacing-3;
+  width: 100%;
+  padding: $spacing-3 $spacing-4;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  @include transition(background-color);
+
+  &:hover {
+    background: var(--color-surface-alt);
+  }
+
+  @include respond-to('md') {
+    grid-template-columns: 4px minmax(200px, 1fr) auto minmax(120px, auto) auto auto;
+    padding: $spacing-3 $spacing-5;
+  }
+}
+
+.ability-row__college-bar {
+  width: 4px;
+  height: 100%;
+  min-height: 40px;
+  border-radius: $border-radius-full;
+  align-self: stretch;
+}
+
+.ability-row__primary {
+  min-width: 0;
+}
+
+.ability-row__name {
+  margin: 0;
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  color: var(--color-text);
+  @include truncate;
+
+  @include respond-to('md') {
+    font-size: $font-size-lg;
+  }
+}
+
+.ability-row__focus {
+  display: block;
+  font-size: $font-size-xs;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  @include truncate;
+}
+
+.ability-row__level {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: $spacing-1 $spacing-2;
+  border-radius: $border-radius-base;
+  border: $border-width-thin solid;
+  font-weight: $font-weight-bold;
+
+  &-value {
     font-size: $font-size-base;
+  }
+
+  &-label {
+    font-size: $font-size-2xs;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+}
+
+.ability-row__output {
+  display: none;
+  min-width: 0;
+  max-width: 180px;
+  overflow: hidden;
+
+  @include respond-to('md') {
+    display: block;
+  }
+
+  @include respond-to('lg') {
+    max-width: 220px;
+  }
+}
+
+.ability-row__ap {
+  display: flex;
+  align-items: center;
+}
+
+.ability-row__chevron {
+  font-size: 24px;
+  color: var(--color-text-muted);
+  @include transition(transform);
+}
+
+// =========================================================================
+// OUTPUT BADGES
+// =========================================================================
+
+.output-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-1;
+  padding: $spacing-1 $spacing-2;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  border-radius: $border-radius-base;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 100%;
+
+  .material-symbols-outlined {
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  &__value {
     font-weight: $font-weight-semibold;
-    color: var(--color-text);
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  &__badges {
-    display: flex;
-    gap: $spacing-1;
-    flex-wrap: wrap;
-  }
-
-  &__meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: $spacing-3;
-    margin-bottom: $spacing-2;
-  }
-
-  &__meta-item {
-    display: flex;
-    align-items: center;
-    gap: 4px;
+  &__type {
     font-size: $font-size-xs;
-    color: var(--color-text-muted);
-
-    .material-symbols-outlined {
-      font-size: 14px;
-      opacity: 0.7;
-    }
-
-    // Stamina cost styling
-    &--stamina {
-      color: var(--color-warning);
-      font-weight: $font-weight-semibold;
-
-      .material-symbols-outlined {
-        opacity: 1;
-        color: var(--color-warning);
-      }
-    }
-
-    // Component cost styling
-    &--component {
-      color: var(--color-primary);
-      font-weight: $font-weight-semibold;
-
-      .material-symbols-outlined {
-        opacity: 1;
-        color: var(--color-primary);
-      }
-    }
+    opacity: 0.8;
+    text-transform: capitalize;
+    flex-shrink: 0;
   }
 
-  &__damage,
-  &__healing {
-    display: inline-flex;
-    align-items: center;
-    gap: $spacing-1;
-    padding: $spacing-1 $spacing-2;
-    margin-bottom: $spacing-2;
-    font-size: $font-size-sm;
-    font-weight: $font-weight-semibold;
-    border-radius: $border-radius-sm;
-
-    .material-symbols-outlined {
-      font-size: 16px;
-    }
-  }
-
-  &__damage {
+  &--damage {
     background: var(--color-error-subtle);
     color: var(--color-error);
+
+    &[data-damage-type="sanity"] {
+      background: color-mix(in srgb, #9b59b6 15%, transparent);
+      color: #9b59b6;
+    }
+
+    &[data-damage-type="necrotic"] {
+      background: color-mix(in srgb, #7f8c8d 15%, transparent);
+      color: #7f8c8d;
+    }
+
+    &[data-damage-type="radiant"] {
+      background: color-mix(in srgb, #f1c40f 15%, transparent);
+      color: #d4a700;
+    }
+
+    &[data-damage-type="fire"] {
+      background: color-mix(in srgb, #e74c3c 15%, transparent);
+      color: #e74c3c;
+    }
+
+    &[data-damage-type="cold"] {
+      background: color-mix(in srgb, #3498db 15%, transparent);
+      color: #3498db;
+    }
   }
 
-  &__healing {
+  &--healing {
     background: var(--color-success-subtle);
     color: var(--color-success);
   }
 
-  &__description {
-    margin: 0 0 $spacing-2;
-    font-size: $font-size-sm;
-    color: var(--color-text);
-    line-height: $line-height-relaxed;
+  &--summon {
+    background: color-mix(in srgb, #9b59b6 15%, transparent);
+    color: #9b59b6;
   }
 
-  &__source {
+  &--effect {
+    background: var(--color-info-subtle);
+    color: var(--color-info);
+  }
+}
+
+// =========================================================================
+// AP BADGE
+// =========================================================================
+
+.ap-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 44px;
+  padding: $spacing-1 $spacing-2;
+  background: var(--color-warning-subtle);
+  border-radius: $border-radius-base;
+
+  &__value {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: var(--color-warning);
+  }
+
+  &__label {
+    font-size: $font-size-2xs;
+    font-weight: $font-weight-semibold;
+    color: var(--color-warning);
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+
+  &--passive {
+    background: var(--color-accent-subtle);
+    min-width: 36px;
+
+    .material-symbols-outlined {
+      font-size: 20px;
+      color: var(--color-accent);
+    }
+  }
+}
+
+// =========================================================================
+// ABILITY ROW DETAILS (EXPANDABLE)
+// =========================================================================
+
+.ability-row__details {
+  display: grid;
+  grid-template-rows: 0fr;
+  @include transition(grid-template-rows);
+}
+
+.ability-details {
+  overflow: hidden;
+  border-top: $border-width-thin solid var(--color-border);
+  background: var(--color-surface-alt);
+}
+
+.ability-details__section {
+  padding: $spacing-4 $spacing-5;
+
+  &:not(:last-child) {
+    border-bottom: $border-width-thin solid var(--color-border);
+  }
+
+  &-title {
+    margin: 0 0 $spacing-3;
     font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+}
+
+.ability-details__description {
+  p {
+    margin: 0;
+    font-size: $font-size-base;
+    line-height: $line-height-relaxed;
+    color: var(--color-text);
+  }
+}
+
+// =========================================================================
+// ABILITY STATS GRID
+// =========================================================================
+
+.ability-details__stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-3;
+  padding: $spacing-4 $spacing-5;
+  border-bottom: $border-width-thin solid var(--color-border);
+
+  @include respond-to('sm') {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 2px;
+
+  .material-symbols-outlined {
+    font-size: 18px;
     color: var(--color-text-subtle);
+  }
+
+  &__label {
+    font-size: $font-size-2xs;
+    font-weight: $font-weight-medium;
+    color: var(--color-text-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  &__value {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: var(--color-text);
+    text-transform: capitalize;
+  }
+}
+
+// =========================================================================
+// ABILITY COSTS
+// =========================================================================
+
+.ability-details__costs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-2;
+}
+
+.cost-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-1;
+  padding: $spacing-2 $spacing-3;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: $border-width-thin solid var(--color-border);
+  border-radius: $border-radius-base;
+
+  .material-symbols-outlined {
+    font-size: 16px;
+    color: var(--color-text-muted);
+  }
+
+  &--sanity {
+    background: color-mix(in srgb, #9b59b6 10%, transparent);
+    border-color: color-mix(in srgb, #9b59b6 30%, transparent);
+    color: #9b59b6;
+
+    .material-symbols-outlined {
+      color: #9b59b6;
+    }
+  }
+}
+
+// =========================================================================
+// SUMMON SECTION
+// =========================================================================
+
+.summon-stats {
+  display: flex;
+  gap: $spacing-4;
+  margin-bottom: $spacing-3;
+}
+
+.summon-stat {
+  display: flex;
+  align-items: center;
+  gap: $spacing-1;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: var(--color-text);
+
+  .material-symbols-outlined {
+    font-size: 16px;
+    color: var(--color-text-muted);
+  }
+}
+
+.summon-attacks {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+}
+
+.summon-attack {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $spacing-2;
+  padding: $spacing-2 $spacing-3;
+  background: var(--color-surface);
+  border-radius: $border-radius-base;
+  font-size: $font-size-sm;
+
+  &__name {
+    font-weight: $font-weight-semibold;
+    color: var(--color-text);
+  }
+
+  &__damage {
+    color: var(--color-error);
+    font-weight: $font-weight-medium;
+  }
+
+  &__cost {
+    padding: 2px $spacing-2;
+    background: var(--color-warning-subtle);
+    color: var(--color-warning);
+    border-radius: $border-radius-sm;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+  }
+
+  &__special {
+    flex-basis: 100%;
+    font-size: $font-size-xs;
+    color: var(--color-text-muted);
     font-style: italic;
   }
+}
+
+// =========================================================================
+// ABILITY EFFECTS
+// =========================================================================
+
+.ability-effects {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+}
+
+.effect-item {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  padding: $spacing-2 $spacing-3;
+  background: var(--color-surface);
+  border-radius: $border-radius-base;
+  font-size: $font-size-sm;
+  color: var(--color-text);
+
+  .material-symbols-outlined {
+    font-size: 16px;
+    color: var(--color-info);
+  }
+
+  &--condition {
+    .material-symbols-outlined {
+      color: var(--color-warning);
+    }
+  }
+
+  &--buff {
+    .material-symbols-outlined {
+      color: var(--color-success);
+    }
+  }
+}
+
+.effect-duration {
+  font-size: $font-size-xs;
+  color: var(--color-text-muted);
+}
+
+// =========================================================================
+// REACTION TRIGGER
+// =========================================================================
+
+.reaction-trigger {
+  margin: 0;
+  padding: $spacing-3;
+  background: color-mix(in srgb, #e67e22 10%, transparent);
+  border-left: 3px solid #e67e22;
+  border-radius: $border-radius-sm;
+  font-size: $font-size-sm;
+  color: var(--color-text);
+}
+
+// =========================================================================
+// ABILITY NOTES
+// =========================================================================
+
+.ability-details__notes {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-2;
+  background: var(--color-info-subtle);
+
+  .material-symbols-outlined {
+    font-size: 18px;
+    color: var(--color-info);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  p {
+    margin: 0;
+    font-size: $font-size-sm;
+    color: var(--color-text-muted);
+  }
+}
+
+// =========================================================================
+// ABILITY FOOTER & TAGS
+// =========================================================================
+
+.ability-details__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-3;
+  padding: $spacing-4 $spacing-5;
+  background: var(--color-surface);
+}
+
+.ability-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-2;
+}
+
+.ability-tag {
+  padding: $spacing-1 $spacing-2;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-radius: $border-radius-sm;
+
+  &--passive {
+    background: var(--color-accent);
+    color: var(--color-text-inverse);
+  }
+
+  &--ritual {
+    background: #9b59b6;
+    color: #fff;
+  }
+
+  &--sustained {
+    background: var(--color-info);
+    color: #fff;
+  }
+
+  &--reaction {
+    background: #e67e22;
+    color: #fff;
+  }
+
+  &--summon {
+    background: #9b59b6;
+    color: #fff;
+  }
+}
+
+.ability-details__source {
+  font-size: $font-size-xs;
+  color: var(--color-text-subtle);
+  font-style: italic;
 }
 
 .badge {

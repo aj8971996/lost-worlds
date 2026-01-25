@@ -4,7 +4,18 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CharacterService } from '@core/services/character.service';
 import { ResolvedCharacter, OverallAlignment } from '@core/models/character.model';
 import { ArmorSlot, ResourceCost } from '@core/models/equipment.model';
-import { AbilitySource, ComponentCost, ResolvedAbility } from '@core/models/ability.model';
+import { 
+  AbilitySource, 
+  ComponentCost, 
+  ResolvedAbility, 
+  AbilityDamage, 
+  AbilityHealing,
+  formatDamage,
+  formatHealing,
+  isReactionAbility,
+  isSummonAbility,
+  hasCollegeAndFocus
+} from '@core/models/ability.model';
 import { calculateMod, calculateDice } from '@core/models/stats.model';
 import { calculateCollegeProgression, FocusLevels, MagicCollege } from '@core/models/magic.model';
 
@@ -30,6 +41,9 @@ export class CharacterDetailComponent implements OnInit {
   character = signal<ResolvedCharacter | null>(null);
   isLoading = signal(true);
   error = signal<string | null>(null);
+
+  // Expanded abilities state (independent - multiple can be open)
+  expandedAbilities = signal<Set<string>>(new Set());
 
   readonly armorSlots: ArmorSlot[] = ['head', 'shoulders', 'chest', 'arms', 'gloves', 'legs', 'boots'];
 
@@ -138,6 +152,26 @@ export class CharacterDetailComponent implements OnInit {
         this.isLoading.set(false);
       }
     });
+  }
+
+  // =========================================================================
+  // ABILITY EXPANSION (INDEPENDENT - MULTIPLE CAN BE OPEN)
+  // =========================================================================
+
+  toggleAbilityExpanded(abilityId: string): void {
+    this.expandedAbilities.update(set => {
+      const newSet = new Set(set);
+      if (newSet.has(abilityId)) {
+        newSet.delete(abilityId);
+      } else {
+        newSet.add(abilityId);
+      }
+      return newSet;
+    });
+  }
+
+  isAbilityExpanded(abilityId: string): boolean {
+    return this.expandedAbilities().has(abilityId);
   }
 
   // =========================================================================
@@ -252,16 +286,28 @@ export class CharacterDetailComponent implements OnInit {
   }
 
   formatFocusName(id: string): string {
+    if (!id) return '';
     return id.split(/(?=[A-Z])/).join(' ')
       .split('-').map(word => 
         word.charAt(0).toUpperCase() + word.slice(1)
       ).join(' ');
   }
 
+  // =========================================================================
+  // ABILITY SOURCE HELPERS
+  // =========================================================================
+
   formatAbilitySource(source: AbilitySource): string {
+    if (hasCollegeAndFocus(source)) {
+      const collegeName = source.college.charAt(0).toUpperCase() + source.college.slice(1);
+      const schoolName = source.school ? this.formatFocusName(source.school) : '';
+      const focusName = this.formatFocusName(source.focus);
+      if (schoolName) {
+        return `${collegeName} · ${schoolName} · ${focusName}`;
+      }
+      return `${collegeName} Magic - ${focusName}`;
+    }
     switch (source.type) {
-      case 'magic':
-        return `${source.college.charAt(0).toUpperCase() + source.college.slice(1)} Magic - ${source.focus}`;
       case 'skill':
         return `Skill: ${source.skillId}`;
       case 'species':
@@ -275,6 +321,184 @@ export class CharacterDetailComponent implements OnInit {
     }
   }
 
+  /**
+   * Get the college from an ability source
+   */
+  getAbilityCollege(ability: ResolvedAbility): string | null {
+    if (hasCollegeAndFocus(ability.source)) {
+      return ability.source.college || null;
+    }
+    return null;
+  }
+
+  /**
+   * Get the focus name from an ability source
+   */
+  getAbilityFocus(ability: ResolvedAbility): string {
+    if (hasCollegeAndFocus(ability.source)) {
+      return this.formatFocusName(ability.source.focus);
+    }
+    return '';
+  }
+
+  /**
+   * Get required level from an ability source
+   */
+  getRequiredLevel(ability: ResolvedAbility): number {
+    const source = ability.source;
+    if (hasCollegeAndFocus(source)) {
+      return source.requiredLevel;
+    }
+    if ('requiredLevel' in source) {
+      return (source as any).requiredLevel ?? 1;
+    }
+    return 1;
+  }
+
+  // =========================================================================
+  // ABILITY OUTPUT DISPLAY HELPERS
+  // =========================================================================
+
+  /**
+   * Get formatted damage string for display - handles both old string format and new AbilityDamage
+   */
+  getDamageDisplay(ability: ResolvedAbility): string | null {
+    if (!ability.damage) return null;
+    
+    if (typeof ability.damage === 'string') {
+      return ability.damage;
+    }
+    
+    return formatDamage(ability.damage);
+  }
+
+  /**
+   * Get damage type for styling
+   */
+  getDamageType(ability: ResolvedAbility): string | null {
+    if (!ability.damage || typeof ability.damage === 'string') {
+      return null;
+    }
+    return (ability.damage as AbilityDamage).type;
+  }
+
+  /**
+   * Get formatted healing string for display - handles both old string format and new AbilityHealing
+   */
+  getHealingDisplay(ability: ResolvedAbility): string | null {
+    if (!ability.healing) return null;
+    
+    if (typeof ability.healing === 'string') {
+      return ability.healing;
+    }
+    
+    return formatHealing(ability.healing);
+  }
+
+  /**
+   * Get summon creature name for display
+   */
+  getSummonName(ability: ResolvedAbility): string {
+    return ability.summon?.creature?.name ?? 'Summon';
+  }
+
+  /**
+   * Get a brief effect summary for the row preview
+   */
+  getEffectSummary(ability: ResolvedAbility): string | null {
+    const effects = ability.effects;
+    if (!effects) return null;
+
+    // Dice modifiers - most common effect
+    if (effects.diceModifiers?.length) {
+      const mod = effects.diceModifiers[0];
+      return `${mod.amount > 0 ? '+' : ''}${mod.amount} D20 ${mod.applies}`;
+    }
+
+    // Stat modifiers
+    if (effects.statModifiers?.length) {
+      const mod = effects.statModifiers[0];
+      const statsText = mod.stats === 'all' ? 'all stats' : 
+        Array.isArray(mod.stats) ? mod.stats.join(', ') : mod.stats;
+      return `${mod.amount > 0 ? '+' : ''}${mod.amount} ${statsText}`;
+    }
+
+    // Movement
+    if (effects.movement) {
+      return `${effects.movement.amount > 0 ? '+' : ''}${effects.movement.amount} ft. movement`;
+    }
+
+    // Damage reduction
+    if (effects.damageReduction) {
+      return `${effects.damageReduction.dice} damage reduction`;
+    }
+
+    // Conditions applied
+    if (effects.appliesConditions?.length) {
+      return `Applies ${effects.appliesConditions[0].condition}`;
+    }
+
+    // Conditions removed
+    if (effects.removesConditions?.length) {
+      return `Removes ${effects.removesConditions[0]}`;
+    }
+
+    // Resistances granted
+    if (effects.resistances?.length) {
+      return `Resist ${effects.resistances[0]}`;
+    }
+
+    // Grants
+    if (effects.grants?.length) {
+      const grant = effects.grants[0];
+      return grant.length > 25 ? grant.substring(0, 22) + '...' : grant;
+    }
+
+    // Special effects
+    if (effects.special?.length) {
+      const special = effects.special[0];
+      return special.length > 25 ? special.substring(0, 22) + '...' : special;
+    }
+
+    return null;
+  }
+
+  // =========================================================================
+  // ABILITY TYPE HELPERS
+  // =========================================================================
+
+  /**
+   * Check if ability is a reaction
+   */
+  isReaction(ability: ResolvedAbility): boolean {
+    return isReactionAbility(ability);
+  }
+
+  /**
+   * Check if ability is a summon
+   */
+  isSummon(ability: ResolvedAbility): boolean {
+    return isSummonAbility(ability);
+  }
+
+  /**
+   * Check if ability has sanity cost
+   */
+  hasSanityCost(ability: ResolvedAbility): boolean {
+    return !!ability.sanityCost && ability.sanityCost > 0;
+  }
+
+  /**
+   * Check if ability has any costs
+   */
+  hasAnyCosts(ability: ResolvedAbility): boolean {
+    return !!(
+      ability.staminaCost ||
+      ability.sanityCost ||
+      (ability.componentCost && ability.componentCost.length > 0)
+    );
+  }
+
   // =========================================================================
   // COST FORMATTING METHODS
   // =========================================================================
@@ -284,14 +508,28 @@ export class CharacterDetailComponent implements OnInit {
    */
   getCostIcon(type: string): string {
     const icons: Record<string, string> = {
+      // Universal
       'AP': 'schedule',
       'ST': 'directions_run',
       'HP': 'favorite',
       'SY': 'psychology',
+      // Cosmic
+      'SR': 'star',
+      'LR': 'light_mode',
+      'Hours': 'hourglass_empty',
+      'VS': 'dark_mode',
+      'RP': 'public',
+      // Earthly
       'FP': 'adjust',
       'LS': 'eco',
-      'VS': 'dark_mode',
       'CP': 'construction',
+      'EP': 'whatshot',
+      'SP': 'record_voice_over',
+      'BP': 'fitness_center',
+      // Dead
+      'FE': 'skull',
+      'DE': 'science',
+      'DC': 'toll',
     };
     return icons[type] || 'toll';
   }
@@ -301,17 +539,40 @@ export class CharacterDetailComponent implements OnInit {
    */
   getCostTypeName(type: string): string {
     const names: Record<string, string> = {
+      // Universal
       'AP': 'Action Points',
       'ST': 'Stamina',
       'HP': 'Health',
       'SY': 'Sanity',
+      // Cosmic
+      'SR': 'Star Runes',
+      'LR': 'Light Runes',
+      'Hours': 'Hours',
+      'VS': 'Void Shards',
+      'RP': 'Realm Points',
+      // Earthly
       'FP': 'Focus Points',
       'LS': 'Life Seeds',
-      'VS': 'Void Shards',
       'CP': 'Craft Points',
-      'SR': 'Star Runes'
+      'EP': 'Elemental Points',
+      'SP': 'Speech Points',
+      'BP': 'Body Points',
+      // Dead
+      'FE': 'Funeral Essence',
+      'DE': 'Decay Essence',
+      'DC': 'Damned Coins',
     };
     return names[type] || type;
+  }
+
+  /**
+   * Format component cost for display, including "per" costs
+   */
+  formatComponentCost(cost: ComponentCost): string {
+    if (cost.per) {
+      return `${cost.amount} ${cost.type} per ${cost.per}`;
+    }
+    return `${cost.amount} ${cost.type}`;
   }
 
   /**
