@@ -5,22 +5,27 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "acceleration",
       "requiredLevel": 1
     },
     "apCost": 1,
     "componentCost": [
-      { "type": "HR", "amount": 2 }
+      { "type": "Hours", "amount": 2 }
     ],
-    "range": "Self or touch",
+    "range": "touch",
     "target": "ally",
-    "damage": "Target gains +15 ft. movement and +1 D20 on SPD rolls.",
     "duration": "3 rounds",
-    "description": "Compress the seconds around your legs. Each stride devours a distance that should take longer to cross.",
+    "effects": {
+      "movement": { "amount": 15, "duration": "3 rounds" },
+      "diceModifiers": [
+        { "amount": 1, "applies": "SPD rolls", "duration": "3 rounds" }
+      ]
+    },
+    "description": "Compress the seconds around your legs. Each stride devours a distance that should take longer to cross. Target gains +15 ft. movement and +1 D20 on SPD rolls. Duration: 3 rounds. Range: Self or touch.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": ""
+    "isSustained": false
   },
 
   "hastened-reflexes": {
@@ -29,22 +34,26 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "acceleration",
       "requiredLevel": 1
     },
     "apCost": 2,
     "componentCost": [
-      { "type": "HR", "amount": 3 }
+      { "type": "Hours", "amount": 3 }
     ],
-    "range": "Self or touch",
+    "range": "touch",
     "target": "ally",
-    "damage": "Target gains +2 D20 on defensive rolls.",
     "duration": "2 rounds",
-    "description": "Accelerate your perception until the world moves like honey. Attacks that seemed unavoidable become leisurely to evade.",
+    "effects": {
+      "diceModifiers": [
+        { "amount": 2, "applies": "defense", "duration": "2 rounds" }
+      ]
+    },
+    "description": "Accelerate your perception until the world moves like honey. Attacks that seemed unavoidable become leisurely to evade. Target gains +2 D20 on defensive rolls. Duration: 2 rounds. Range: Self or touch.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": ""
+    "isSustained": false
   },
 
   "rapid-strike": {
@@ -53,22 +62,28 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "acceleration",
       "requiredLevel": 1
     },
     "apCost": 1,
     "componentCost": [
-      { "type": "HR", "amount": 2 }
+      { "type": "Hours", "amount": 2 }
     ],
     "range": "self",
     "target": "self",
-    "damage": "Next attack costs 0 AP and gains +1 D20 to hit. Must be used within 1 round.",
-    "duration": "instant",
-    "description": "Steal seconds from the future to deliver your blow before the present catches up.",
+    "duration": "1 round",
+    "effects": {
+      "ap": { "amount": 0, "affects": "next", "duration": "until triggered" },
+      "diceModifiers": [
+        { "amount": 1, "applies": "attack", "duration": "until triggered" }
+      ],
+      "special": ["Next attack costs 0 AP and gains +1 D20 to hit", "Must be used within 1 round"]
+    },
+    "description": "Steal seconds from the future to deliver your blow before the present catches up. Next attack costs 0 AP and gains +1 D20 to hit. Must be used within 1 round.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": ""
+    "isSustained": false
   },
 
   "blur-of-motion": {
@@ -77,22 +92,28 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "acceleration",
       "requiredLevel": 2
     },
     "apCost": 3,
     "componentCost": [
-      { "type": "HR", "amount": 4 }
+      { "type": "Hours", "amount": 4 }
     ],
     "range": "self",
     "target": "self",
-    "damage": "Caster gains +2 D20 on defensive rolls. Attacks against caster suffer -1 D20. Caster must move at least 10 ft. each turn to maintain the effect.",
     "duration": "3 rounds",
-    "description": "Move so quickly that your form smears across multiple positions at once. Enemies struggle to track where you truly are.",
+    "maintenanceRequirement": "Caster must move at least 10 ft. each turn to maintain effect",
+    "effects": {
+      "diceModifiers": [
+        { "amount": 2, "applies": "defense", "duration": "3 rounds" }
+      ],
+      "special": ["Attacks against caster suffer -1 D20"]
+    },
+    "description": "Move so quickly that your form smears across multiple positions at once. Enemies struggle to track where you truly are. Caster gains +2 D20 on defensive rolls. Attacks against caster suffer -1 D20. Duration: 3 rounds. Caster must move at least 10 ft. each turn to maintain effect.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": ""
+    "isSustained": true
   },
 
   "accelerated-recovery": {
@@ -101,23 +122,28 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "acceleration",
       "requiredLevel": 2
     },
     "apCost": 3,
     "componentCost": [
-      { "type": "HR", "amount": 6 }
+      { "type": "Hours", "amount": 6 }
     ],
-    "range": "Touch",
+    "range": "touch",
     "target": "ally",
     "duration": "instant",
-    "description": "Speed the flow of time through wounded flesh. Hours of healing compress into heartbeats.",
-    "damage": null,
-    "healing": "3D10 | One Bleeding condition is removed.",
+    "healing": {
+      "dice": "3D10",
+      "target": "hp"
+    },
+    "effects": {
+      "removesConditions": ["bleeding"]
+    },
+    "description": "Speed the flow of time through wounded flesh. Hours of healing compress into heartbeats. Target heals 3D10 HP. One Bleeding condition is removed. Range: Touch.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": ""
+    "isSustained": false
   },
 
   "borrowed-seconds": {
@@ -126,22 +152,30 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "acceleration",
       "requiredLevel": 3
     },
     "apCost": 1,
     "componentCost": [
-      { "type": "HR", "amount": 8 }
+      { "type": "Hours", "amount": 8 }
     ],
     "sanityCost": 5,
-    "range": "Self or 30 ft",
-    "target": "self",
+    "range": "30 ft",
+    "target": "ally",
     "duration": "instant",
-    "description": "Target gains +3 AP on their current turn. Within the next hour, the target loses 2 AP next turn.",
+    "effects": {
+      "ap": { "amount": 3, "affects": "current", "duration": "instant" }
+    },
+    "delayedEffect": {
+      "description": "Within the next hour, target loses 2 AP on their next turn",
+      "timing": "Within 1 hour",
+      "effect": "Loses 2 AP on next turn as time balances itself"
+    },
+    "description": "Reach into the next few moments and pull them into now. Time will balance itself eventually. Target gains +3 AP on their current turn. Within the next hour, the target loses 2 AP next turn. Range: Self or 30 ft.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": ""
+    "isSustained": false
   },
 
   "flurry-of-moments": {
@@ -150,22 +184,29 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "acceleration",
       "requiredLevel": 3
     },
     "apCost": 5,
     "componentCost": [
-      { "type": "HR", "amount": 10 }
+      { "type": "Hours", "amount": 10 }
     ],
     "sanityCost": 5,
     "range": "self",
     "target": "self",
     "duration": "instant",
-    "description": "Make 3 attacks with a single action. The opponent only has a chance to defend the initial hit. If hit by the first attack, damage is rolled three times.",
+    "effects": {
+      "special": [
+        "Make 3 attacks with a single action",
+        "Opponent only has a chance to defend the initial hit",
+        "If hit by the first attack, damage is rolled three times"
+      ]
+    },
+    "description": "Compress an entire exchange of blows into a single stretched instant. Your weapon moves faster than eyes can follow. Make 3 attacks with a single action. The opponent only has a chance to defend the initial hit. If hit by the first attack, damage is rolled three times.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": ""
+    "isSustained": false
   },
 
   "temporal-overdrive": {
@@ -174,22 +215,34 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "acceleration",
       "requiredLevel": 4
     },
     "apCost": 5,
     "componentCost": [
-      { "type": "HR", "amount": 18 }
+      { "type": "Hours", "amount": 18 }
     ],
     "sanityCost": 10,
     "range": "self",
     "target": "self",
     "duration": "instant",
-    "description": "Caster immediately takes an additional full turn (6 AP) after their current turn ends. All enemies have -2 D20 to defend against attacks made during this bonus turn. After the effect ends, the caster loses 4 AP on their next regular turn as time reasserts itself.",
+    "effects": {
+      "ap": { "amount": 6, "affects": "current", "duration": "instant" },
+      "special": [
+        "Caster immediately takes an additional full turn (6 AP) after current turn ends",
+        "All enemies have -2 D20 to defend against attacks made during this bonus turn"
+      ]
+    },
+    "delayedEffect": {
+      "description": "After effect ends, caster loses 4 AP on their next regular turn",
+      "timing": "Next regular turn",
+      "effect": "Loses 4 AP as time reasserts itself"
+    },
+    "description": "Tear yourself free from the normal flow of time. For a few precious seconds, you exist between moments while the world holds its breath. Caster immediately takes an additional full turn (6 AP) after their current turn ends. All enemies have -2 D20 to defend against attacks made during this bonus turn. After the effect ends, the caster loses 4 AP on their next regular turn as time reasserts itself.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": ""
+    "isSustained": false
   },
 
   "weighted-seconds": {
@@ -198,21 +251,27 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "delay",
       "requiredLevel": 1
     },
     "apCost": 2,
     "componentCost": [
-      { "type": "HR", "amount": 2 }
+      { "type": "Hours", "amount": 2 }
     ],
     "range": "30 ft",
     "target": "enemy",
     "duration": "2 rounds",
-    "description": "Target loses 10 ft. movement and -1 D20 on SPD rolls.",
+    "effects": {
+      "movement": { "amount": -10, "duration": "2 rounds" },
+      "diceModifiers": [
+        { "amount": -1, "applies": "SPD rolls", "duration": "2 rounds" }
+      ]
+    },
+    "description": "Time grows heavy around your target's limbs. Every movement requires effort that exhausts both body and will. Target loses 10 ft. movement and -1 D20 on SPD rolls. Duration: 2 rounds. Range: 30 ft.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": ""
+    "isSustained": false
   },
 
   "stalling-grasp": {
@@ -221,21 +280,24 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "delay",
       "requiredLevel": 1
     },
     "apCost": 2,
     "componentCost": [
-      { "type": "HR", "amount": 3 }
+      { "type": "Hours", "amount": 3 }
     ],
-    "range": "Touch",
+    "range": "touch",
     "target": "enemy",
     "duration": "instant",
-    "description": "Target loses 2 AP on their next turn.",
+    "effects": {
+      "ap": { "amount": -2, "affects": "next", "duration": "1 turn" }
+    },
+    "description": "Reach out and grip a target's personal timeline, dragging it backward against the flow. Target loses 2 AP on their next turn. Range: Touch.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": ""
+    "isSustained": false
   },
 
   "temporal-drag": {
@@ -244,21 +306,32 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "delay",
       "requiredLevel": 1
     },
     "apCost": 1,
     "componentCost": [
-      { "type": "HR", "amount": 2 }
+      { "type": "Hours", "amount": 2 }
     ],
     "range": "30 ft",
     "target": "ally",
     "duration": "instant",
-    "description": "When an ally within 30 ft. is targeted by a ranged attack, grant them +2 D20 on their defensive roll.",
+    "timing": "reaction",
+    "isReaction": true,
+    "reactionTrigger": {
+      "event": "Ally within 30 ft. is targeted by a ranged attack",
+      "range": "30 ft"
+    },
+    "effects": {
+      "diceModifiers": [
+        { "amount": 2, "applies": "defense", "duration": "instant" }
+      ]
+    },
+    "description": "Slow an incoming projectile or attack mid-flight, giving your ally precious moments to evade. When an ally within 30 ft. is targeted by a ranged attack, grant them +2 D20 on their defensive roll.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": ""
+    "isSustained": false
   },
 
   "thickened-air": {
@@ -267,21 +340,32 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "delay",
       "requiredLevel": 2
     },
     "apCost": 3,
     "componentCost": [
-      { "type": "HR", "amount": 5 }
+      { "type": "Hours", "amount": 5 }
     ],
     "range": "40 ft",
     "target": "area",
+    "areaOfEffect": {
+      "shape": "radius",
+      "size": "15 ft"
+    },
     "duration": "3 rounds",
-    "description": "Create a 15 ft. radius zone. All enemies within lose 20 ft. movement and -1 D20 on attack rolls.",
+    "effects": {
+      "movement": { "amount": -20, "duration": "3 rounds" },
+      "diceModifiers": [
+        { "amount": -1, "applies": "attack", "duration": "3 rounds" }
+      ],
+      "special": ["Does not affect flying creatures"]
+    },
+    "description": "Spread your influence across a space, making the very air resist movement. Those within struggle as if wading through deep water. Create a 15 ft. radius zone. All enemies within lose 20 ft. movement and -1 D20 on attack rolls. Duration: 3 rounds. Range: 40 ft. Does not affect flying creatures.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": ""
+    "isSustained": false
   },
 
   "suspended-harm": {
@@ -290,22 +374,35 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "delay",
       "requiredLevel": 2
     },
     "apCost": 2,
     "componentCost": [
-      { "type": "HR", "amount": 6 }
+      { "type": "Hours", "amount": 6 }
     ],
     "sanityCost": 5,
-    "range": "30 ft",
+    "range": "touch",
     "target": "ally",
     "duration": "3 rounds",
-    "description": "When you or an adjacent ally takes damage, delay that damage for 3 rounds. At the end of the duration, the damage applies. If healed above the delayed amount before then, reduce the delayed damage accordingly.",
+    "timing": "reaction",
+    "isReaction": true,
+    "reactionTrigger": {
+      "event": "You or an adjacent ally takes damage",
+      "range": "adjacent"
+    },
+    "effects": {
+      "special": [
+        "Delay damage for 3 rounds",
+        "At end of duration, the damage applies",
+        "If healed above the delayed amount before then, reduce delayed damage accordingly"
+      ]
+    },
+    "description": "Catch damage in a temporal loop, delaying its arrival. The wound will come, but not yet. When you or an adjacent ally takes damage, delay that damage for 3 rounds. At the end of the duration, the damage applies. If healed above the delayed amount before then, reduce delayed damage accordingly.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": ""
+    "isSustained": false
   },
 
   "moments-hesitation": {
@@ -314,22 +411,28 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "delay",
       "requiredLevel": 3
     },
     "apCost": 4,
     "componentCost": [
-      { "type": "HR", "amount": 10 }
+      { "type": "Hours", "amount": 10 }
     ],
     "sanityCost": 5,
     "range": "30 ft",
     "target": "enemy",
     "duration": "instant",
-    "description": "Target loses their next turn entirely. Enemies with more than 100 remaining HP may resist with a DET check (Difficulty 45)",
+    "effects": {
+      "special": [
+        "Target loses their next turn entirely",
+        "Enemies with more than 100 remaining HP may resist with a DET check (Difficulty 45)"
+      ]
+    },
+    "description": "Seize an enemy's next few seconds and crush them into nothing. They reach for action and find only stillness. Target loses their next turn entirely. Enemies with more than 100 remaining HP may resist with a DET check (Difficulty 45). Range: 30 ft.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": ""
+    "isSustained": false
   },
 
   "temporal-prison": {
@@ -338,22 +441,29 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "delay",
       "requiredLevel": 4
     },
     "apCost": 5,
     "componentCost": [
-      { "type": "HR", "amount": 16 }
+      { "type": "Hours", "amount": 16 }
     ],
     "sanityCost": 10,
     "range": "30 ft",
     "target": "enemy",
-    "duration": "instant",
-    "description": "Target is removed from combat for 1 minute (10 rounds) or until the caster dismisses the effect. Target cannot be harmed while imprisoned but also cannot act, move, or be targeted. Range: 30 ft.",
+    "duration": "1 minute",
+    "effects": {
+      "special": [
+        "Target is removed from combat for 1 minute (10 rounds) or until caster dismisses the effect",
+        "Target cannot be harmed while imprisoned but also cannot act, move, or be targeted",
+        "Target is aware of everything happening around them"
+      ]
+    },
+    "description": "Wrap your target in layers of frozen time. They can perceive the world continuing without them, but cannot interact with it. Target is removed from combat for 1 minute (10 rounds) or until the caster dismisses the effect. Target cannot be harmed while imprisoned but also cannot act, move, or be targeted. Target is aware of everything happening around them. Range: 30 ft.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": ""
+    "isSustained": false
   },
 
   "echo-of-vigor": {
@@ -362,22 +472,30 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "past",
       "requiredLevel": 1
     },
     "apCost": 2,
     "componentCost": [
-      { "type": "HR", "amount": 3 }
+      { "type": "Hours", "amount": 3 }
     ],
-    "range": "Self",
+    "range": "self",
     "target": "self",
     "duration": "instant",
-    "description": "Restore HP or ST equal to damage or expenditure taken in the last round (max 24). Range: Self.",
-    "healing": "up to 2D12 (equal to damage taken in last round)",
+    "healing": {
+      "dice": "2D12",
+      "target": "hp",
+      "conditionalBonus": {
+        "condition": "Equal to damage or ST expenditure taken in last round",
+        "bonusDice": "varies"
+      }
+    },
+    "description": "Remember what your body felt like moments ago, before the wound, before the exhaustion. Pull that memory into the present. Restore HP or ST equal to damage or expenditure taken in the last round (max 2D12). Range: Self.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": ""
+    "notes": "Can restore HP or ST"
   },
 
   "memory-trace": {
@@ -386,21 +504,28 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "past",
       "requiredLevel": 1
     },
     "apCost": 2,
     "componentCost": [
-      { "type": "HR", "amount": 2 }
+      { "type": "Hours", "amount": 2 }
     ],
-    "range": "Touch",
-    "target": "ally",
+    "range": "touch",
+    "target": "object",
     "duration": "instant",
-    "description": "See a vision of events that occurred in this location within the last 24 hours. Duration and clarity depend on KNW + AST check.",
+    "effects": {
+      "special": [
+        "See a vision of events that occurred in this location within the last 24 hours",
+        "Duration and clarity depend on KNW + AST check"
+      ]
+    },
+    "description": "Press your hand against an object or surface and let the past bleed through. Images of what transpired here flicker behind your eyes. See a vision of events that occurred in this location within the last 24 hours. Duration and clarity depend on KNW + AST check. Range: Touch.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": ""
+    "notes": "Utility divination ability"
   },
 
   "rewind-wound": {
@@ -409,22 +534,29 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "past",
       "requiredLevel": 1
     },
     "apCost": 2,
     "componentCost": [
-      { "type": "HR", "amount": 3 }
+      { "type": "Hours", "amount": 3 }
     ],
-    "range": "Touch",
+    "range": "touch",
     "target": "ally",
     "duration": "instant",
-    "description": "Heal 2D10 HP. If target received damage this round, heal an additional 1D10.",
-    "healing": "2D10 (+1D10 if wound occurred in last round)",
+    "healing": {
+      "dice": "2D10",
+      "target": "hp",
+      "conditionalBonus": {
+        "condition": "If target received damage this round",
+        "bonusDice": "1D10"
+      }
+    },
+    "description": "Turn back the clock on a single injury, convincing the body it was never harmed. Heal 2D10 HP. If target received damage this round, heal an additional 1D10. Range: Touch.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": ""
+    "isSustained": false
   },
 
   "yesterdays-strength": {
@@ -433,21 +565,26 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "past",
       "requiredLevel": 2
     },
     "apCost": 2,
     "componentCost": [
-      { "type": "HR", "amount": 6 }
+      { "type": "Hours", "amount": 6 }
     ],
-    "range": "Self",
+    "range": "self",
     "target": "self",
     "duration": "3 rounds",
-    "description": "Gain +2 to all stat modifiers for 3 rounds.",
+    "effects": {
+      "statModifiers": [
+        { "stats": "all", "amount": 2, "duration": "3 rounds" }
+      ]
+    },
+    "description": "Channel an echo of yourself from a moment of triumph. Your past self lends you their conviction. Gain +2 to all stat modifiers for 3 rounds. Range: Self.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": ""
+    "isSustained": false
   },
 
   "chronal-recovery": {
@@ -456,21 +593,26 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "past",
       "requiredLevel": 2
     },
     "apCost": 2,
     "componentCost": [
-      { "type": "HR", "amount": 5 }
+      { "type": "Hours", "amount": 5 }
     ],
-    "range": "Self",
+    "range": "self",
     "target": "self",
     "duration": "instant",
-    "description": "Summon a Past Echo (see Quick Reference) that acts on your turn.",
+    "healing": {
+      "dice": "2D20",
+      "target": "stamina"
+    },
+    "description": "Pull resources from your past self, borrowing stamina you've already spent or clarity you've already lost. Restore 2D20 ST or 2D20 SY (choose one). This cannot exceed your starting values. Range: Self.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": ""
+    "notes": "Can restore ST or SY"
   },
 
   "summon-past-echo": {
@@ -479,22 +621,44 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "past",
       "requiredLevel": 3
     },
     "apCost": 3,
     "componentCost": [
-      { "type": "HR", "amount": 12 }
+      { "type": "Hours", "amount": 12 }
     ],
     "sanityCost": 5,
     "range": "30 ft",
-    "target": "area",
-    "duration": "5 rounds or until destroyed",
-    "description": "Reach back to a version of yourself and pull...poral ghost. They remember being you, and fight as you once did.",
+    "target": "special",
+    "duration": "5 rounds",
+    "summon": {
+      "creatureId": "past-echo",
+      "creature": {
+        "id": "past-echo",
+        "name": "Past Echo",
+        "hp": 60,
+        "stamina": 30,
+        "attacks": [
+          {
+            "name": "Remembered Strike",
+            "type": "physical",
+            "damage": "3D10",
+            "damageType": "physical",
+            "apCost": 3,
+            "special": "Uses caster's stats from 1 Character Level ago (or current if Level 1)"
+          }
+        ],
+        "passives": ["Fades if the caster takes Sanity damage"]
+      },
+      "duration": "5 rounds or until destroyed",
+      "summonRange": "30 ft"
+    },
+    "description": "Reach back to a version of yourself and pull them forward as a flickering temporal ghost. They remember being you, and fight as you once did. Summon a Past Echo (see Quick Reference) that acts on your turn. Duration: 5 rounds or until destroyed.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": "See Past Echo stat block in Time school reference."
+    "isSustained": false
   },
 
   "undo-injury": {
@@ -503,23 +667,29 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "past",
       "requiredLevel": 3
     },
     "apCost": 2,
     "componentCost": [
-      { "type": "HR", "amount": 10 }
+      { "type": "Hours", "amount": 10 }
     ],
     "sanityCost": 5,
-    "range": "Touch",
+    "range": "touch",
     "target": "ally",
     "duration": "instant",
-    "description": "Target heals 4D12 HP. Remove one of the following conditions: Burned, Bleeding, Poisoned, or Shocked.",
-    "healing": "4D12",
+    "healing": {
+      "dice": "4D12",
+      "target": "hp"
+    },
+    "effects": {
+      "removesConditions": ["burned", "bleeding", "poisoned", "shocked"]
+    },
+    "description": "Reverse time within a body, erasing wounds as if they never occurred. The flesh forgets what harmed it. Target heals 4D12 HP. Remove one of: Burned, Bleeding, Poisoned, or Shocked condition. Range: Touch.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": ""
+    "isSustained": false
   },
 
   "temporal-regression": {
@@ -528,22 +698,30 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "past",
       "requiredLevel": 4
     },
     "apCost": 4,
     "componentCost": [
-      { "type": "HR", "amount": 20 }
+      { "type": "Hours", "amount": 20 }
     ],
     "sanityCost": 10,
     "range": "30 ft",
-    "target": "enemy",
+    "target": "creature",
     "duration": "instant",
-    "description": "Choose one: Restore – Return one willing target to their exact state (HP, ST, SY, conditions, position) from 2 rounds ago | Regress – Return one enemy to their position from 2 rounds ago and remove any buffs gained during that time. Damage dealt is not reversed",
+    "effects": {
+      "special": [
+        "Choose one mode:",
+        "Restore: Return one willing target to their exact state (HP, ST, SY, conditions, position) from 2 rounds ago",
+        "Regress: Return one enemy to their position from 2 rounds ago and remove any buffs gained during that time. Damage dealt is not reversed."
+      ]
+    },
+    "description": "Rewind a target to a previous state, undoing everything that has happened to them in the last few moments. Allies are restored; enemies lose their progress. Choose one: Restore — Return one willing target to their exact state (HP, ST, SY, conditions, position) from 2 rounds ago. Regress — Return one enemy to their position from 2 rounds ago and remove any buffs gained during that time. Damage dealt is not reversed. Range: 30 ft.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": ""
+    "notes": "Dual-mode ability with choice"
   },
 
   "foreseen-dodge": {
@@ -552,21 +730,32 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "future",
       "requiredLevel": 1
     },
     "apCost": 1,
     "componentCost": [
-      { "type": "HR", "amount": 2 }
+      { "type": "Hours", "amount": 2 }
     ],
     "range": "self",
     "target": "self",
     "duration": "instant",
-    "description": "Reaction: Gain +3 D20 on a single defensive roll.",
+    "timing": "reaction",
+    "isReaction": true,
+    "reactionTrigger": {
+      "event": "Being attacked",
+      "conditions": ["Must be declared before the attack roll"]
+    },
+    "effects": {
+      "diceModifiers": [
+        { "amount": 3, "applies": "defense", "duration": "instant" }
+      ]
+    },
+    "description": "You see the strike a heartbeat before it occurs. Your body is already moving aside when the blow arrives. Reaction: Gain +3 D20 on a single defensive roll. Must be declared before the attack roll.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": ""
+    "isSustained": false
   },
 
   "tomorrows-vigor": {
@@ -575,21 +764,31 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "future",
       "requiredLevel": 1
     },
     "apCost": 2,
     "componentCost": [
-      { "type": "HR", "amount": 3 }
+      { "type": "Hours", "amount": 3 }
     ],
     "range": "self",
     "target": "self",
     "duration": "3 rounds",
-    "description": "Gain +1 D20 on all rolls for 3 rounds. At the end of the duration, suffer -1 D20 on all rolls for 1 round as the debt comes due.",
+    "effects": {
+      "diceModifiers": [
+        { "amount": 1, "applies": "all", "duration": "3 rounds" }
+      ]
+    },
+    "delayedEffect": {
+      "description": "At the end of the duration, suffer -1 D20 on all rolls for 1 round",
+      "timing": "After 3 rounds",
+      "effect": "Loses 1 D20 on all rolls for 1 round as the debt comes due"
+    },
+    "description": "Borrow strength from the person you will become. Your future self won't miss it, probably. Gain +1 D20 on all rolls for 3 rounds. At the end of the duration, suffer -1 D20 on all rolls for 1 round as the debt comes due.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": ""
+    "isSustained": false
   },
 
   "glimpse-ahead": {
@@ -598,21 +797,28 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "future",
       "requiredLevel": 1
     },
     "apCost": 1,
     "componentCost": [
-      { "type": "HR", "amount": 2 }
+      { "type": "Hours", "amount": 2 }
     ],
     "range": "self",
     "target": "self",
     "duration": "instant",
-    "description": "Ask the Game Runner one yes/no question about the immediate consequences of a specific action. The answer reflects the most likely outcome.",
+    "effects": {
+      "special": [
+        "Ask the Game Runner one yes/no question about the immediate consequences of a specific action",
+        "The answer reflects the most likely outcome"
+      ]
+    },
+    "description": "Peer a few seconds into the future, seeing the immediate outcome of a choice before you commit to it. Ask the Game Runner one yes/no question about the immediate consequences of a specific action. The answer reflects the most likely outcome.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": ""
+    "notes": "Divination utility"
   },
 
   "inevitable-strike": {
@@ -621,22 +827,30 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "future",
       "requiredLevel": 2
     },
     "apCost": 3,
     "componentCost": [
-      { "type": "HR", "amount": 6 }
+      { "type": "Hours", "amount": 6 }
     ],
     "sanityCost": 5,
-    "range": "30 ft",
-    "target": "enemy",
-    "duration": "instant",
-    "description": "The next attack automatically hits (no roll required). Damage roll is made normally. Target may not use abilities that trigger on being attacked.",
+    "range": "self",
+    "target": "self",
+    "duration": "1 round",
+    "effects": {
+      "special": [
+        "Next attack automatically hits (no roll required)",
+        "Damage roll is made normally",
+        "Target may not use abilities that trigger on being 'attacked'",
+        "Must be used within 1 round"
+      ]
+    },
+    "description": "You see the wound before you inflict it. Your weapon simply travels to where it already struck. The next attack automatically hits (no roll required). Damage roll is made normally. Target may not use abilities that trigger on being 'attacked.' Must be used within 1 round.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": ""
+    "isSustained": false
   },
 
   "borrow-from-tomorrow": {
@@ -645,22 +859,29 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "future",
       "requiredLevel": 2
     },
     "apCost": 2,
     "componentCost": [
-      { "type": "HR", "amount": 5 }
+      { "type": "Hours", "amount": 5 }
     ],
     "range": "self",
     "target": "self",
-    "duration": "instant",
-    "description": "Gain 3D12 temporary HP that lasts for 1 hour. When the effect ends, if any temporary HP remains, you lose that amount from your current HP",
-    "healing": "3D12 (future HP debt)",
+    "duration": "1 hour",
+    "effects": {
+      "temporaryHp": {
+        "dice": "3D12",
+        "duration": "1 hour",
+        "expiration": "If any temporary HP remains, you lose that amount from your actual HP"
+      }
+    },
+    "description": "Take hit points from your future self. You'll heal eventually, you just haven't yet. Gain 3D12 temporary HP that lasts for 1 hour. When the effect ends, if any temporary HP remains, you lose that amount from your actual HP as the future reclaims its due.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": ""
+    "notes": "Temporary HP with delayed cost"
   },
 
   "paradox-wound": {
@@ -669,23 +890,36 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "future",
       "requiredLevel": 3
     },
     "apCost": 4,
     "componentCost": [
-      { "type": "HR", "amount": 10 }
+      { "type": "Hours", "amount": 10 }
     ],
     "sanityCost": 5,
     "range": "30 ft",
     "target": "enemy",
-    "duration": "2 rounds",
-    "description": "4D10 + AST Modifier. Sanity damage. Target must make a DET check (Difficulty 35) or gain Confused condition for 2 rounds as their mind rejects the paradox.",
-    "damage": "4D10",
+    "duration": "instant",
+    "damage": {
+      "dice": "4D10",
+      "statModifier": "AST",
+      "type": "sanity"
+    },
+    "effects": {
+      "appliesConditions": [
+        {
+          "condition": "confused",
+          "duration": "2 rounds",
+          "save": { "stat": "DET", "difficulty": 35 }
+        }
+      ]
+    },
+    "description": "Strike a target with damage that hasn't happened yet. The wound appears before the cause, a tear in causality that the body cannot understand. 4D10 + AST Modifier. Sanity damage. Target must make a DET check (Difficulty 35) or gain Confused condition for 2 rounds as their mind rejects the paradox. Range: 30 ft.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": ""
+    "isSustained": false
   },
 
   "future-echo": {
@@ -694,22 +928,48 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "future",
       "requiredLevel": 3
     },
     "apCost": 4,
     "componentCost": [
-      { "type": "HR", "amount": 12 }
+      { "type": "Hours", "amount": 12 }
     ],
     "sanityCost": 5,
     "range": "30 ft",
-    "target": "area",
-    "duration": "5 rounds or until destroyed",
-    "description": "Summon a Future Echo (see Quick Reference) that acts on your turn. Duration: 5 rounds or until destroyed. The Future Echo knows one piece of useful information about the current situation ",
+    "target": "special",
+    "duration": "5 rounds",
+    "summon": {
+      "creatureId": "future-echo",
+      "creature": {
+        "id": "future-echo",
+        "name": "Future Echo",
+        "hp": 80,
+        "stamina": 40,
+        "attacks": [
+          {
+            "name": "Fated Blow",
+            "type": "physical",
+            "damage": "4D12",
+            "damageType": "physical",
+            "apCost": 3,
+            "special": "+2 D20 on all attack rolls"
+          }
+        ],
+        "passives": [
+          "+2 D20 on all attack rolls",
+          "Once per summon, can grant caster +2 D20 on any roll (no action required)",
+          "Fades if caster is reduced below 25% HP"
+        ]
+      },
+      "duration": "5 rounds or until destroyed",
+      "summonRange": "30 ft"
+    },
+    "description": "Summon a shadow of who you will become, stronger, wiser, bearing scars you haven't yet earned. They fight alongside you, knowing what you do not. Summon a Future Echo (see Quick Reference) that acts on your turn. Duration: 5 rounds or until destroyed. The Future Echo knows one piece of useful information about the current situation (Game Runner's discretion).",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": "See Future Echo stat block in Time school reference."
+    "isSustained": false
   },
 
   "sealed-moment": {
@@ -718,21 +978,31 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "time",
       "focus": "future",
       "requiredLevel": 4
     },
     "apCost": 4,
     "componentCost": [
-      { "type": "HR", "amount": 18 }
+      { "type": "Hours", "amount": 18 }
     ],
     "sanityCost": 15,
-    "range": "self",
-    "target": "self",
-    "duration": "instant",
-    "description": "[Declare one of the following before any roll is made]| They will fall: Target's next defensive roll automatically fails. || We will endure: Target ally's next defensive roll automatically succeeds. || It will strike true: Target ally's next attack automatically hits and crits. The sealed moment must occur within 3 rounds or the Hours are wasted. |",
+    "range": "30 ft",
+    "target": "creature",
+    "duration": "3 rounds",
+    "effects": {
+      "special": [
+        "Declare one of the following before any roll is made:",
+        "'They will fall': Target's next defensive roll automatically fails",
+        "'We will endure': Target ally's next defensive roll automatically succeeds",
+        "'It will strike true': Target ally's next attack automatically hits and crits",
+        "The sealed moment must occur within 3 rounds or the Hours are wasted"
+      ]
+    },
+    "description": "Declare what will happen and lock it into place. The future bends to accommodate your certainty. Declare one of the following before any roll is made: 'They will fall': Target's next defensive roll automatically fails. 'We will endure': Target ally's next defensive roll automatically succeeds. 'It will strike true': Target ally's next attack automatically hits and crits. The sealed moment must occur within 3 rounds or the Hours are wasted. Range: 30 ft.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": ""
+    "notes": "Choice-based fate manipulation"
   }
 }

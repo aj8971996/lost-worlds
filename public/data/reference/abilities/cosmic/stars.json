@@ -5,6 +5,7 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "divination",
       "requiredLevel": 1
     },
@@ -13,20 +14,27 @@
       { "type": "SR", "amount": 1 }
     ],
     "range": "touch",
-    "target": "Enemy",
+    "target": "creature",
     "duration": "30 minutes",
+    "effects": {
+      "diceModifiers": [
+        { "amount": 1, "applies": "defense", "duration": "30 minutes" }
+      ]
+    },
     "description": "Connect with the celestial bodies that watch over a creature, granting them fragmented visions of incoming threats. Target gains +1 D20 when defending.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Fragmented visions of incoming threats"
+    "notes": "Defensive support ability"
   },
+
   "foretold-strike": {
     "id": "foretold-strike",
     "name": "Foretold Strike",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "divination",
       "requiredLevel": 1
     },
@@ -38,18 +46,23 @@
     "range": "30 ft",
     "target": "enemy",
     "duration": "instant",
+    "effects": {
+      "special": ["Target rolls double their defensive dice pool and takes the lowest set. Applies to the next attack only."]
+    },
     "description": "Peer into the near future and see where your opponent will be. Your strike meets them there. Target rolls double their defensive dice pool and takes the lowest set. Applies to the next attack only.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Forces disadvantage on target's defense"
+    "notes": "Forces disadvantage on target's next defense"
   },
+
   "star-whisper": {
     "id": "star-whisper",
     "name": "Star Whisper",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "divination",
       "requiredLevel": 1
     },
@@ -58,20 +71,22 @@
       { "type": "SR", "amount": 1, "per": "10 words" }
     ],
     "range": "unlimited",
-    "target": "Enemy",
+    "target": "creature",
     "duration": "instant",
-    "description": "Speak your words to a celestial body—the Sun, the Moon, a distant star—and it carries your message to one whose face you hold clearly in your mind. Telepathic message delivered to target you can visualize. The celestial body that will send the message must also be visible and have means of passing along the message.",
+    "description": "Speak your words to a celestial body, and it carries your message to one whose face you hold clearly in your mind. Telepathic message delivered to target you can visualize. The celestial body that will send the message must also be visible and have means of passing along the message.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Requires visible celestial body to relay message"
+    "notes": "Requires visible celestial body to relay message; target must be visualizable"
   },
+
   "expose-frailty": {
     "id": "expose-frailty",
     "name": "Expose Frailty",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "divination",
       "requiredLevel": 2
     },
@@ -82,18 +97,24 @@
     "range": "30 ft",
     "target": "enemy",
     "duration": "3 rounds",
+    "effects": {
+      "appliesConditions": [
+        { "condition": "exposed", "duration": "3 rounds" }
+      ]
+    },
     "description": "The stars remember every wound a body has ever suffered. They whisper where the old breaks never quite mended. Target gains Exposed condition for 3 rounds.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": "Applies Exposed condition"
+    "isSustained": false
   },
+
   "celestial-warning": {
     "id": "celestial-warning",
     "name": "Celestial Warning",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "divination",
       "requiredLevel": 2
     },
@@ -104,18 +125,25 @@
     "range": "touch",
     "target": "ally",
     "duration": "1 hour",
+    "effects": {
+      "diceModifiers": [
+        { "amount": 1, "applies": "initiative", "duration": "1 hour" }
+      ],
+      "grants": ["Cannot be surprised"]
+    },
     "description": "Gift an ally with the watchful attention of the cosmos. Danger will not find them unaware. Target cannot be surprised and gains +1 D20 on initiative rolls.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": "Prevents surprise and boosts initiative"
+    "isSustained": false
   },
+
   "vision-of-ending": {
     "id": "vision-of-ending",
     "name": "Vision of Ending",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "divination",
       "requiredLevel": 3
     },
@@ -126,20 +154,25 @@
     "sanityCost": 5,
     "range": "30 ft",
     "target": "enemy",
-    "damage": "3D12 + AST",
+    "damage": {
+      "dice": "3D12",
+      "statModifier": "AST",
+      "type": "sanity"
+    },
     "duration": "instant",
     "description": "Force an enemy to witness a glimpse of their own death. The vision lasts only a moment, but the weight of it lingers. Deals Sanity damage.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": "Sanity damage"
+    "isSustained": false
   },
+
   "read-the-battlefield": {
     "id": "read-the-battlefield",
     "name": "Read the Battlefield",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "divination",
       "requiredLevel": 3
     },
@@ -149,20 +182,32 @@
     ],
     "range": "self",
     "target": "area",
-    "areaOfEffect": "30 ft radius",
+    "areaOfEffect": {
+      "shape": "radius",
+      "size": "30 ft"
+    },
     "duration": "3 rounds",
+    "effects": {
+      "diceModifiers": [
+        { "amount": 1, "applies": "attack", "duration": "3 rounds" },
+        { "amount": 1, "applies": "defense", "duration": "3 rounds" }
+      ],
+      "special": ["Affects all allies within area"]
+    },
     "description": "Enter a trance and perceive the flow of combat from above, guiding your allies through the chaos with whispered warnings. All allies within 30 ft. gain +1 D20 to attack dice pools and +1 D20 to defending dice pools.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": true,
-    "notes": "Trance state, buffs all allies in range"
+    "notes": "Requires trance state"
   },
+
   "starfire-gaze": {
     "id": "starfire-gaze",
     "name": "Starfire Gaze",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "divination",
       "requiredLevel": 4
     },
@@ -173,14 +218,20 @@
     "sanityCost": 10,
     "range": "self",
     "target": "area",
-    "areaOfEffect": "15 ft cone",
-    "damage": "5D12 + AST",
+    "areaOfEffect": {
+      "shape": "cone",
+      "size": "15 ft"
+    },
+    "damage": {
+      "dice": "5D12",
+      "statModifier": "AST",
+      "type": "sanity"
+    },
     "duration": "instant",
-    "description": "Your eyes flood with the light of ancient stars. Those who meet your gaze see too much—the vast indifference of the cosmos, the smallness of their existence, the certainty of their end. Deals Sanity damage.",
+    "description": "Your eyes flood with the light of ancient stars. Those who meet your gaze see too much, the vast indifference of the cosmos, the smallness of their existence, the certainty of their end. Deals Sanity damage.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": "Sanity damage, cone AoE"
+    "isSustained": false
   },
 
   "lucky-break": {
@@ -189,6 +240,7 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "fate",
       "requiredLevel": 1
     },
@@ -197,20 +249,31 @@
       { "type": "SR", "amount": 1 }
     ],
     "range": "30 ft",
-    "target": "Enemy",
+    "target": "creature",
     "duration": "instant",
+    "timing": "reaction",
+    "isReaction": true,
+    "reactionTrigger": {
+      "event": "Target rolls a die",
+      "conditions": ["Must be used immediately after roll"]
+    },
+    "effects": {
+      "special": ["Target rerolls 1 die that was just rolled. Take either result."]
+    },
     "description": "A gentle nudge to the threads of fate, just enough to turn a near-miss into a grazing success. Target rerolls 1 die that was just rolled. Take either result.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Reaction ability, choose best result"
+    "notes": "Can choose best result"
   },
+
   "ill-omen": {
     "id": "ill-omen",
     "name": "Ill Omen",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "fate",
       "requiredLevel": 1
     },
@@ -221,18 +284,25 @@
     "range": "30 ft",
     "target": "enemy",
     "duration": "instant",
+    "effects": {
+      "diceModifiers": [
+        { "amount": -1, "applies": "next roll", "duration": "until triggered" }
+      ],
+      "special": ["Minimum 1 die remaining"]
+    },
     "description": "Mark an enemy with a whisper of misfortune. The stars turn their favor elsewhere. Target loses 1 D20 from their next roll (minimum 1 die).",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": "Debuff to next roll"
+    "isSustained": false
   },
+
   "destined-wound": {
     "id": "destined-wound",
     "name": "Destined Wound",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "fate",
       "requiredLevel": 1
     },
@@ -243,20 +313,26 @@
     "sanityCost": 5,
     "range": "30 ft",
     "target": "enemy",
-    "damage": "2D10 + AST",
+    "damage": {
+      "dice": "2D10",
+      "statModifier": "AST",
+      "type": "physical"
+    },
     "duration": "instant",
     "description": "You see the cut before it happens, a thread pulled taut, ready to snap. You simply... let it. Damage manifests as a wound from an injury that 'was always going to happen.'",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Fate-based damage"
+    "notes": "Fate-based damage; no attack roll required"
   },
+
   "thread-tug": {
     "id": "thread-tug",
     "name": "Thread Tug",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "fate",
       "requiredLevel": 2
     },
@@ -264,21 +340,32 @@
     "componentCost": [
       { "type": "SR", "amount": 2 }
     ],
-    "range": "line of sight",
+    "range": "line-of-sight",
     "target": "enemy",
     "duration": "instant",
+    "timing": "reaction",
+    "isReaction": true,
+    "reactionTrigger": {
+      "event": "Enemy completes a roll",
+      "conditions": ["Can be used after seeing the outcome"]
+    },
+    "effects": {
+      "special": ["Force target to reroll their most recent roll. They must take the new result."]
+    },
     "description": "Reach into the weave and pull. What was certain becomes uncertain again. Force any enemy you can see to reroll their most recent roll. They must take the new result. Can be used after seeing the outcome of a dice.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Reaction ability, forces reroll"
+    "notes": "Target must take new result"
   },
+
   "borrowed-fortune": {
     "id": "borrowed-fortune",
     "name": "Borrowed Fortune",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "fate",
       "requiredLevel": 2
     },
@@ -290,18 +377,30 @@
     "range": "self",
     "target": "self",
     "duration": "1 hour",
+    "effects": {
+      "diceModifiers": [
+        { "amount": 2, "applies": "next roll", "duration": "until triggered" }
+      ]
+    },
+    "delayedEffect": {
+      "description": "Suffer -1 D20 on one roll within the next hour",
+      "timing": "Within 1 hour",
+      "effect": "Game Runner chooses when the penalty applies"
+    },
     "description": "Steal luck from your own future. The debt always comes due. Gain +2 D20 on your next roll. Within the next hour, suffer -1 D20 on one roll (Game Runner chooses when).",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Delayed penalty"
+    "notes": "Delayed penalty chosen by Game Runner"
   },
+
   "sever-thread": {
     "id": "sever-thread",
     "name": "Sever Thread",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "fate",
       "requiredLevel": 3
     },
@@ -312,20 +411,30 @@
     "sanityCost": 5,
     "range": "30 ft",
     "target": "enemy",
-    "damage": "2D8 + AST",
+    "damage": {
+      "dice": "2D8",
+      "statModifier": "AST",
+      "type": "sanity"
+    },
     "duration": "1 round",
+    "effects": {
+      "diceModifiers": [
+        { "amount": -1, "applies": "all", "duration": "until end of target's next turn" }
+      ]
+    },
     "description": "Grip an enemy's fate-line and cut. The severed strand lashes back against them. Deals Sanity damage. Target suffers -1 D20 on all rolls until the end of their next turn as their fate unravels.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": "Sanity damage plus debuff"
+    "isSustained": false
   },
+
   "probability-spike": {
     "id": "probability-spike",
     "name": "Probability Spike",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "fate",
       "requiredLevel": 4
     },
@@ -335,20 +444,29 @@
     ],
     "sanityCost": 10,
     "range": "30 ft",
-    "target": "Enemy",
+    "target": "creature",
     "duration": "instant",
+    "effects": {
+      "special": [
+        "Declare before any roll is made by the target",
+        "Success: any damage rolls are doubled",
+        "Failure: any damage rolls are halved"
+      ]
+    },
     "description": "Sharpen the moment. What would merely succeed now triumphs; what would merely fail now collapses. Declare before any roll is made by the target. Success causes any damage rolls to double, failure causes any damage rolls to halve.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Must declare before roll"
+    "notes": "Must declare before roll is made"
   },
+
   "fates-due": {
     "id": "fates-due",
     "name": "Fate's Due",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "fate",
       "requiredLevel": 4
     },
@@ -359,13 +477,21 @@
     "sanityCost": 10,
     "range": "30 ft",
     "target": "enemy",
-    "damage": "5D10 + AST",
+    "damage": {
+      "dice": "5D10",
+      "statModifier": "AST",
+      "type": "sanity",
+      "bonusAgainst": {
+        "targets": ["benefited from luck or reroll effect in last hour"],
+        "bonusDice": "5D10"
+      }
+    },
     "duration": "instant",
-    "description": "All the misfortune an enemy has avoided catches up at once. Every near-miss, every lucky dodge, every close call—collected and delivered. Deals Sanity damage. If the target has benefited from any luck or reroll effect in the last hour, damage is doubled.",
+    "description": "All the misfortune an enemy has avoided catches up at once. Every near-miss, every lucky dodge, every close call, all collected and delivered. Deals Sanity damage. If the target has benefited from any luck or reroll effect in the last hour, damage is doubled.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Sanity damage, doubled if target used luck effects"
+    "notes": "Damage doubled if target used luck/reroll effects recently"
   },
 
   "words-of-weakness": {
@@ -374,6 +500,7 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "prophecy",
       "requiredLevel": 1
     },
@@ -384,18 +511,22 @@
     "range": "30 ft",
     "target": "enemy",
     "duration": "3 rounds",
+    "effects": {
+      "special": ["Target suffers -5 to damage rolls for 3 rounds"]
+    },
     "description": "Speak of the moment your enemy's strength fails them. The stars witness your declaration and begin pulling that future into being. Target suffers -5 to damage rolls for 3 rounds.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": "Damage debuff"
+    "isSustained": false
   },
+
   "foretold-stumble": {
     "id": "foretold-stumble",
     "name": "Foretold Stumble",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "prophecy",
       "requiredLevel": 1
     },
@@ -406,18 +537,25 @@
     "range": "30 ft",
     "target": "enemy",
     "duration": "2 rounds",
+    "effects": {
+      "movement": { "amount": -15, "duration": "2 rounds" },
+      "diceModifiers": [
+        { "amount": -1, "applies": "SPD rolls", "duration": "2 rounds" }
+      ]
+    },
     "description": "Declare that your enemy will falter mid-stride. Their legs grow uncertain as destiny tugs at their ankles. Target loses 15 ft. of movement and -1 D20 on SPD rolls.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": "Movement and SPD debuff"
+    "isSustained": false
   },
+
   "mark-of-wounded": {
     "id": "mark-of-wounded",
     "name": "Mark of Wounded",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "prophecy",
       "requiredLevel": 1
     },
@@ -427,19 +565,24 @@
     ],
     "range": "30 ft",
     "target": "enemy",
-    "duration": "10 minutes",
+    "duration": "until-triggered",
+    "effects": {
+      "damageIncrease": "+2D12",
+      "special": ["Applies to next attack against target", "Lasts until triggered or 10 minutes"]
+    },
     "description": "Whisper of the wound that awaits. The next strike against them will find its mark with terrible precision. Next attack against target deals +2D12 damage. Lasts until triggered or 10 minutes.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": "Triggered damage boost"
+    "isSustained": false
   },
+
   "pronounce-terror": {
     "id": "pronounce-terror",
     "name": "Pronounce Terror",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "prophecy",
       "requiredLevel": 2
     },
@@ -451,18 +594,28 @@
     "range": "30 ft",
     "target": "enemy",
     "duration": "3 rounds",
+    "effects": {
+      "appliesConditions": [
+        {
+          "condition": "terrified",
+          "duration": "3 rounds",
+          "save": { "stat": "COR", "difficulty": 40 }
+        }
+      ]
+    },
     "description": "Speak directly into an enemy's future and show them what awaits. They see it clearly: the moment of their end, rushing toward them. Target gains Terrified condition (3 rounds or COR check Difficulty 40).",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": "Applies Terrified condition"
+    "isSustained": false
   },
+
   "prophets-burden": {
     "id": "prophets-burden",
     "name": "Prophet's Burden",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "prophecy",
       "requiredLevel": 2
     },
@@ -474,18 +627,25 @@
     "range": "30 ft",
     "target": "enemy",
     "duration": "3 rounds",
+    "effects": {
+      "ap": { "amount": -1, "affects": "max", "duration": "3 rounds" },
+      "diceModifiers": [
+        { "amount": -1, "applies": "all", "duration": "3 rounds" }
+      ]
+    },
     "description": "Lay a heavy doom upon your foe. Every action they take feels like wading through thickening fate. Target loses 1 Max AP per turn and -1 D20 on all rolls.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": "AP and dice pool debuff"
+    "isSustained": false
   },
+
   "speak-the-bleeding": {
     "id": "speak-the-bleeding",
     "name": "Speak the Bleeding",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "prophecy",
       "requiredLevel": 3
     },
@@ -497,18 +657,26 @@
     "range": "30 ft",
     "target": "enemy",
     "duration": "sustained",
+    "effects": {
+      "appliesConditions": [
+        { "condition": "bleeding", "duration": "until treated" }
+      ],
+      "special": ["Bleeding deals 2D10 damage per turn", "No physical attack required", "Target must be able to hear"]
+    },
     "description": "Declare the wound before it exists. Blood answers the prophecy, seeping from flesh that remembers a future injury. Target gains Bleeding condition (2D10 damage per turn until treated). No physical attack required. Target must be able to hear.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Applies Bleeding without attack"
+    "notes": "Target must be able to hear"
   },
+
   "chorus-of-doom": {
     "id": "chorus-of-doom",
     "name": "Chorus of Doom",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "prophecy",
       "requiredLevel": 3
     },
@@ -519,20 +687,32 @@
     "sanityCost": 10,
     "range": "20 ft",
     "target": "area",
-    "areaOfEffect": "20 ft radius",
+    "targetCount": 3,
+    "areaOfEffect": {
+      "shape": "radius",
+      "size": "20 ft",
+      "maxTargets": 3
+    },
     "duration": "2 rounds",
+    "effects": {
+      "diceModifiers": [
+        { "amount": -2, "applies": "next roll", "duration": "until triggered" }
+      ],
+      "special": ["-15 to all damage rolls for 2 rounds"]
+    },
     "description": "Address multiple enemies with a sweeping declaration of their shared misfortune. The stars dim above them all. Up to 3 targets within 20 ft. suffer -2 D20 on their next roll and -15 to all damage rolls for 2 rounds.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": "Multi-target debuff"
+    "isSustained": false
   },
+
   "seal-their-fate": {
     "id": "seal-their-fate",
     "name": "Seal Their Fate",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "prophecy",
       "requiredLevel": 4
     },
@@ -544,11 +724,23 @@
     "range": "30 ft",
     "target": "enemy",
     "duration": "1 hour",
+    "effects": {
+      "appliesConditions": [
+        { "condition": "doomed", "duration": "until dispelled, target rests, or 1 hour" }
+      ],
+      "diceModifiers": [
+        { "amount": -2, "applies": "all", "duration": "until condition ends" }
+      ],
+      "statModifiers": [
+        { "stats": "all", "amount": -2, "duration": "until condition ends" }
+      ],
+      "damageIncrease": "+1D10",
+      "special": ["All damage taken is increased by +1D10"]
+    },
     "description": "Pronounce a doom so absolute that reality accepts it as inevitable. The target's threads fray visibly as their future narrows to a single, grim point. Target suffers 'Doomed' condition: -2 D20 on all rolls, -2 to all stat modifiers, and all damage taken is increased by +1D10. Duration: Until dispelled, target rests, or 1 hour.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": "Applies Doomed condition"
+    "isSustained": false
   },
 
   "hunters-bow": {
@@ -557,6 +749,7 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "constellations",
       "requiredLevel": 1
     },
@@ -566,20 +759,42 @@
     ],
     "range": "self",
     "target": "self",
-    "damage": "2D12",
-    "duration": "until dismissed or rest",
-    "description": "Call forth the spectral bow of the great hunter written in the stars. It materializes in your hands, drawn taut with starlight. Summons spectral bow. Ranged attacks deal 2D12. Uses caster's SPD + AST for attack rolls.",
+    "duration": "until-dismissed",
+    "summon": {
+      "creatureId": "hunters-bow-weapon",
+      "creature": {
+        "id": "hunters-bow-weapon",
+        "name": "Spectral Bow",
+        "hp": 0,
+        "stamina": 0,
+        "attacks": [
+          {
+            "name": "Starlight Arrow",
+            "type": "ranged",
+            "damage": "2D12",
+            "damageType": "radiant",
+            "statModifiers": ["SPD", "AST"],
+            "apCost": 2
+          }
+        ],
+        "notes": "Summoned weapon; uses caster's SPD + AST for attack rolls"
+      },
+      "duration": "until dismissed or rest"
+    },
+    "description": "Call forth the spectral bow of the great hunter written in the stars. It materializes in your hands, drawn taut with starlight. Summons spectral bow. Ranged attacks deal 2D12. Uses caster's SPD + AST for attack rolls. Lasts until dismissed or rest.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Summoned weapon, uses SPD + AST"
+    "notes": "Summoned weapon"
   },
+
   "summon-the-lesser-bear": {
     "id": "summon-the-lesser-bear",
     "name": "Summon the Lesser Bear",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "constellations",
       "requiredLevel": 1
     },
@@ -589,19 +804,41 @@
     ],
     "range": "30 ft",
     "target": "special",
-    "duration": "until destroyed, dismissed, or rest",
-    "description": "Reach toward the smaller bear constellation and pull a fragment of its essence into being. A spectral cub of starlight answers your call. Summons Lesser Star Bear (HP: 30, ST: 20, Attack: Starlight Swipe 2D12 for 2 AP). Special: Guardian Presence—adjacent allies gain +1 D20 on defensive rolls (passive).",
+    "duration": "until-destroyed",
+    "summon": {
+      "creatureId": "lesser-star-bear",
+      "creature": {
+        "id": "lesser-star-bear",
+        "name": "Lesser Star Bear",
+        "hp": 30,
+        "stamina": 20,
+        "attacks": [
+          {
+            "name": "Starlight Swipe",
+            "type": "physical",
+            "damage": "2D12",
+            "damageType": "physical",
+            "apCost": 2
+          }
+        ],
+        "passives": ["Guardian Presence: Adjacent allies gain +1 D20 on defensive rolls"]
+      },
+      "duration": "until destroyed, dismissed, or rest",
+      "summonRange": "30 ft"
+    },
+    "description": "Reach toward the smaller bear constellation and pull a fragment of its essence into being. A spectral cub of starlight answers your call. Summons Lesser Star Bear (HP: 30, ST: 20, Attack: Starlight Swipe 2D12 for 2 AP). Special: Guardian Presence: adjacent allies gain +1 D20 on defensive rolls (passive).",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": "Summon creature"
+    "isSustained": false
   },
+
   "constellation-brand": {
     "id": "constellation-brand",
     "name": "Constellation Brand",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "constellations",
       "requiredLevel": 1
     },
@@ -610,20 +847,29 @@
       { "type": "SR", "amount": 1 }
     ],
     "range": "touch",
-    "target": "Enemy",
+    "target": "creature",
     "duration": "1 turn",
+    "effects": {
+      "diceModifiers": [
+        { "amount": 1, "applies": "attack", "duration": "1 turn" }
+      ],
+      "movement": { "amount": 5, "duration": "1 turn" },
+      "grants": ["Caster always knows target's direction"]
+    },
     "description": "Touch a target and mark them with a stellar pattern. The stars remember them now. Target gains +1 D20 on attacks and +5 ft. movement. You always know their direction in relation to where you are facing.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Buff plus tracking"
+    "notes": "Provides tracking in addition to buffs"
   },
+
   "call-the-serpent": {
     "id": "call-the-serpent",
     "name": "Call the Serpent",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "constellations",
       "requiredLevel": 2
     },
@@ -634,19 +880,50 @@
     "sanityCost": 5,
     "range": "30 ft",
     "target": "special",
-    "duration": "until destroyed, dismissed, or rest",
-    "description": "Invoke the great serpent that coils between the stars. A sinuous form of cold light slithers into existence at your command. Summons Star Serpent (HP: 40, ST: 30, Attacks: Coiling Fangs 4D10 for 3 AP—applies Constricted condition; Crushing Coil 8D6 for 1 AP—only targets Constricted enemies, extends Constricted by 1 turn).",
+    "duration": "until-destroyed",
+    "summon": {
+      "creatureId": "star-serpent",
+      "creature": {
+        "id": "star-serpent",
+        "name": "Star Serpent",
+        "hp": 40,
+        "stamina": 30,
+        "attacks": [
+          {
+            "name": "Coiling Fangs",
+            "type": "physical",
+            "damage": "4D10",
+            "damageType": "physical",
+            "apCost": 3,
+            "special": "On hit, target gains 'Constricted' condition: loses 1 AP on their next turn"
+          },
+          {
+            "name": "Crushing Coil",
+            "type": "physical",
+            "damage": "8D6",
+            "damageType": "physical",
+            "apCost": 1,
+            "targetRestriction": "Can only target Constricted enemies",
+            "special": "Extends Constricted by 1 turn"
+          }
+        ]
+      },
+      "duration": "until destroyed, dismissed, or rest",
+      "summonRange": "30 ft"
+    },
+    "description": "Invoke the great serpent that coils between the stars. A sinuous form of cold light slithers into existence at your command. Summons Star Serpent (HP: 40, ST: 30, Attacks: Coiling Fangs 4D10 for 3 AP (applies Constricted condition); Crushing Coil 8D6 for 1 AP (only targets Constricted enemies, extends Constricted by 1 turn).",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": "Summon creature"
+    "isSustained": false
   },
+
   "mantle-of-stars": {
     "id": "mantle-of-stars",
     "name": "Mantle of Stars",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "constellations",
       "requiredLevel": 2
     },
@@ -657,18 +934,25 @@
     "range": "touch",
     "target": "ally",
     "duration": "2 turns",
+    "effects": {
+      "diceModifiers": [
+        { "amount": 2, "applies": "defense", "duration": "2 turns" }
+      ],
+      "resistances": ["sanity"]
+    },
     "description": "Drape yourself or an ally in the protective patterns of the constellations. The stars themselves become armor. Target gains +2 D20 on defense dice pools and resistance to Sanity damage (Sanity damage is halved).",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": "Defense buff plus Sanity resistance"
+    "isSustained": false
   },
+
   "summon-the-great-bear-cub": {
     "id": "summon-the-great-bear-cub",
     "name": "Summon the Great Bear Cub",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "constellations",
       "requiredLevel": 3
     },
@@ -678,19 +962,47 @@
     ],
     "range": "30 ft",
     "target": "special",
-    "duration": "until destroyed, dismissed, or rest",
-    "description": "Call upon the greater bear cub, ancient guardian in training of the celestial pole. An impressive form of concentrated starlight answers, steady and powerful. Summons Greater Star Bear Cub (HP: 100, ST: 40, Attacks: Celestial Maul 4D12 for 3 AP; Intercept for 1 AP—Reaction: When adjacent ally is attacked, the bear becomes the target instead).",
+    "duration": "until-destroyed",
+    "summon": {
+      "creatureId": "greater-star-bear-cub",
+      "creature": {
+        "id": "greater-star-bear-cub",
+        "name": "Greater Star Bear Cub",
+        "hp": 100,
+        "stamina": 40,
+        "attacks": [
+          {
+            "name": "Celestial Maul",
+            "type": "physical",
+            "damage": "4D12",
+            "damageType": "physical",
+            "apCost": 3
+          },
+          {
+            "name": "Intercept",
+            "type": "physical",
+            "damage": "0",
+            "apCost": 1,
+            "special": "Reaction: When adjacent ally is attacked, the bear becomes the target instead"
+          }
+        ]
+      },
+      "duration": "until destroyed, dismissed, or rest",
+      "summonRange": "30 ft"
+    },
+    "description": "Call upon the greater bear cub, ancient guardian in training of the celestial pole. An impressive form of concentrated starlight answers, steady and powerful. Summons Greater Star Bear Cub (HP: 100, ST: 40, Attacks: Celestial Maul 4D12 for 3 AP; Intercept for 1 AP (Reaction): When adjacent ally is attacked, the bear becomes the target instead).",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": "Summon creature, powerful guardian"
+    "isSustained": false
   },
+
   "crown-of-the-royal": {
     "id": "crown-of-the-royal",
     "name": "Crown of the Royal",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "constellations",
       "requiredLevel": 3
     },
@@ -701,18 +1013,28 @@
     "range": "touch",
     "target": "ally",
     "duration": "5 turns",
+    "effects": {
+      "statModifiers": [
+        { "stats": "all", "amount": 5, "duration": "5 turns" }
+      ],
+      "diceModifiers": [
+        { "amount": 1, "applies": "all", "duration": "5 turns" }
+      ]
+    },
     "description": "Invoke the stellar crown worn by legendary rulers. A circlet of burning stars settles upon the brow of your chosen ally. Target gains +5 to all stat modifiers and +1 D20 on all rolls.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Powerful stat buff"
+    "notes": "Powerful buff ability"
   },
+
   "call-the-wyrmling": {
     "id": "call-the-wyrmling",
     "name": "Call the Wyrmling",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "stars",
       "focus": "constellations",
       "requiredLevel": 4
     },
@@ -723,11 +1045,41 @@
     "sanityCost": 5,
     "range": "30 ft",
     "target": "special",
-    "duration": "until destroyed, dismissed, or rest",
-    "description": "Reach toward the dragon constellation and coax forth a fragment of its young. A hatchling of celestial fire tumbles into existence, eager and volatile, not yet the terror its parent will become, but dangerous nonetheless. Summons Star Wyrmling (HP: 120, ST: 35, Attacks: Fledgling Claws 4D12 + MIT + AST for 3 AP; Ember Breath 10D6 for 5 AP—10 ft. cone, targets gain Burned 1 stack, usable three times per day).",
+    "duration": "until-destroyed",
+    "summon": {
+      "creatureId": "star-wyrmling",
+      "creature": {
+        "id": "star-wyrmling",
+        "name": "Star Wyrmling",
+        "hp": 120,
+        "stamina": 35,
+        "attacks": [
+          {
+            "name": "Fledgling Claws",
+            "type": "physical",
+            "damage": "4D12",
+            "statModifiers": ["MIT", "AST"],
+            "damageType": "physical",
+            "apCost": 3
+          },
+          {
+            "name": "Ember Breath",
+            "type": "ranged",
+            "damage": "10D6",
+            "damageType": "fire",
+            "apCost": 5,
+            "usesPerDay": 3,
+            "special": "10 ft. cone. Targets gain Burned (1 stack)."
+          }
+        ]
+      },
+      "duration": "until destroyed, dismissed, or rest",
+      "summonRange": "30 ft"
+    },
+    "description": "Reach toward the dragon constellation and coax forth a fragment of its young. A hatchling of celestial fire tumbles into existence, eager and volatile, not yet the terror its parent will become, but dangerous nonetheless. Summons Star Wyrmling (HP: 120, ST: 35, Attacks: Fledgling Claws 4D12 + MIT + AST for 3 AP; Ember Breath 10D6 for 5 AP (10 ft. cone), targets gain Burned 1 stack, usable three times per day).",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Summon creature, powerful dragon"
+    "notes": "Most powerful constellation summon"
   }
 }

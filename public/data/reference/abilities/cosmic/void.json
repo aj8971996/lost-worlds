@@ -1,10 +1,643 @@
 {
+  "shadow-bullet": {
+    "id": "shadow-bullet",
+    "name": "Shadow Bullet",
+    "source": {
+      "type": "magic",
+      "college": "cosmic",
+      "school": "void",
+      "focus": "shadow",
+      "requiredLevel": 1
+    },
+    "apCost": 1,
+    "componentCost": [
+      { "type": "VS", "amount": 1 }
+    ],
+    "range": "40 ft",
+    "target": "enemy",
+    "damage": {
+      "dice": "2D8",
+      "statModifier": "AST",
+      "type": "necrotic"
+    },
+    "duration": "instant",
+    "effects": {
+      "special": [
+        "Can add 1 additional D8 for every 2 additional VS spent",
+        "Example: 5 VS spent would mean damage roll is 4D8 + AST"
+      ]
+    },
+    "description": "Condense darkness into a projectile that tears through flesh and leaves cold numbness in its wake. 2D8 + AST Modifier. Range: 40 ft. Can Add 1 Additional D8 for Every 2 additional VS spent.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "Scalable damage with additional VS"
+  },
+
+  "cloak-of-shadows": {
+    "id": "cloak-of-shadows",
+    "name": "Cloak of Shadows",
+    "source": {
+      "type": "magic",
+      "college": "cosmic",
+      "school": "void",
+      "focus": "shadow",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "componentCost": [
+      { "type": "VS", "amount": 1 }
+    ],
+    "range": "self",
+    "target": "self",
+    "duration": "10 minutes",
+    "effects": {
+      "diceModifiers": [
+        { "amount": 2, "applies": "stealth-related rolls", "duration": "10 minutes" },
+        { "amount": 1, "applies": "defense", "duration": "10 minutes" }
+      ],
+      "special": ["Bright light ends the effect early"]
+    },
+    "description": "Pull darkness around yourself like a garment. Light slides away from you, and your outline blurs. Caster gains +2 D20 on stealth-related rolls and +1 D20 on defensive rolls. Duration: 10 minutes. Bright light ends the effect early.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "darken": {
+    "id": "darken",
+    "name": "Darken",
+    "source": {
+      "type": "magic",
+      "college": "cosmic",
+      "school": "void",
+      "focus": "shadow",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "componentCost": [
+      { "type": "VS", "amount": 1 }
+    ],
+    "range": "30 ft",
+    "target": "area",
+    "areaOfEffect": {
+      "shape": "radius",
+      "size": "20 ft"
+    },
+    "duration": "5 minutes",
+    "effects": {
+      "special": [
+        "Create a 20 ft. radius of darkness centered on a point",
+        "Mundane light sources are extinguished",
+        "Magical light sources are suppressed for the duration"
+      ]
+    },
+    "description": "Extinguish light sources and spread darkness across an area. Torches gutter, lanterns die, and even magical light dims. Create a 20 ft. radius of darkness centered on a point within 30 ft. Mundane light sources are extinguished. Magical light sources are suppressed for the duration. Duration: 5 minutes.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "Area denial utility"
+  },
+
+  "shadow-step": {
+    "id": "shadow-step",
+    "name": "Shadow Step",
+    "source": {
+      "type": "magic",
+      "college": "cosmic",
+      "school": "void",
+      "focus": "shadow",
+      "requiredLevel": 2
+    },
+    "apCost": 2,
+    "componentCost": [
+      { "type": "VS", "amount": 2 }
+    ],
+    "range": "40 ft",
+    "target": "self",
+    "duration": "instant",
+    "effects": {
+      "special": [
+        "Teleport up to 40 ft. between two areas of dim light or darkness",
+        "Cannot be targeted by attacks of opportunity during this movement"
+      ]
+    },
+    "description": "Sink into one shadow and emerge from another. For a moment, you exist only as darkness moving through darkness. Teleport up to 40 ft. between two areas of dim light or darkness. You cannot be targeted by attacks of opportunity during this movement.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "Requires dim light or darkness at both origin and destination"
+  },
+
+  "umbral-lash": {
+    "id": "umbral-lash",
+    "name": "Umbral Lash",
+    "source": {
+      "type": "magic",
+      "college": "cosmic",
+      "school": "void",
+      "focus": "shadow",
+      "requiredLevel": 2
+    },
+    "apCost": 3,
+    "componentCost": [
+      { "type": "VS", "amount": 2 }
+    ],
+    "sanityCost": 5,
+    "range": "25 ft",
+    "target": "enemy",
+    "damage": {
+      "dice": "3D10",
+      "statModifier": "AST",
+      "type": "necrotic"
+    },
+    "duration": "instant",
+    "effects": {
+      "diceModifiers": [
+        { "amount": -1, "applies": "attack", "duration": "until end of target's next turn" }
+      ],
+      "special": ["Target suffers -1 D20 on their next attack roll as creeping cold numbs their limbs"]
+    },
+    "description": "Command your own shadow to strike. It stretches impossibly, its edges sharp as razors, and rakes across your foe. 3D10 + AST Modifier. Target suffers -1 D20 on their next attack roll as creeping cold numbs their limbs. Range: 25 ft.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "assassins-veil": {
+    "id": "assassins-veil",
+    "name": "Assassin's Veil",
+    "source": {
+      "type": "magic",
+      "college": "cosmic",
+      "school": "void",
+      "focus": "shadow",
+      "requiredLevel": 3
+    },
+    "apCost": 4,
+    "componentCost": [
+      { "type": "VS", "amount": 3 }
+    ],
+    "sanityCost": 5,
+    "range": "self",
+    "target": "self",
+    "duration": "1 hour",
+    "effects": {
+      "grants": ["Invisible while in dim light or darkness"],
+      "special": [
+        "First attack made while invisible deals +3D12 damage and automatically crits if it hits",
+        "Effect ends after attacking or entering bright light",
+        "AP price can be reduced to a minimum of 1 by spending additional VS"
+      ]
+    },
+    "description": "Become one with the darkness. While in shadow, you are nearly impossible to detect, and your first strike carries the weight of the void. Caster becomes invisible while in dim light or darkness. First attack made while invisible deals +3D12 damage and automatically crits if it hits. The effect ends after attacking or entering bright light. Duration: 1 hour or until triggered. Note: AP Price can be reduced to a minimum of 1 by spending additional VS.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "Powerful stealth setup with critical strike payoff"
+  },
+
+  "summon-shade": {
+    "id": "summon-shade",
+    "name": "Summon Shade",
+    "source": {
+      "type": "magic",
+      "college": "cosmic",
+      "school": "void",
+      "focus": "shadow",
+      "requiredLevel": 3
+    },
+    "apCost": 4,
+    "componentCost": [
+      { "type": "VS", "amount": 3 }
+    ],
+    "sanityCost": 10,
+    "range": "30 ft",
+    "target": "special",
+    "duration": "5 rounds",
+    "summon": {
+      "creatureId": "shade",
+      "creature": {
+        "id": "shade",
+        "name": "Shade",
+        "hp": 50,
+        "stamina": 25,
+        "attacks": [
+          {
+            "name": "Umbral Rake",
+            "type": "physical",
+            "damage": "5D6",
+            "damageType": "necrotic",
+            "apCost": 3,
+            "special": "Attacks from darkness gain +2 D20 to hit"
+          }
+        ],
+        "passives": [
+          "Attacks from darkness gain +2 D20 to hit",
+          "Can use Shadow Step once per round (no cost)",
+          "Takes double damage from radiant/light sources"
+        ]
+      },
+      "duration": "5 rounds or until destroyed",
+      "summonRange": "30 ft"
+    },
+    "description": "Tear a fragment of living darkness from the void. It stalks your enemies with silent hunger, striking from angles that shouldn't exist. Summon a Shade that acts on your turn. Duration: 5 rounds or until destroyed.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "ebon-annihilation": {
+    "id": "ebon-annihilation",
+    "name": "Ebon Annihilation",
+    "source": {
+      "type": "magic",
+      "college": "cosmic",
+      "school": "void",
+      "focus": "shadow",
+      "requiredLevel": 4
+    },
+    "apCost": 5,
+    "componentCost": [
+      { "type": "VS", "amount": 5 }
+    ],
+    "sanityCost": 15,
+    "range": "30 ft",
+    "target": "enemy",
+    "damage": {
+      "dice": "6D12",
+      "statModifier": "AST",
+      "type": "necrotic"
+    },
+    "duration": "instant",
+    "effects": {
+      "appliesConditions": [
+        { "condition": "terrified", "duration": "2 rounds" }
+      ],
+      "special": [
+        "Half physical damage, half Sanity damage",
+        "If target is in dim light or darkness, damage dice are maximized (no roll, take highest possible)"
+      ]
+    },
+    "description": "Open yourself fully to the void and become a conduit for absolute darkness. Shadows in the area surge toward your target, tearing at body and soul alike. 6D12 + AST Modifier. Half physical damage, half Sanity damage. If the target is in dim light or darkness, damage dice are maximized (no roll, take highest possible). Target gains Terrified condition for 2 rounds. Range: 30 ft.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "Devastating finisher with maximized damage in darkness"
+  },
+
+  "nullify": {
+    "id": "nullify",
+    "name": "Nullify",
+    "source": {
+      "type": "magic",
+      "college": "cosmic",
+      "school": "void",
+      "focus": "emptiness",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "componentCost": [
+      { "type": "VS", "amount": 1 }
+    ],
+    "range": "30 ft",
+    "target": "creature",
+    "duration": "instant",
+    "effects": {
+      "special": [
+        "End one magical effect of School Level 2 or lower on a target or area",
+        "Higher level effects require an AST + MAG check against Difficulty 30 + (5 x School Level)"
+      ]
+    },
+    "description": "Reach into a spell's structure and tear out its foundation. Minor magic unravels at your touch. End one magical effect of School Level 2 or lower on a target or area within 30 ft. Higher level effects require an AST + MAG check against Difficulty 30 + (5 x School Level).",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "Dispel magic effect"
+  },
+
+  "void-touch": {
+    "id": "void-touch",
+    "name": "Void Touch",
+    "source": {
+      "type": "magic",
+      "college": "cosmic",
+      "school": "void",
+      "focus": "emptiness",
+      "requiredLevel": 1
+    },
+    "apCost": 1,
+    "componentCost": [
+      { "type": "VS", "amount": 1 }
+    ],
+    "range": "touch",
+    "target": "enemy",
+    "damage": {
+      "dice": "2D8",
+      "statModifier": "AST",
+      "type": "necrotic"
+    },
+    "duration": "instant",
+    "effects": {
+      "special": [
+        "If target has any active magical buffs, one is suppressed for 2 rounds"
+      ]
+    },
+    "description": "Strike with a hand wreathed in emptiness. Where you touch, magic flickers and fades. 2D8 + AST Modifier. If target has any active magical buffs, one is suppressed for 2 rounds. Range: Touch.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "spell-resistance": {
+    "id": "spell-resistance",
+    "name": "Spell Resistance",
+    "source": {
+      "type": "magic",
+      "college": "cosmic",
+      "school": "void",
+      "focus": "emptiness",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "componentCost": [
+      { "type": "VS", "amount": 1 }
+    ],
+    "range": "self",
+    "target": "self",
+    "duration": "10 minutes",
+    "effects": {
+      "diceModifiers": [
+        { "amount": 2, "applies": "defense against magical attacks", "duration": "10 minutes" }
+      ]
+    },
+    "description": "Wrap yourself in a thin layer of nothingness that resists magical intrusion. Spells slide off you like water from oil. Caster gains +2 D20 on defensive rolls against magical attacks and abilities. Duration: 10 minutes.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "counterspell": {
+    "id": "counterspell",
+    "name": "Counterspell",
+    "source": {
+      "type": "magic",
+      "college": "cosmic",
+      "school": "void",
+      "focus": "emptiness",
+      "requiredLevel": 2
+    },
+    "apCost": 2,
+    "componentCost": [
+      { "type": "VS", "amount": 2 }
+    ],
+    "range": "40 ft",
+    "target": "enemy",
+    "duration": "instant",
+    "timing": "reaction",
+    "isReaction": true,
+    "reactionTrigger": {
+      "event": "Enemy within 40 ft. uses a magical ability",
+      "range": "40 ft"
+    },
+    "effects": {
+      "special": [
+        "Make an opposed AST + MAG roll",
+        "If you win, the ability fails and any components/resources are still expended"
+      ]
+    },
+    "description": "As an enemy casts, you reach into the void between moments and pull their magic apart before it can fully form. When an enemy within 40 ft. uses a magical ability, make an opposed AST + MAG roll. If you win, the ability fails and any components/resources are still expended.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "Reaction ability - counterspell"
+  },
+
+  "devour-magic": {
+    "id": "devour-magic",
+    "name": "Devour Magic",
+    "source": {
+      "type": "magic",
+      "college": "cosmic",
+      "school": "void",
+      "focus": "emptiness",
+      "requiredLevel": 2
+    },
+    "apCost": 3,
+    "componentCost": [
+      { "type": "VS", "amount": 2 }
+    ],
+    "sanityCost": 5,
+    "range": "30 ft",
+    "target": "creature",
+    "duration": "instant",
+    "healing": {
+      "dice": "2D10",
+      "target": "hp",
+      "conditionalBonus": {
+        "condition": "If the effect was School Level 3 or higher",
+        "bonusDice": "2D10"
+      }
+    },
+    "effects": {
+      "special": [
+        "End one magical effect within 30 ft",
+        "Caster heals 2D10 HP or restores 2D10 SY (choose when cast)",
+        "If effect was School Level 3 or higher, healing is doubled"
+      ]
+    },
+    "description": "Consume an active magical effect and convert its energy into sustenance for yourself. End one magical effect within 30 ft. Caster heals 2D10 HP or restores 2D10 SY (choose when cast). If the effect was School Level 3 or higher, healing is doubled.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "Can heal HP or restore SY"
+  },
+
+  "null-field": {
+    "id": "null-field",
+    "name": "Null Field",
+    "source": {
+      "type": "magic",
+      "college": "cosmic",
+      "school": "void",
+      "focus": "emptiness",
+      "requiredLevel": 3
+    },
+    "apCost": 4,
+    "componentCost": [
+      { "type": "VS", "amount": 4 }
+    ],
+    "sanityCost": 5,
+    "range": "self",
+    "target": "area",
+    "areaOfEffect": {
+      "shape": "radius",
+      "size": "15 ft"
+    },
+    "duration": "3 rounds",
+    "maintenanceRequirement": "Caster cannot move while maintaining",
+    "effects": {
+      "special": [
+        "Create a 15 ft. radius zone centered on self",
+        "No magical abilities can be activated within the zone",
+        "Active magical effects on creatures entering are suppressed while inside",
+        "The caster also cannot use magic while maintaining this field"
+      ]
+    },
+    "description": "Establish a zone where magic simply ceases to function. Spells cannot be cast within, and magical effects that enter are temporarily suppressed. Create a 15 ft. radius zone centered on self. No magical abilities can be activated within the zone. Active magical effects on creatures entering are suppressed while inside. The caster also cannot use magic while maintaining this field. Duration: 3 rounds. Caster cannot move while maintaining.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": true,
+    "notes": "Anti-magic zone - affects caster too"
+  },
+
+  "siphon-essence": {
+    "id": "siphon-essence",
+    "name": "Siphon Essence",
+    "source": {
+      "type": "magic",
+      "college": "cosmic",
+      "school": "void",
+      "focus": "emptiness",
+      "requiredLevel": 3
+    },
+    "apCost": 4,
+    "componentCost": [
+      { "type": "VS", "amount": 3 }
+    ],
+    "sanityCost": 5,
+    "range": "30 ft",
+    "target": "enemy",
+    "duration": "instant",
+    "healing": {
+      "dice": "3D8",
+      "target": "hp"
+    },
+    "effects": {
+      "special": [
+        "Target loses resources: 2D6 from their primary magic resource (GM determines)",
+        "Caster regains 1 VS or heals 3D8 HP"
+      ]
+    },
+    "description": "Drain the magical reserves from an enemy, leaving them hollow and weakened while you grow stronger. Target loses resources: 2D6 from their primary magic resource (GM determines). Caster regains 1 VS or heals 3D8 HP. Range: 30 ft.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "Resource drain and recovery"
+  },
+
+  "absolute-void": {
+    "id": "absolute-void",
+    "name": "Absolute Void",
+    "source": {
+      "type": "magic",
+      "college": "cosmic",
+      "school": "void",
+      "focus": "emptiness",
+      "requiredLevel": 4
+    },
+    "apCost": 5,
+    "componentCost": [
+      { "type": "VS", "amount": 6 }
+    ],
+    "sanityCost": 15,
+    "range": "40 ft",
+    "target": "area",
+    "areaOfEffect": {
+      "shape": "sphere",
+      "size": "10 ft radius"
+    },
+    "damage": {
+      "dice": "4D12",
+      "type": "true"
+    },
+    "duration": "1 minute",
+    "effects": {
+      "special": [
+        "All magical effects in the area are permanently dispelled",
+        "All creatures in area take 4D12 damage (ignores all resistances)",
+        "All creatures lose all active magical buffs",
+        "Magical items in area are suppressed for 1 hour",
+        "Area remains a dead-magic zone for 1 minute"
+      ]
+    },
+    "description": "For one terrible moment, create a sphere of true nothingness, a point where reality itself does not exist. Magic, matter, and energy all cease within its boundaries. Create a 10 ft. radius sphere at a point within 40 ft. All magical effects in the area are permanently dispelled. All creatures in the area take 4D12 damage (ignores all resistances) and lose all active magical buffs. Magical items in the area are suppressed for 1 hour. The area remains a dead-magic zone for 1 minute.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "Ultimate anti-magic nuke"
+  },
+
+  "fade": {
+    "id": "fade",
+    "name": "Fade",
+    "source": {
+      "type": "magic",
+      "college": "cosmic",
+      "school": "void",
+      "focus": "concealment",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "componentCost": [
+      { "type": "VS", "amount": 1 }
+    ],
+    "range": "self",
+    "target": "self",
+    "duration": "30 minutes",
+    "effects": {
+      "diceModifiers": [
+        { "amount": 3, "applies": "stealth rolls", "duration": "30 minutes" }
+      ],
+      "special": [
+        "Enemies must pass a FRS check (Difficulty 30) to notice caster even when looking directly at them",
+        "Attacking or casting offensive magic ends the effect"
+      ]
+    },
+    "description": "Let the void drink your presence. You do not turn invisible, you simply become unimportant, a thing the eye slides past without registering. Caster gains +3 D20 on stealth rolls. Enemies must pass a FRS check (Difficulty 30) to notice caster even when looking directly at them. Attacking or casting offensive magic ends the effect. Duration: 30 minutes.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "Perception filter effect"
+  },
+
+  "muffle": {
+    "id": "muffle",
+    "name": "Muffle",
+    "source": {
+      "type": "magic",
+      "college": "cosmic",
+      "school": "void",
+      "focus": "concealment",
+      "requiredLevel": 1
+    },
+    "apCost": 1,
+    "componentCost": [
+      { "type": "VS", "amount": 1 }
+    ],
+    "range": "self",
+    "target": "self",
+    "duration": "1 hour",
+    "effects": {
+      "grants": ["Makes no sound from movement, speech, or equipment"],
+      "special": [
+        "Can still cast spells with verbal components (the sound exists but does not travel beyond 5 ft.)"
+      ]
+    },
+    "description": "Wrap sound in void-stuff, creating a pocket of silence around yourself. Footsteps make no noise; armor does not clink. Caster makes no sound from movement, speech, or equipment. Can still cast spells with verbal components (the sound exists but does not travel beyond 5 ft.). Duration: 1 hour.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "Sound suppression"
+  },
+
   "void-sight": {
     "id": "void-sight",
     "name": "Void Sight",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "void",
       "focus": "concealment",
       "requiredLevel": 1
     },
@@ -15,18 +648,29 @@
     "range": "self",
     "target": "self",
     "duration": "10 minutes",
-    "description": "Caster can see invisible creatures and objects, see through magical illusions, and gains +2 D20 on checks to detect hidden doors or traps.",
+    "effects": {
+      "grants": [
+        "Can see invisible creatures and objects",
+        "See through magical illusions"
+      ],
+      "diceModifiers": [
+        { "amount": 2, "applies": "checks to detect hidden doors or traps", "duration": "10 minutes" }
+      ]
+    },
+    "description": "Open your eyes to the spaces between. You perceive hidden things, illusions, and creatures attempting to conceal themselves. Caster can see invisible creatures and objects, see through magical illusions, and gains +2 D20 on checks to detect hidden doors or traps. Duration: 10 minutes.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Can see all that is hidden"
+    "notes": "True sight ability"
   },
+
   "veil-other": {
     "id": "veil-other",
     "name": "Veil Other",
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "void",
       "focus": "concealment",
       "requiredLevel": 2
     },
@@ -37,10 +681,149 @@
     "range": "touch",
     "target": "ally",
     "duration": "30 minutes",
-    "description": "Grant one ally within touch range the effects of Fade for 30 minutes. If the ally attacks or casts offensive magic, only their concealment ends, yours remains.",
+    "effects": {
+      "special": [
+        "Grant one ally the effects of Fade for 30 minutes",
+        "If the ally attacks or casts offensive magic, only their concealment ends, yours remains"
+      ]
+    },
+    "description": "Extend your concealment to an ally, wrapping them in the same emptiness that hides you. Grant one ally within touch range the effects of Fade for 30 minutes. If the ally attacks or casts offensive magic, only their concealment ends, yours remains.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Requires Fade ability to be known. Effect mirrors Fade but on an ally."
+    "notes": "Requires Fade ability; applies Fade to ally"
+  },
+
+  "false-face": {
+    "id": "false-face",
+    "name": "False Face",
+    "source": {
+      "type": "magic",
+      "college": "cosmic",
+      "school": "void",
+      "focus": "concealment",
+      "requiredLevel": 2
+    },
+    "apCost": 3,
+    "componentCost": [
+      { "type": "VS", "amount": 3 }
+    ],
+    "sanityCost": 5,
+    "range": "self",
+    "target": "self",
+    "duration": "1 hour",
+    "effects": {
+      "special": [
+        "Caster takes on the appearance and voice of a humanoid they have seen",
+        "Physical examination or FRS + KNW check (Difficulty 45) can detect the disguise"
+      ]
+    },
+    "description": "Shape shadows over your features to assume another's appearance. The disguise is perfect to mundane senses, only magic can pierce it. Caster takes on the appearance and voice of a humanoid they have seen. Physical examination or FRS + KNW check (Difficulty 45) can detect the disguise. Duration: 1 hour.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "Perfect disguise ability"
+  },
+
+  "phase": {
+    "id": "phase",
+    "name": "Phase",
+    "source": {
+      "type": "magic",
+      "college": "cosmic",
+      "school": "void",
+      "focus": "concealment",
+      "requiredLevel": 3
+    },
+    "apCost": 4,
+    "componentCost": [
+      { "type": "VS", "amount": 4 }
+    ],
+    "sanityCost": 5,
+    "range": "self",
+    "target": "self",
+    "duration": "3 rounds",
+    "damage": {
+      "dice": "2D8",
+      "type": "sanity"
+    },
+    "effects": {
+      "grants": ["Can move through solid objects up to 5 ft. thick"],
+      "special": [
+        "Moving through living creatures deals 2D8 Sanity damage to them",
+        "Caster takes 1D10 Sanity damage each time they phase through an object"
+      ]
+    },
+    "description": "Become partially unreal, allowing you to pass through solid matter as if it were thick fog. The experience is deeply unsettling. Caster can move through solid objects up to 5 ft. thick. Moving through living creatures deals 2D8 Sanity damage to them. Caster takes 1D10 Sanity damage each time they phase through an object. Duration: 3 rounds.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "Phasing damages caster's sanity"
+  },
+
+  "group-concealment": {
+    "id": "group-concealment",
+    "name": "Group Concealment",
+    "source": {
+      "type": "magic",
+      "college": "cosmic",
+      "school": "void",
+      "focus": "concealment",
+      "requiredLevel": 3
+    },
+    "apCost": 4,
+    "componentCost": [
+      { "type": "VS", "amount": 4 }
+    ],
+    "sanityCost": 5,
+    "range": "15 ft",
+    "target": "allies",
+    "duration": "30 minutes",
+    "effects": {
+      "special": [
+        "Up to 5 willing targets within 15 ft. gain the effects of Fade for 30 minutes",
+        "If any member of the group attacks or casts offensive magic, only their concealment ends"
+      ]
+    },
+    "description": "Extend your mastery to hide an entire party within the void's embrace. All of you become shadows passing through an unaware world. Up to 5 willing targets within 15 ft. gain the effects of Fade for 30 minutes. If any member of the group attacks or casts offensive magic, only their concealment ends.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "Party-wide stealth"
+  },
+
+  "become-nothing": {
+    "id": "become-nothing",
+    "name": "Become Nothing",
+    "source": {
+      "type": "magic",
+      "college": "cosmic",
+      "school": "void",
+      "focus": "concealment",
+      "requiredLevel": 4
+    },
+    "apCost": 4,
+    "componentCost": [
+      { "type": "VS", "amount": 6 }
+    ],
+    "sanityCost": 10,
+    "range": "self",
+    "target": "self",
+    "duration": "1 hour",
+    "effects": {
+      "grants": [
+        "Completely undetectable by any means, mundane, magical, or divine",
+        "Cannot be seen, heard, smelled, or detected by any magical means including divination or true sight",
+        "Can move through all wards and barriers as if they did not exist"
+      ],
+      "special": [
+        "Cannot attack, cast offensive magic, or interact with physical objects without ending the effect"
+      ]
+    },
+    "description": "Surrender yourself completely to the void, becoming truly undetectable by any means, mundane, magical, or divine. You exist between moments, between spaces, between thoughts. Caster becomes completely undetectable. Cannot be seen, heard, smelled, or detected by any magical means including divination or true sight. Can move through all wards and barriers as if they did not exist. Cannot attack, cast offensive magic, or interact with physical objects without ending the effect. Duration: 1 hour or until voluntarily ended.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "Ultimate concealment - perfect infiltration"
   }
 }

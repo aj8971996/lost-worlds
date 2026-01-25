@@ -5,6 +5,7 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "light",
       "focus": "radiance",
       "requiredLevel": 1
     },
@@ -14,13 +15,16 @@
     ],
     "range": "self",
     "target": "self",
-    "damage": "2D12 (melee weapon, uses MIT + AST to hit)",
-    "duration": "until dismissed or rest",
-    "description": "Summon a sword of condensed light into your hands. The blade hums with radiant energy and strikes as a melee weapon dealing 2D12 damage using your MIT + AST for attack rolls. The weapon persists until dismissed or you rest.",
+    "damage": {
+      "dice": "2D12",
+      "type": "radiant"
+    },
+    "duration": "until-dismissed",
+    "description": "Summon a sword of condensed light into your hands. The blade hums with radiant energy, eager to strike. Summons light sword. Melee attacks deal 2D12. Uses caster's MIT + AST for attack rolls. Lasts until dismissed or rest.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Summoned melee light weapon"
+    "notes": "Summoned melee light weapon. Attack rolls use MIT + AST."
   },
 
   "searing-ray": {
@@ -29,6 +33,7 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "light",
       "focus": "radiance",
       "requiredLevel": 1
     },
@@ -37,14 +42,17 @@
       { "type": "LR", "amount": 1 }
     ],
     "range": "40 ft",
-    "target": "Enemy",
-    "damage": "2D10 + AST",
+    "target": "enemy",
+    "damage": {
+      "dice": "2D10",
+      "statModifier": "AST",
+      "type": "radiant"
+    },
     "duration": "instant",
-    "description": "Focus light through your fingertips into a concentrated beam that burns through flesh and armor. Make a ranged spell attack against a creature within 40 ft, dealing 2D10 + AST damage.",
+    "description": "Focus light through your fingertips into a concentrated beam that burns through flesh and armor alike.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": "Basic ranged radiant attack"
+    "isSustained": false
   },
 
   "luminous-edge": {
@@ -53,6 +61,7 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "light",
       "focus": "radiance",
       "requiredLevel": 1
     },
@@ -61,14 +70,16 @@
       { "type": "LR", "amount": 2 }
     ],
     "range": "touch",
-    "target": "weapon",
-    "damage": "+3D8 damage to weapon's normal damage",
+    "target": "object",
     "duration": "3 rounds",
-    "description": "Infuse an existing weapon with radiant energy. For 3 rounds the weapon's damage rolls gain +3D8 additional damage.",
+    "effects": {
+      "special": ["Enchant weapon: +3D8 damage on all damage rolls"]
+    },
+    "description": "Infuse an existing weapon with radiant energy. Light traces along its edge, hungry for impact. Enchant weapon: +3D8 damage on all damage rolls. Duration: 3 rounds.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Weapon damage buff"
+    "notes": "Weapon enhancement"
   },
 
   "lance-of-radiance": {
@@ -77,6 +88,7 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "light",
       "focus": "radiance",
       "requiredLevel": 2
     },
@@ -84,15 +96,18 @@
     "componentCost": [
       { "type": "LR", "amount": 2 }
     ],
-    "range": "60 ft",
-    "target": "Enemy",
-    "damage": "3D10 (ranged weapon, uses SPD + AST to hit)",
-    "duration": "until dismissed or rest",
-    "description": "Conjure a spear of pure sunlight that returns to your hand after each throw. Attacks with the lance use SPD + AST for attack rolls and deal 3D10 damage. The spear persists until dismissed or you rest.",
+    "range": "self",
+    "target": "self",
+    "damage": {
+      "dice": "3D10",
+      "type": "radiant"
+    },
+    "duration": "until-dismissed",
+    "description": "Conjure a spear of pure sunlight. It returns to your hand after each throw, trailing golden fire. Summons light spear. Ranged attacks deal 3D10, returns after throw. Uses SPD + AST for attack rolls. Lasts until dismissed or rest.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Summoned returning light spear"
+    "notes": "Summoned returning ranged light weapon. Attack rolls use SPD + AST."
   },
 
   "empowered-strike": {
@@ -101,6 +116,7 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "light",
       "focus": "radiance",
       "requiredLevel": 2
     },
@@ -110,14 +126,16 @@
     ],
     "sanityCost": 5,
     "range": "self",
-    "target": "self or weapon attack",
-    "damage": "doubles damage dice of next attack",
-    "duration": "1 minute or until used",
-    "description": "Channel concentrated light into your next attack. Within 1 minute, the next qualifying attack you make rolls double its normal damage dice. Works with light weapons or weapons currently enchanted with radiant effects.",
+    "target": "self",
+    "duration": "1 minute",
+    "effects": {
+      "special": ["Next attack within 1 minute deals double damage dice", "Works with light weapons or enchanted weapons"]
+    },
+    "description": "Channel concentrated light into your next attack. The blow lands with the weight of the sun behind it. Next attack within 1 minute deals double damage dice. Works with light weapons or enchanted weapons.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Damage dice doubling buff"
+    "notes": "Damage multiplier buff"
   },
 
   "solar-arsenal": {
@@ -126,6 +144,7 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "light",
       "focus": "radiance",
       "requiredLevel": 3
     },
@@ -133,15 +152,36 @@
     "componentCost": [
       { "type": "LR", "amount": 3 }
     ],
-    "range": "self (dagger attacks 30 ft)",
-    "target": "multiple enemies",
-    "damage": "Each dagger attack deals 2D8 (uses AST to hit)",
-    "duration": "until destroyed or rest",
-    "description": "Summon three light daggers that orbit you. On your turns you may spend 1 AP per dagger to make individual attacks (2D8 damage each, using AST for attack rolls) against targets within 30 ft. Daggers remain until destroyed or you rest.",
+    "range": "self",
+    "target": "special",
+    "duration": "until-destroyed",
+    "summon": {
+      "creatureId": "solar-arsenal-daggers",
+      "creature": {
+        "id": "solar-arsenal-daggers",
+        "name": "Light Daggers (3)",
+        "hp": 0,
+        "stamina": 0,
+        "attacks": [
+          {
+            "name": "Dagger Strike",
+            "type": "ranged",
+            "damage": "2D8",
+            "damageType": "radiant",
+            "statModifiers": ["AST"],
+            "apCost": 1,
+            "special": "Each dagger attacks separately"
+          }
+        ],
+        "notes": "3 daggers orbit the caster. Each can attack independently for 1 AP. Range 30 ft."
+      },
+      "duration": "until destroyed or rest"
+    },
+    "description": "Summon multiple weapons of light that orbit around you, striking at enemies who draw near. Summons 3 light daggers that orbit caster. Each dagger can attack for 2D8. Daggers use AST for attack rolls. 1 AP per dagger attack. Lasts until destroyed or rest.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Orbiting summoned daggers"
+    "notes": "Multiple independent attacks"
   },
 
   "radiant-fury": {
@@ -150,6 +190,7 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "light",
       "focus": "radiance",
       "requiredLevel": 3
     },
@@ -159,14 +200,19 @@
     ],
     "sanityCost": 5,
     "range": "touch",
-    "target": "ally weapon",
-    "damage": "+2D12 radiant damage on weapon attacks; blinds on crits",
+    "target": "ally",
     "duration": "3 rounds",
-    "description": "Empower an ally's weapon with blinding radiance. For 3 rounds the weapon's attacks deal +2D12 radiant damage. On critical hits, targets are Blinded.",
+    "effects": {
+      "special": [
+        "Target ally's weapon attacks deal +2D12 radiant damage",
+        "Inflict Blinded on critical hits"
+      ]
+    },
+    "description": "Empower an ally's weapon with blinding radiance. Their strikes burn with holy vengeance. Target ally's weapon attacks deal +2D12 radiant damage and inflict Blinded on critical hits. Duration: 3 rounds.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Strong ally weapon buff"
+    "notes": "Strong ally weapon buff with blind on crit"
   },
 
   "corona-strike": {
@@ -175,6 +221,7 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "light",
       "focus": "radiance",
       "requiredLevel": 4
     },
@@ -184,14 +231,28 @@
     ],
     "sanityCost": 10,
     "range": "melee",
-    "target": "primary enemy and nearby enemies",
-    "damage": "Primary: 6D12 + MIT + AST; others: 3D10 radiant",
-    "duration": "instant; blindness 1 round",
-    "description": "Become a vessel of pure light and deliver a devastating melee blow. The primary target takes 6D12 + MIT + AST damage. All enemies within 15 ft of the target take 3D10 radiant damage and are Blinded for 1 round.",
+    "target": "enemy",
+    "areaOfEffect": {
+      "shape": "radius",
+      "size": "15 ft"
+    },
+    "damage": {
+      "dice": "6D12",
+      "statModifier": "MIT + AST",
+      "type": "radiant"
+    },
+    "duration": "instant",
+    "effects": {
+      "appliesConditions": [
+        { "condition": "blinded", "duration": "1 round" }
+      ],
+      "special": ["All enemies within 15 ft. of target take 3D10 radiant damage"]
+    },
+    "description": "Become a vessel of pure light. Your entire body blazes as you deliver a devastating blow that echoes across the battlefield. 6D12 + MIT + AST Modifier. All enemies within 15 ft. of target take 3D10 radiant damage. Enemies struck are Blinded for 1 round. Range: Melee.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "High-cost nova melee finisher"
+    "notes": "High-damage melee finisher with AoE"
   },
 
   "shield-of-light": {
@@ -200,6 +261,7 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "light",
       "focus": "protection",
       "requiredLevel": 1
     },
@@ -207,14 +269,18 @@
     "componentCost": [
       { "type": "LR", "amount": 1 }
     ],
-    "range": "self or touch",
-    "target": "self or ally",
+    "range": "touch",
+    "target": "ally",
     "duration": "2 rounds",
-    "description": "Raise a barrier of solid radiance. The target gains +2 D20 on defensive rolls for 2 rounds.",
+    "effects": {
+      "diceModifiers": [
+        { "amount": 2, "applies": "defense", "duration": "2 rounds" }
+      ]
+    },
+    "description": "Raise your hand and weave a barrier of solid radiance before you. Attacks splash harmlessly against its gleaming surface. Target gains +2 D20 on defensive rolls. Duration: 2 rounds. Range: Self or touch.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
-    "notes": "Short-duration defensive buff"
+    "isSustained": false
   },
 
   "absorb-radiance": {
@@ -223,6 +289,7 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "light",
       "focus": "protection",
       "requiredLevel": 1
     },
@@ -232,13 +299,24 @@
     ],
     "range": "self",
     "target": "self",
-    "damage": "reduces incoming magic damage by 2D10; heal half amount reduced",
     "duration": "instant",
-    "description": "Draw incoming magical energy into yourself, converting hostile magic into sustaining light. Reduce magic damage taken by 2D10 and heal HP equal to half the amount reduced.",
+    "timing": "reaction",
+    "isReaction": true,
+    "reactionTrigger": {
+      "event": "Taking magical damage"
+    },
+    "effects": {
+      "damageReduction": {
+        "dice": "2D10",
+        "types": ["magical"]
+      },
+      "special": ["Heal HP equal to half the amount reduced"]
+    },
+    "description": "Draw incoming energy into yourself, converting hostile magic into sustaining light. Reduce magic damage taken by 2D10. Caster heals for half the amount absorbed.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Reaction-style magic damage reduction"
+    "notes": "Reaction ability"
   },
 
   "guardians-glow": {
@@ -247,6 +325,7 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "light",
       "focus": "protection",
       "requiredLevel": 1
     },
@@ -256,13 +335,16 @@
     ],
     "range": "self",
     "target": "self",
-    "damage": "reduces first attack damage by 1D10",
-    "duration": "1 hour or until triggered",
-    "description": "A soft aura surrounds you, warning of danger. You cannot be surprised, and the first attack against you each combat deals 1D10 less damage.",
+    "duration": "1 hour",
+    "effects": {
+      "grants": ["Cannot be surprised"],
+      "special": ["First attack against caster each combat deals -1D10 damage"]
+    },
+    "description": "A soft aura surrounds you, warning of incoming danger and hardening against the first strike. Caster cannot be surprised. First attack against caster each combat deals -1D10 damage. Duration: 1 hour.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Long-duration self-protection aura"
+    "notes": "Long-duration protection"
   },
 
   "bulwark-of-dawn": {
@@ -271,6 +353,7 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "light",
       "focus": "protection",
       "requiredLevel": 2
     },
@@ -278,15 +361,20 @@
     "componentCost": [
       { "type": "LR", "amount": 2 }
     ],
-    "range": "30 ft (placement)",
-    "target": "hazard (10 ft barrier)",
-    "damage": "2D8 radiant to enemies attacking through",
+    "range": "30 ft",
+    "target": "area",
     "duration": "3 rounds",
-    "description": "Erect a 10 ft-wide barrier of crystallized light. Enemies that attack through it take 2D8 radiant damage. The barrier lasts for 3 rounds.",
+    "effects": {
+      "special": [
+        "Create a 10 ft. wide barrier",
+        "Enemies attacking through it suffer 2D8 radiant damage"
+      ]
+    },
+    "description": "Erect a wall of crystallized light. Those who strike it find their weapons burning in their hands. Create a 10 ft. wide barrier. Enemies attacking through it suffer 2D8 radiant damage. Duration: 3 rounds.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Creates damaging light barrier"
+    "notes": "Creates damaging barrier"
   },
 
   "interpose": {
@@ -295,6 +383,7 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "light",
       "focus": "protection",
       "requiredLevel": 2
     },
@@ -303,15 +392,26 @@
       { "type": "LR", "amount": 2 }
     ],
     "sanityCost": 5,
-    "range": "adjacent ally",
-    "target": "self",
-    "damage": "reduces damage by 2D12",
+    "range": "touch",
+    "target": "ally",
     "duration": "instant",
-    "description": "Step between an adjacent ally and harm, becoming the target of the attack instead. Damage you take from that attack is reduced by 2D12.",
+    "timing": "reaction",
+    "isReaction": true,
+    "reactionTrigger": {
+      "event": "Adjacent ally is attacked",
+      "range": "adjacent"
+    },
+    "effects": {
+      "damageReduction": {
+        "dice": "2D12"
+      },
+      "special": ["Become the target instead"]
+    },
+    "description": "Step between an ally and harm, wreathing yourself in protective light as you take the blow meant for them. When an adjacent ally is attacked, become the target instead. Damage taken is reduced by 2D12.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Protection reaction, trades position for reduced damage"
+    "notes": "Reaction ability - redirects attack"
   },
 
   "aegis-of-the-sun": {
@@ -320,6 +420,7 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "light",
       "focus": "protection",
       "requiredLevel": 3
     },
@@ -329,13 +430,20 @@
     ],
     "range": "self",
     "target": "self",
-    "damage": "50 temporary HP; adjacent attackers take 1D8 radiant",
-    "duration": "until depleted or 10 minutes",
-    "description": "Radiance wraps around you as armor. Gain 50 temporary HP that is lost before normal HP. While the aegis persists, attackers within 5 ft take 1D8 radiant damage when they hit you.",
+    "duration": "10 minutes",
+    "effects": {
+      "temporaryHp": {
+        "dice": "50",
+        "duration": "until depleted or 10 minutes",
+        "expiration": "Absorbs damage before real HP"
+      },
+      "special": ["Attackers within 5 ft. take 1D8 radiant damage"]
+    },
+    "description": "The light itself becomes your armor. Radiance wraps around you in layers, each one waiting to shatter before harm reaches flesh. Caster gains 50 temporary HP that absorbs damage before real HP. While active, attackers within 5 ft. take 1D8 radiant damage. Duration: Until depleted or 10 minutes.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Strong defensive temp HP shell"
+    "notes": "Strong defensive shell with retaliation"
   },
 
   "sanctuary-of-radiance": {
@@ -344,6 +452,7 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "light",
       "focus": "protection",
       "requiredLevel": 4
     },
@@ -352,13 +461,29 @@
       { "type": "LR", "amount": 6 }
     ],
     "sanityCost": 10,
-    "range": "self (20 ft radius)",
-    "target": "area (allies inside)",
+    "range": "self",
+    "target": "area",
+    "areaOfEffect": {
+      "shape": "dome",
+      "size": "20 ft radius"
+    },
     "duration": "3 rounds",
-    "description": "Call forth a 20 ft-radius dome of pure light centered on you. Allies inside gain +3 D20 on defensive rolls and resistance to all damage (damage halved). Enemies cannot enter. The dome lasts 3 rounds, and you cannot move while maintaining it.",
+    "maintenanceRequirement": "Caster cannot move",
+    "effects": {
+      "diceModifiers": [
+        { "amount": 3, "applies": "defense", "duration": "3 rounds" }
+      ],
+      "resistances": ["physical", "magical", "radiant", "necrotic", "fire", "cold", "lightning", "poison", "psychic", "force"],
+      "special": [
+        "All allies inside gain +3 D20 on defensive rolls",
+        "All allies inside gain resistance to all damage (damage halved)",
+        "Enemies cannot enter"
+      ]
+    },
+    "description": "Call forth a dome of pure light that shields all within. Inside its boundaries, harm cannot find purchase. Create a 20 ft. radius dome centered on caster. All allies inside gain +3 D20 on defensive rolls and resistance to all damage (damage halved). Enemies cannot enter. Duration: 3 rounds. The caster cannot move.",
     "isPassive": false,
     "isRitual": false,
-    "isSustained": false,
+    "isSustained": true,
     "notes": "Powerful stationary defensive dome"
   },
 
@@ -368,6 +493,7 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "light",
       "focus": "purification",
       "requiredLevel": 1
     },
@@ -378,7 +504,10 @@
     "range": "touch",
     "target": "ally",
     "duration": "instant",
-    "description": "Wash an ally in gentle radiance that burns away afflictions without harming flesh. Remove one curse, poison, or disease from the target.",
+    "effects": {
+      "removesConditions": ["cursed", "poisoned", "diseased"]
+    },
+    "description": "Wash an ally in gentle radiance that burns away afflictions while leaving flesh untouched. Remove one curse, poison, or disease from the target. Range: Touch.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
@@ -391,6 +520,7 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "light",
       "focus": "purification",
       "requiredLevel": 1
     },
@@ -400,13 +530,16 @@
     ],
     "range": "touch",
     "target": "ally",
-    "damage": "2D8 healing",
+    "healing": {
+      "dice": "2D8",
+      "target": "hp"
+    },
     "duration": "instant",
-    "description": "Channel soft healing light into a creature you touch, restoring 2D8 HP.",
+    "description": "The softest light carries the greatest healing. Minor wounds close beneath its warm touch. Target heals 2D8 HP. Range: Touch.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Basic healing effect"
+    "notes": "Basic healing"
   },
 
   "purifying-beam": {
@@ -415,6 +548,7 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "light",
       "focus": "purification",
       "requiredLevel": 1
     },
@@ -423,14 +557,22 @@
       { "type": "LR", "amount": 1 }
     ],
     "range": "30 ft",
-    "target": "Enemy",
-    "damage": "2D10 + AST ( +1D10 vs undead or corrupted)",
+    "target": "enemy",
+    "damage": {
+      "dice": "2D10",
+      "statModifier": "AST",
+      "type": "radiant",
+      "bonusAgainst": {
+        "targets": ["undead", "corrupted"],
+        "bonusDice": "1D10"
+      }
+    },
     "duration": "instant",
-    "description": "Fire a lance of sanctified light that sears corruption. The target takes 2D10 + AST damage, plus an additional 1D10 damage if they are undead or otherwise corrupted. Range 30 ft.",
+    "description": "A lance of sanctified light that sears corruption and undead with particular ferocity. 2D10 + AST Modifier. Deals +1D10 against undead or corrupted targets. Range: 30 ft.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Radiant attack with bonus vs undead/corrupted"
+    "notes": "Bonus damage vs undead/corrupted"
   },
 
   "dispel-darkness": {
@@ -439,6 +581,7 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "light",
       "focus": "purification",
       "requiredLevel": 2
     },
@@ -446,15 +589,28 @@
     "componentCost": [
       { "type": "LR", "amount": 2 }
     ],
-    "range": "30 ft radius",
+    "range": "self",
     "target": "area",
-    "damage": "2D8 radiant to Void casters in area",
+    "areaOfEffect": {
+      "shape": "radius",
+      "size": "30 ft"
+    },
+    "damage": {
+      "dice": "2D8",
+      "type": "radiant"
+    },
     "duration": "instant",
-    "description": "Drive back unnatural shadows and the magic that spawned them. End one magical darkness or shadow-based effect in a 30 ft radius. Void or shadow magic users in the area suffer 2D8 radiant damage.",
+    "effects": {
+      "special": [
+        "End one magical darkness effect or shadow-based ability in area",
+        "Void magic users in the area suffer damage"
+      ]
+    },
+    "description": "Drive back unnatural shadows and the magic that spawned them. Light floods spaces that darkness has claimed. End one magical darkness effect or shadow-based ability in 30 ft. radius. Void magic users in the area suffer 2D8 radiant damage.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Anti-darkness utility and niche damage"
+    "notes": "Anti-darkness utility"
   },
 
   "restore-clarity": {
@@ -463,6 +619,7 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "light",
       "focus": "purification",
       "requiredLevel": 2
     },
@@ -472,9 +629,12 @@
     ],
     "sanityCost": 5,
     "range": "30 ft",
-    "target": "Enemy",
+    "target": "ally",
     "duration": "instant",
-    "description": "Burn away mental contamination with focused radiance. Remove Confused, Charmed, Terrified, or similar mental conditions from a target within 30 ft.",
+    "effects": {
+      "removesConditions": ["confused", "charmed", "terrified"]
+    },
+    "description": "Burn away mental contamination with focused radiance. Minds trapped in darkness find their way back to light. Remove Confused, Charmed, Terrified, or similar mental conditions from target. Range: 30 ft.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
@@ -487,6 +647,7 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "light",
       "focus": "purification",
       "requiredLevel": 3
     },
@@ -495,15 +656,28 @@
       { "type": "LR", "amount": 3 }
     ],
     "sanityCost": 5,
-    "range": "20 ft radius",
-    "target": "allies in area",
-    "damage": "2D10 healing each",
+    "range": "self",
+    "target": "area",
+    "areaOfEffect": {
+      "shape": "radius",
+      "size": "20 ft"
+    },
+    "healing": {
+      "dice": "2D10",
+      "target": "hp"
+    },
     "duration": "instant",
-    "description": "Light pours outward in a wave, touching all allies in a 20 ft radius. Each ally is cleansed of one negative condition and heals 2D10 HP.",
+    "effects": {
+      "special": [
+        "All allies within 20 ft. are cleansed of one negative condition each",
+        "Each ally heals 2D10 HP"
+      ]
+    },
+    "description": "Light pours outward in a wave, touching all allies and scouring impurities from their bodies and spirits. All allies within 20 ft. are cleansed of one negative condition each and heal 2D10 HP.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
-    "notes": "Group heal and group cleanse"
+    "notes": "Group heal and cleanse"
   },
 
   "searing-judgment": {
@@ -512,6 +686,7 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "light",
       "focus": "purification",
       "requiredLevel": 3
     },
@@ -521,10 +696,23 @@
     ],
     "sanityCost": 5,
     "range": "40 ft",
-    "target": "Enemy",
-    "damage": "4D12 + AST ( +2D12 vs undead/demons/corrupted ) and 1 Burned stack",
+    "target": "enemy",
+    "damage": {
+      "dice": "4D12",
+      "statModifier": "AST",
+      "type": "radiant",
+      "bonusAgainst": {
+        "targets": ["undead", "demons", "corrupted"],
+        "bonusDice": "2D12"
+      }
+    },
     "duration": "instant",
-    "description": "Concentrate righteous light into a devastating ray. The target takes 4D12 + AST damage, plus an extra 2D12 against undead, demons, or corrupted targets, and gains 1 stack of Burned. Range 40 ft.",
+    "effects": {
+      "appliesConditions": [
+        { "condition": "burned", "stacks": 1 }
+      ]
+    },
+    "description": "Concentrate the righteous fury of pure light into a devastating ray that leaves only ash where corruption stood. 4D12 + AST Modifier. Deals +2D12 against undead, demons, or corrupted targets. Target gains Burned condition (1 stack). Range: 40 ft.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,
@@ -537,6 +725,7 @@
     "source": {
       "type": "magic",
       "college": "cosmic",
+      "school": "light",
       "focus": "purification",
       "requiredLevel": 4
     },
@@ -545,11 +734,34 @@
       { "type": "LR", "amount": 6 }
     ],
     "sanityCost": 15,
-    "range": "25 ft radius",
+    "range": "self",
     "target": "area",
-    "damage": "Enemies: 5D10 radiant ( +3D10 vs undead/corrupted ); allies heal 3D10",
+    "areaOfEffect": {
+      "shape": "radius",
+      "size": "25 ft"
+    },
+    "damage": {
+      "dice": "5D10",
+      "type": "radiant",
+      "bonusAgainst": {
+        "targets": ["undead", "corrupted"],
+        "bonusDice": "3D10"
+      }
+    },
+    "healing": {
+      "dice": "3D10",
+      "target": "hp"
+    },
     "duration": "instant",
-    "description": "Call down a pillar of absolute light that purges all darkness from an area. All enemies in a 25 ft radius take 5D10 radiant damage. Undead and corrupted enemies take an additional 3D10 damage and must make a COR check (Difficulty 45) or be destroyed instantly. All negative conditions on allies in the area are removed, and allies heal 3D10 HP.",
+    "effects": {
+      "special": [
+        "All enemies in 25 ft. radius take damage",
+        "Undead and corrupted must make COR check (Difficulty 45) or be destroyed instantly",
+        "All negative conditions on allies in the area are removed",
+        "Allies heal 3D10 HP"
+      ]
+    },
+    "description": "Call down a pillar of absolute light that purges all darkness from an area. Nothing impure survives its touch. All enemies in 25 ft. radius take 5D10 radiant damage. All negative conditions on allies in the area are removed. Undead and corrupted enemies take +3D10 damage and must make COR check (Difficulty 45) or be destroyed instantly. Allies heal 3D10 HP.",
     "isPassive": false,
     "isRitual": false,
     "isSustained": false,

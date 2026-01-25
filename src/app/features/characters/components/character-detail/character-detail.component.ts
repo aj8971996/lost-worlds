@@ -4,7 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CharacterService } from '@core/services/character.service';
 import { ResolvedCharacter, OverallAlignment } from '@core/models/character.model';
 import { ArmorSlot, ResourceCost } from '@core/models/equipment.model';
-import { AbilitySource, ResolvedAbility } from '@core/models/ability.model';
+import { AbilitySource, ComponentCost, ResolvedAbility } from '@core/models/ability.model';
 import { calculateMod, calculateDice } from '@core/models/stats.model';
 import { calculateCollegeProgression, FocusLevels, MagicCollege } from '@core/models/magic.model';
 
@@ -308,7 +308,8 @@ export class CharacterDetailComponent implements OnInit {
       'FP': 'Focus Points',
       'LS': 'Life Seeds',
       'VS': 'Void Shards',
-      'CP': 'Craft Points'
+      'CP': 'Craft Points',
+      'SR': 'Star Runes'
     };
     return names[type] || type;
   }
@@ -326,12 +327,17 @@ export class CharacterDetailComponent implements OnInit {
   /**
    * Get all non-AP costs for an ability as a formatted array
    */
-  getAbilityCosts(ability: ResolvedAbility): ResourceCost[] {
-    const costs: ResourceCost[] = [];
+  getAbilityCosts(ability: ResolvedAbility): Array<{ type: string; amount: number; per?: string }> {
+    const costs: Array<{ type: string; amount: number; per?: string }> = [];
     
     // Add stamina cost if present
     if (ability.staminaCost) {
       costs.push({ type: 'ST', amount: ability.staminaCost });
+    }
+    
+    // Add sanity cost if present
+    if (ability.sanityCost) {
+      costs.push({ type: 'SY', amount: ability.sanityCost });
     }
     
     // Add component costs if present

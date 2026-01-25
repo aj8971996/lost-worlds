@@ -7,7 +7,7 @@ import {
   AccessoryReference,
   ItemReference
 } from '../models/equipment.model';
-import { AbilityReference } from '../models/ability.model';
+import { AbilityReference, hasCollegeAndFocus } from '../models/ability.model';
 import { SkillReference } from '../models/skills.model';
 import { SpeciesReference } from '../models/character.model';
 
@@ -197,8 +197,33 @@ export class ReferenceDataService {
       map(abilities => {
         const filtered: Record<string, AbilityReference> = {};
         for (const [id, ability] of Object.entries(abilities)) {
-          if (ability.source.type === 'magic' || ability.source.type === 'physical') {
+          if (hasCollegeAndFocus(ability.source)) {
             if (ability.source.college === college) {
+              filtered[id] = ability;
+            }
+          }
+        }
+        return filtered;
+      })
+    );
+  }
+
+  /**
+   * Get abilities filtered by school
+   * Supports both new format (school in source) and legacy (derived from focus)
+   */
+  getAbilitiesBySchool(school: string): Observable<Record<string, AbilityReference>> {
+    return this.getAbilities().pipe(
+      map(abilities => {
+        const filtered: Record<string, AbilityReference> = {};
+        for (const [id, ability] of Object.entries(abilities)) {
+          if (hasCollegeAndFocus(ability.source)) {
+            // Check new format first
+            if ('school' in ability.source && ability.source.school === school) {
+              filtered[id] = ability;
+            }
+            // Fallback to focus-based school detection
+            else if (this.focusToSchool(ability.source.focus) === school) {
               filtered[id] = ability;
             }
           }
@@ -216,7 +241,7 @@ export class ReferenceDataService {
       map(abilities => {
         const filtered: Record<string, AbilityReference> = {};
         for (const [id, ability] of Object.entries(abilities)) {
-          if (ability.source.type === 'magic' || ability.source.type === 'physical') {
+          if (hasCollegeAndFocus(ability.source)) {
             if (ability.source.focus === focus) {
               filtered[id] = ability;
             }
@@ -235,7 +260,7 @@ export class ReferenceDataService {
       map(abilities => {
         const filtered: Record<string, AbilityReference> = {};
         for (const [id, ability] of Object.entries(abilities)) {
-          if (ability.source.type === 'magic' || ability.source.type === 'physical') {
+          if (hasCollegeAndFocus(ability.source)) {
             if (ability.source.focus === focus && ability.source.requiredLevel <= level) {
               filtered[id] = ability;
             }
@@ -246,9 +271,116 @@ export class ReferenceDataService {
     );
   }
 
+  /**
+   * Get abilities for a school at a specific level
+   */
+  getAbilitiesBySchoolAtLevel(school: string, level: number): Observable<Record<string, AbilityReference>> {
+    return this.getAbilitiesBySchool(school).pipe(
+      map(abilities => {
+        const filtered: Record<string, AbilityReference> = {};
+        for (const [id, ability] of Object.entries(abilities)) {
+          if (hasCollegeAndFocus(ability.source)) {
+            if (ability.source.requiredLevel <= level) {
+              filtered[id] = ability;
+            }
+          }
+        }
+        return filtered;
+      })
+    );
+  }
+
+  /**
+   * Get all summon abilities
+   */
+  getSummonAbilities(): Observable<Record<string, AbilityReference>> {
+    return this.getAbilities().pipe(
+      map(abilities => {
+        const filtered: Record<string, AbilityReference> = {};
+        for (const [id, ability] of Object.entries(abilities)) {
+          if (ability.summon) {
+            filtered[id] = ability;
+          }
+        }
+        return filtered;
+      })
+    );
+  }
+
+  /**
+   * Get all reaction abilities
+   */
+  getReactionAbilities(): Observable<Record<string, AbilityReference>> {
+    return this.getAbilities().pipe(
+      map(abilities => {
+        const filtered: Record<string, AbilityReference> = {};
+        for (const [id, ability] of Object.entries(abilities)) {
+          if (ability.isReaction || ability.timing === 'reaction') {
+            filtered[id] = ability;
+          }
+        }
+        return filtered;
+      })
+    );
+  }
+
+  /**
+   * Get abilities that deal a specific damage type
+   */
+  getAbilitiesByDamageType(damageType: string): Observable<Record<string, AbilityReference>> {
+    return this.getAbilities().pipe(
+      map(abilities => {
+        const filtered: Record<string, AbilityReference> = {};
+        for (const [id, ability] of Object.entries(abilities)) {
+          if (ability.damage && typeof ability.damage === 'object' && ability.damage.type === damageType) {
+            filtered[id] = ability;
+          }
+        }
+        return filtered;
+      })
+    );
+  }
+
   // ============================================================================
   // PRIVATE HELPERS
   // ============================================================================
+
+  /**
+   * Map focus to school (legacy support)
+   */
+  private focusToSchool(focus: string): string | null {
+    const mapping: Record<string, string> = {
+      // Cosmic - Stars
+      divination: 'stars', fate: 'stars', prophecy: 'stars', constellations: 'stars',
+      // Cosmic - Light
+      radiance: 'light', protection: 'light', purification: 'light',
+      // Cosmic - Time
+      acceleration: 'time', delay: 'time', future: 'time', past: 'time',
+      // Cosmic - Void
+      shadow: 'void', emptiness: 'void', concealment: 'void',
+      // Cosmic - Realms
+      plasma: 'realms', aether: 'realms', gravity: 'realms', ether: 'realms',
+      // Earthly - Elements
+      earth: 'elements', water: 'elements', fire: 'elements', air: 'elements',
+      // Earthly - Life
+      healing: 'life', growth: 'life', plants: 'life', beasts: 'life',
+      // Earthly - Speech
+      performance: 'speech', rhetoric: 'speech', jest: 'speech', verse: 'speech',
+      // Earthly - Body
+      strength: 'body', speed: 'body', endurance: 'body', 
+      weaponArts: 'body', martialArts: 'body', senses: 'body',
+      // Earthly - Craft
+      weapons: 'craft', wards: 'craft', tools: 'craft', 
+      items: 'craft', enchantment: 'craft',
+      // Dead - Decay
+      disease: 'decay', entropy: 'decay', withering: 'decay', rot: 'decay',
+      // Dead - Damned
+      pacts: 'damned', corruption: 'damned', infernal: 'damned',
+      // Dead - Endings
+      passage: 'endings', finality: 'endings', reaper: 'endings',
+    };
+    return mapping[focus] || null;
+  }
 
   /**
    * Load all ability files and merge them into a single record

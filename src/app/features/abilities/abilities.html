@@ -198,15 +198,15 @@
             </button>
             @if (isSectionExpanded('sourceTypes')) {
               <div class="filter-section__content">
-                @for (source of sourceTypes; track source.id) {
+                @for (type of sourceTypes; track type.id) {
                   <label class="filter-checkbox">
                     <input 
                       type="checkbox"
-                      [checked]="isFilterActive('sourceTypes', source.id)"
-                      (change)="toggleFilter('sourceTypes', source.id)"
+                      [checked]="isFilterActive('sourceTypes', type.id)"
+                      (change)="toggleFilter('sourceTypes', type.id)"
                     />
                     <span class="filter-checkbox__mark"></span>
-                    <span class="filter-checkbox__label">{{ source.name }}</span>
+                    <span class="filter-checkbox__label">{{ type.name }}</span>
                   </label>
                 }
               </div>
@@ -351,6 +351,27 @@
 
                 <p class="ability-card__description">{{ ability.description }}</p>
 
+                <!-- Damage/Healing Display -->
+                @if (getDamageDisplay(ability) || getHealingDisplay(ability)) {
+                  <div class="ability-card__output">
+                    @if (getDamageDisplay(ability)) {
+                      <div class="ability-output ability-output--damage" [attr.data-damage-type]="getDamageType(ability)">
+                        <span class="material-symbols-outlined">swords</span>
+                        <span class="ability-output__value">{{ getDamageDisplay(ability) }}</span>
+                        @if (getDamageType(ability)) {
+                          <span class="ability-output__type">{{ getDamageType(ability) }}</span>
+                        }
+                      </div>
+                    }
+                    @if (getHealingDisplay(ability)) {
+                      <div class="ability-output ability-output--healing">
+                        <span class="material-symbols-outlined">healing</span>
+                        <span class="ability-output__value">{{ getHealingDisplay(ability) }}</span>
+                      </div>
+                    }
+                  </div>
+                }
+
                 <div class="ability-card__stats">
                   <div class="ability-stat">
                     <span class="material-symbols-outlined">straighten</span>
@@ -369,7 +390,8 @@
                   </div>
                 </div>
 
-                @if (ability.componentCost?.length || ability.staminaCost) {
+                <!-- Costs Section -->
+                @if (ability.componentCost?.length || ability.staminaCost || hasSanityCost(ability)) {
                   <div class="ability-card__costs">
                     @if (ability.staminaCost) {
                       <span class="cost-tag">
@@ -377,10 +399,16 @@
                         {{ ability.staminaCost }} ST
                       </span>
                     }
+                    @if (hasSanityCost(ability)) {
+                      <span class="cost-tag cost-tag--sanity">
+                        <span class="material-symbols-outlined">{{ getCostIcon('SY') }}</span>
+                        {{ ability.sanityCost }} SY
+                      </span>
+                    }
                     @for (cost of ability.componentCost; track cost.type) {
-                      <span class="cost-tag">
+                      <span class="cost-tag" [title]="getCostTypeName(cost.type)">
                         <span class="material-symbols-outlined">{{ getCostIcon(cost.type) }}</span>
-                        {{ cost.amount }} {{ cost.type }}
+                        {{ formatComponentCost(cost) }}
                       </span>
                     }
                   </div>
@@ -396,6 +424,12 @@
                     }
                     @if (ability.isSustained) {
                       <span class="ability-tag ability-tag--sustained">Sustained</span>
+                    }
+                    @if (isReaction(ability)) {
+                      <span class="ability-tag ability-tag--reaction">Reaction</span>
+                    }
+                    @if (isSummon(ability)) {
+                      <span class="ability-tag ability-tag--summon">Summon</span>
                     }
                   </div>
                   

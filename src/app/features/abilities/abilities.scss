@@ -1045,3 +1045,167 @@
 .btn-secondary {
   @include button-secondary;
 }
+
+// =========================================================================
+// ABILITY OUTPUT (DAMAGE/HEALING DISPLAY)
+// =========================================================================
+
+.ability-card__output {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-2;
+  margin-bottom: $spacing-3;
+}
+
+.ability-output {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-1;
+  padding: $spacing-1 $spacing-2;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  border-radius: $border-radius-base;
+
+  .material-symbols-outlined {
+    font-size: 16px;
+  }
+
+  &__value {
+    font-weight: $font-weight-semibold;
+  }
+
+  &__type {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    text-transform: capitalize;
+    opacity: 0.8;
+  }
+
+  // Damage styling
+  &--damage {
+    background: var(--color-error-subtle);
+    color: var(--color-error);
+
+    // Damage type specific colors
+    &[data-damage-type="sanity"] {
+      background: color-mix(in srgb, #9b59b6 15%, transparent);
+      color: #9b59b6;
+    }
+
+    &[data-damage-type="necrotic"] {
+      background: color-mix(in srgb, #2c3e50 15%, transparent);
+      color: #7f8c8d;
+    }
+
+    &[data-damage-type="radiant"] {
+      background: color-mix(in srgb, #f1c40f 15%, transparent);
+      color: #d4a700;
+    }
+
+    &[data-damage-type="fire"] {
+      background: color-mix(in srgb, #e74c3c 15%, transparent);
+      color: #e74c3c;
+    }
+
+    &[data-damage-type="cold"] {
+      background: color-mix(in srgb, #3498db 15%, transparent);
+      color: #3498db;
+    }
+
+    &[data-damage-type="lightning"] {
+      background: color-mix(in srgb, #9b59b6 15%, transparent);
+      color: #8e44ad;
+    }
+
+    &[data-damage-type="poison"] {
+      background: color-mix(in srgb, #27ae60 15%, transparent);
+      color: #27ae60;
+    }
+  }
+
+  // Healing styling
+  &--healing {
+    background: var(--color-success-subtle);
+    color: var(--color-success);
+  }
+}
+
+// =========================================================================
+// ADDITIONAL ABILITY TAGS
+// =========================================================================
+
+.ability-tag {
+  // Existing styles...
+
+  &--reaction {
+    background: #e67e22;
+    color: #fff;
+  }
+
+  &--summon {
+    background: #9b59b6;
+    color: #fff;
+  }
+}
+
+// =========================================================================
+// SANITY COST TAG STYLING
+// =========================================================================
+
+.cost-tag {
+  // Existing styles...
+
+  &--sanity {
+    background: color-mix(in srgb, #9b59b6 15%, transparent);
+    color: #9b59b6;
+    border: 1px solid color-mix(in srgb, #9b59b6 30%, transparent);
+  }
+}
+
+// =========================================================================
+// COMPONENT COST ICONS BY TYPE
+// Add distinctive styling for different component types
+// =========================================================================
+
+// Cosmic components
+.cost-tag[title="Star Runes"] {
+  .material-symbols-outlined { color: #9370db; }
+}
+
+.cost-tag[title="Light Runes"] {
+  .material-symbols-outlined { color: #f1c40f; }
+}
+
+.cost-tag[title="Hours"] {
+  .material-symbols-outlined { color: #3498db; }
+}
+
+.cost-tag[title="Void Shards"] {
+  .material-symbols-outlined { color: #2c3e50; }
+}
+
+// Earthly components
+.cost-tag[title="Focus Points"] {
+  .material-symbols-outlined { color: #27ae60; }
+}
+
+.cost-tag[title="Life Seeds"] {
+  .material-symbols-outlined { color: #2ecc71; }
+}
+
+.cost-tag[title="Craft Points"] {
+  .material-symbols-outlined { color: #e67e22; }
+}
+
+// Dead components
+.cost-tag[title="Funeral Essence"] {
+  .material-symbols-outlined { color: #7f8c8d; }
+}
+
+.cost-tag[title="Decay Essence"] {
+  .material-symbols-outlined { color: #95a5a6; }
+}
+
+.cost-tag[title="Damned Coins"] {
+  .material-symbols-outlined { color: #c0392b; }
+}

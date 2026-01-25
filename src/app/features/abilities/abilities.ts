@@ -3,7 +3,19 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ReferenceDataService } from '@core/services/reference-data.service';
-import { AbilityReference, AbilitySource, AbilitySourceType, hasCollegeAndFocus } from '@core/models/ability.model';
+import { 
+  AbilityReference, 
+  AbilitySource, 
+  AbilitySourceType, 
+  hasCollegeAndFocus,
+  AbilityDamage,
+  AbilityHealing,
+  ComponentCost,
+  formatDamage,
+  formatHealing,
+  isReactionAbility,
+  isSummonAbility
+} from '@core/models/ability.model';
 import { MagicCollege, MagicSchool } from '@core/models/magic.model';
 import { StatAbbr, STAT_NAMES } from '@core/models/stats.model';
 
@@ -76,7 +88,8 @@ export class AbilitiesComponent implements OnInit {
     { id: 'active', name: 'Active' },
     { id: 'passive', name: 'Passive' },
     { id: 'ritual', name: 'Ritual' },
-    { id: 'sustained', name: 'Sustained' }
+    { id: 'sustained', name: 'Sustained' },
+    { id: 'reaction', name: 'Reaction' }
   ];
 
   readonly apCostOptions: { id: string; name: string }[] = [
@@ -88,7 +101,30 @@ export class AbilitiesComponent implements OnInit {
 
   readonly statOptions: StatAbbr[] = ['MIT', 'GRT', 'SPD', 'KNW', 'FRS', 'COR', 'DET', 'AST', 'MAG', 'NAT'];
 
-  // Focus to School mapping (same as character-detail)
+  // Schools grouped by college for filter UI
+  readonly schoolsByCollege: Record<string, { id: string; name: string }[]> = {
+    cosmic: [
+      { id: 'stars', name: 'School of Stars' },
+      { id: 'light', name: 'School of Light' },
+      { id: 'time', name: 'School of Time' },
+      { id: 'void', name: 'School of Void' },
+      { id: 'realms', name: 'School of Realms' }
+    ],
+    earthly: [
+      { id: 'elements', name: 'School of Elements' },
+      { id: 'life', name: 'School of Life' },
+      { id: 'speech', name: 'School of Speech' },
+      { id: 'body', name: 'School of Body' },
+      { id: 'craft', name: 'School of Craft' }
+    ],
+    dead: [
+      { id: 'decay', name: 'School of Decay' },
+      { id: 'damned', name: 'School of Damned' },
+      { id: 'endings', name: 'School of Endings' }
+    ]
+  };
+
+  // Fallback: Focus to School mapping (for abilities that don't have school in source)
   private readonly focusToSchool: Record<string, { school: string; schoolName: string; college: string }> = {
     // Cosmic - Stars
     divination: { school: 'stars', schoolName: 'School of Stars', college: 'cosmic' },
@@ -156,29 +192,6 @@ export class AbilitiesComponent implements OnInit {
     reaper: { school: 'endings', schoolName: 'School of Endings', college: 'dead' },
   };
 
-  // Schools grouped by college for filter UI
-  readonly schoolsByCollege: Record<string, { id: string; name: string }[]> = {
-    cosmic: [
-      { id: 'stars', name: 'School of Stars' },
-      { id: 'light', name: 'School of Light' },
-      { id: 'time', name: 'School of Time' },
-      { id: 'void', name: 'School of Void' },
-      { id: 'realms', name: 'School of Realms' }
-    ],
-    earthly: [
-      { id: 'elements', name: 'School of Elements' },
-      { id: 'life', name: 'School of Life' },
-      { id: 'speech', name: 'School of Speech' },
-      { id: 'body', name: 'School of Body' },
-      { id: 'craft', name: 'School of Craft' }
-    ],
-    dead: [
-      { id: 'decay', name: 'School of Decay' },
-      { id: 'damned', name: 'School of Damned' },
-      { id: 'endings', name: 'School of Endings' }
-    ]
-  };
-
   // Computed: filtered abilities
   filteredAbilities = computed(() => {
     const all = this.abilities();
@@ -220,10 +233,11 @@ export class AbilitiesComponent implements OnInit {
       // Ability type filter
       if (f.abilityTypes.size > 0) {
         const abilityTypeFlags = {
-          active: !ability.isPassive && !ability.isRitual && !ability.isSustained,
+          active: !ability.isPassive && !ability.isRitual && !ability.isSustained && !isReactionAbility(ability),
           passive: ability.isPassive,
           ritual: ability.isRitual,
-          sustained: ability.isSustained
+          sustained: ability.isSustained,
+          reaction: isReactionAbility(ability)
         };
         const matchesType = Array.from(f.abilityTypes).some(
           type => abilityTypeFlags[type as keyof typeof abilityTypeFlags]
@@ -284,19 +298,81 @@ export class AbilitiesComponent implements OnInit {
   }
 
   /**
-   * Detect stat references in ability text
+   * Detect stat references in ability - handles both old string format and new structured format
    */
   private detectStats(ability: AbilityReference): StatAbbr[] {
     const stats = new Set<StatAbbr>();
-    const textToSearch = [
+    
+    // Build text to search from description and notes
+    const textParts: string[] = [
       ability.description,
-      ability.damage,
-      ability.healing,
-      ability.notes
-    ].filter(Boolean).join(' ').toUpperCase();
+      ability.notes || ''
+    ];
 
-    // Check for stat abbreviations
+    // Handle damage - could be string (legacy) or AbilityDamage object (new)
+    if (ability.damage) {
+      if (typeof ability.damage === 'string') {
+        // Legacy format
+        textParts.push(ability.damage);
+      } else {
+        // New structured format
+        const dmg = ability.damage as AbilityDamage;
+        textParts.push(dmg.dice);
+        if (dmg.statModifier) {
+          stats.add(dmg.statModifier as StatAbbr);
+        }
+      }
+    }
+
+    // Handle healing - could be string (legacy) or AbilityHealing object (new)
+    if (ability.healing) {
+      if (typeof ability.healing === 'string') {
+        // Legacy format
+        textParts.push(ability.healing);
+      } else {
+        // New structured format
+        const heal = ability.healing as AbilityHealing;
+        textParts.push(heal.dice);
+        if (heal.statModifier) {
+          stats.add(heal.statModifier as StatAbbr);
+        }
+      }
+    }
+
+    // Check effects for stat references
+    if (ability.effects?.statModifiers) {
+      for (const mod of ability.effects.statModifiers) {
+        if (Array.isArray(mod.stats)) {
+          // Specific stats listed
+          for (const stat of mod.stats) {
+            if (this.statOptions.includes(stat as StatAbbr)) {
+              stats.add(stat as StatAbbr);
+            }
+          }
+        }
+        // "all" doesn't add specific stats to detection
+      }
+    }
+
+    // Check summon attacks for stat modifiers
+    if (ability.summon?.creature?.attacks) {
+      for (const attack of ability.summon.creature.attacks) {
+        if (attack.statModifiers) {
+          for (const stat of attack.statModifiers) {
+            if (this.statOptions.includes(stat as StatAbbr)) {
+              stats.add(stat as StatAbbr);
+            }
+          }
+        }
+      }
+    }
+
+    const textToSearch = textParts.join(' ').toUpperCase();
+
+    // Check for stat abbreviations in text
     for (const stat of this.statOptions) {
+      if (stats.has(stat)) continue; // Already detected from structured data
+      
       // Match stat abbreviation as whole word or in common patterns
       const patterns = [
         new RegExp(`\\b${stat}\\b`, 'i'),
@@ -332,8 +408,16 @@ export class AbilitiesComponent implements OnInit {
     return Array.from(stats);
   }
 
+  /**
+   * Get school ID from ability - checks new format first, falls back to focus mapping
+   */
   private getSchoolFromAbility(ability: AbilityReference): string | null {
     if (hasCollegeAndFocus(ability.source)) {
+      // New format: school is directly on source
+      if ('school' in ability.source && ability.source.school) {
+        return ability.source.school;
+      }
+      // Fallback: derive from focus
       const focus = ability.source.focus;
       if (focus && this.focusToSchool[focus]) {
         return this.focusToSchool[focus].school;
@@ -355,13 +439,11 @@ export class AbilitiesComponent implements OnInit {
 
   openMobileFilters(): void {
     this.isMobileFiltersOpen.set(true);
-    // Prevent body scroll when drawer is open
     document.body.style.overflow = 'hidden';
   }
 
   closeMobileFilters(): void {
     this.isMobileFiltersOpen.set(false);
-    // Restore body scroll
     document.body.style.overflow = '';
   }
 
@@ -446,6 +528,11 @@ export class AbilitiesComponent implements OnInit {
   getSourceDisplayName(ability: AbilityReference): string {
     const source = ability.source;
     if (hasCollegeAndFocus(source)) {
+      // Show school if available, otherwise focus
+      if ('school' in source && source.school) {
+        const schoolName = this.getSchoolDisplayName(source.school);
+        return source.focus ? `${schoolName} · ${this.formatFocusName(source.focus)}` : schoolName;
+      }
       return source.focus ? this.formatFocusName(source.focus) : source.type;
     }
     switch (source.type) {
@@ -462,31 +549,142 @@ export class AbilitiesComponent implements OnInit {
     }
   }
 
+  getSchoolDisplayName(schoolId: string): string {
+    for (const college of Object.values(this.schoolsByCollege)) {
+      const school = college.find(s => s.id === schoolId);
+      if (school) return school.name;
+    }
+    return schoolId;
+  }
+
+  // =========================================================================
+  // COST & DAMAGE DISPLAY HELPERS
+  // =========================================================================
+
   getCostIcon(type: string): string {
     const icons: Record<string, string> = {
+      // Universal
       'AP': 'schedule',
       'ST': 'directions_run',
       'HP': 'favorite',
       'SY': 'psychology',
+      // Cosmic
+      'SR': 'star',
+      'LR': 'light_mode',
+      'Hours': 'hourglass_empty',
+      'VS': 'dark_mode',
+      'RP': 'public',
+      // Earthly
       'FP': 'adjust',
       'LS': 'eco',
-      'VS': 'dark_mode',
       'CP': 'construction',
+      'EP': 'whatshot',
+      'SP': 'record_voice_over',
+      'BP': 'fitness_center',
+      // Dead
+      'FE': 'skull',
+      'DE': 'science',
+      'DC': 'toll',
     };
     return icons[type] || 'toll';
   }
 
   getCostTypeName(type: string): string {
     const names: Record<string, string> = {
+      // Universal
       'AP': 'Action Points',
       'ST': 'Stamina',
       'HP': 'Health',
       'SY': 'Sanity',
+      // Cosmic
+      'SR': 'Star Runes',
+      'LR': 'Light Runes',
+      'Hours': 'Hours',
+      'VS': 'Void Shards',
+      'RP': 'Realm Points',
+      // Earthly
       'FP': 'Focus Points',
       'LS': 'Life Seeds',
-      'VS': 'Void Shards',
-      'CP': 'Craft Points'
+      'CP': 'Craft Points',
+      'EP': 'Elemental Points',
+      'SP': 'Speech Points',
+      'BP': 'Body Points',
+      // Dead
+      'FE': 'Funeral Essence',
+      'DE': 'Decay Essence',
+      'DC': 'Damned Coins',
     };
     return names[type] || type;
+  }
+
+  /**
+   * Format component cost for display, including "per" costs
+   */
+  formatComponentCost(cost: ComponentCost): string {
+    if (cost.per) {
+      return `${cost.amount} ${cost.type} per ${cost.per}`;
+    }
+    return `${cost.amount} ${cost.type}`;
+  }
+
+  /**
+   * Get formatted damage string for display
+   */
+  getDamageDisplay(ability: AbilityReference): string | null {
+    if (!ability.damage) return null;
+    
+    if (typeof ability.damage === 'string') {
+      // Legacy format
+      return ability.damage;
+    }
+    
+    // New structured format
+    return formatDamage(ability.damage);
+  }
+
+  /**
+   * Get damage type for styling
+   */
+  getDamageType(ability: AbilityReference): string | null {
+    if (!ability.damage || typeof ability.damage === 'string') {
+      return null;
+    }
+    return ability.damage.type;
+  }
+
+  /**
+   * Get formatted healing string for display
+   */
+  getHealingDisplay(ability: AbilityReference): string | null {
+    if (!ability.healing) return null;
+    
+    if (typeof ability.healing === 'string') {
+      // Legacy format
+      return ability.healing;
+    }
+    
+    // New structured format
+    return formatHealing(ability.healing);
+  }
+
+  /**
+   * Check if ability is a reaction
+   */
+  isReaction(ability: AbilityReference): boolean {
+    return isReactionAbility(ability);
+  }
+
+  /**
+   * Check if ability is a summon
+   */
+  isSummon(ability: AbilityReference): boolean {
+    return isSummonAbility(ability);
+  }
+
+  /**
+   * Check if ability has sanity cost
+   */
+  hasSanityCost(ability: AbilityReference): boolean {
+    return !!ability.sanityCost && ability.sanityCost > 0;
   }
 }
