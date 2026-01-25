@@ -60,179 +60,217 @@
   <!-- Main Content -->
   @else {
     <div class="content-layout">
+      <!-- Mobile Filter Toggle Button -->
+      <button class="mobile-filter-toggle" (click)="openMobileFilters()">
+        <span class="material-symbols-outlined">filter_list</span>
+        <span>Filters</span>
+        @if (activeFilterCount() > 0) {
+          <span class="filter-badge">{{ activeFilterCount() }}</span>
+        }
+      </button>
+
+      <!-- Mobile Filter Overlay -->
+      <div 
+        class="filters-overlay" 
+        [class.is-visible]="isMobileFiltersOpen()"
+        (click)="closeMobileFilters()"
+      ></div>
+
       <!-- Sidebar Filters -->
-      <aside class="filters-sidebar">
-        <div class="filters-header">
-          <div class="filters-title">
+      <aside class="filters-sidebar" [class.is-open]="isMobileFiltersOpen()">
+        <!-- Mobile Header -->
+        <div class="filters-mobile-header">
+          <span class="filters-mobile-title">
             <span class="material-symbols-outlined">filter_list</span>
-            <span>Filters</span>
+            Filters
+          </span>
+          <button class="filters-close-btn" (click)="closeMobileFilters()">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+
+        <!-- Filter Content (scrollable area) -->
+        <div class="filters-scroll-area">
+          <!-- Desktop Header -->
+          <div class="filters-desktop-header">
+            <div class="filters-title">
+              <span class="material-symbols-outlined">filter_list</span>
+              <span>Filters</span>
+            </div>
+            @if (activeFilterCount() > 0) {
+              <button class="clear-all-btn" (click)="clearAllFilters()">
+                Clear All ({{ activeFilterCount() }})
+              </button>
+            }
           </div>
-          @if (activeFilterCount() > 0) {
-            <button class="clear-all-btn" (click)="clearAllFilters()">
-              Clear All ({{ activeFilterCount() }})
+
+          <!-- Magic College Filter -->
+          <div class="filter-section">
+            <button class="filter-section__header" (click)="toggleSection('colleges')">
+              <span class="filter-section__title">Magic College</span>
+              <span class="material-symbols-outlined filter-section__chevron" 
+                    [class.expanded]="isSectionExpanded('colleges')">
+                expand_more
+              </span>
             </button>
-          }
+            @if (isSectionExpanded('colleges')) {
+              <div class="filter-section__content">
+                @for (college of colleges; track college.id) {
+                  <label class="filter-checkbox" [style.--college-color]="college.color">
+                    <input 
+                      type="checkbox" 
+                      [checked]="isFilterActive('colleges', college.id)"
+                      (change)="toggleFilter('colleges', college.id)"
+                    />
+                    <span class="filter-checkbox__mark"></span>
+                    <span class="filter-checkbox__label">{{ college.name }}</span>
+                  </label>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- Schools Filter -->
+          <div class="filter-section">
+            <button class="filter-section__header" (click)="toggleSection('schools')">
+              <span class="filter-section__title">Schools</span>
+              <span class="material-symbols-outlined filter-section__chevron"
+                    [class.expanded]="isSectionExpanded('schools')">
+                expand_more
+              </span>
+            </button>
+            @if (isSectionExpanded('schools')) {
+              <div class="filter-section__content">
+                @for (college of colleges; track college.id) {
+                  <div class="school-group">
+                    <span class="school-group__label" [style.color]="college.color">{{ college.name }}</span>
+                    @for (school of schoolsByCollege[college.id]; track school.id) {
+                      <label class="filter-checkbox filter-checkbox--nested">
+                        <input 
+                          type="checkbox"
+                          [checked]="isFilterActive('schools', school.id)"
+                          (change)="toggleFilter('schools', school.id)"
+                        />
+                        <span class="filter-checkbox__mark"></span>
+                        <span class="filter-checkbox__label">{{ school.name }}</span>
+                      </label>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- Stats Used Filter -->
+          <div class="filter-section">
+            <button class="filter-section__header" (click)="toggleSection('stats')">
+              <span class="filter-section__title">Stats Used</span>
+              <span class="material-symbols-outlined filter-section__chevron"
+                    [class.expanded]="isSectionExpanded('stats')">
+                expand_more
+              </span>
+            </button>
+            @if (isSectionExpanded('stats')) {
+              <div class="filter-section__content filter-section__content--grid">
+                @for (stat of statOptions; track stat) {
+                  <label class="filter-checkbox filter-checkbox--compact">
+                    <input 
+                      type="checkbox"
+                      [checked]="isFilterActive('stats', stat)"
+                      (change)="toggleFilter('stats', stat)"
+                    />
+                    <span class="filter-checkbox__mark"></span>
+                    <span class="filter-checkbox__label">{{ stat }}</span>
+                  </label>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- Source Type Filter -->
+          <div class="filter-section">
+            <button class="filter-section__header" (click)="toggleSection('sourceTypes')">
+              <span class="filter-section__title">Source Type</span>
+              <span class="material-symbols-outlined filter-section__chevron"
+                    [class.expanded]="isSectionExpanded('sourceTypes')">
+                expand_more
+              </span>
+            </button>
+            @if (isSectionExpanded('sourceTypes')) {
+              <div class="filter-section__content">
+                @for (source of sourceTypes; track source.id) {
+                  <label class="filter-checkbox">
+                    <input 
+                      type="checkbox"
+                      [checked]="isFilterActive('sourceTypes', source.id)"
+                      (change)="toggleFilter('sourceTypes', source.id)"
+                    />
+                    <span class="filter-checkbox__mark"></span>
+                    <span class="filter-checkbox__label">{{ source.name }}</span>
+                  </label>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- Ability Type Filter -->
+          <div class="filter-section">
+            <button class="filter-section__header" (click)="toggleSection('abilityTypes')">
+              <span class="filter-section__title">Ability Type</span>
+              <span class="material-symbols-outlined filter-section__chevron"
+                    [class.expanded]="isSectionExpanded('abilityTypes')">
+                expand_more
+              </span>
+            </button>
+            @if (isSectionExpanded('abilityTypes')) {
+              <div class="filter-section__content">
+                @for (type of abilityTypes; track type.id) {
+                  <label class="filter-checkbox">
+                    <input 
+                      type="checkbox"
+                      [checked]="isFilterActive('abilityTypes', type.id)"
+                      (change)="toggleFilter('abilityTypes', type.id)"
+                    />
+                    <span class="filter-checkbox__mark"></span>
+                    <span class="filter-checkbox__label">{{ type.name }}</span>
+                  </label>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- AP Cost Filter -->
+          <div class="filter-section">
+            <button class="filter-section__header" (click)="toggleSection('apCost')">
+              <span class="filter-section__title">AP Cost</span>
+              <span class="material-symbols-outlined filter-section__chevron"
+                    [class.expanded]="isSectionExpanded('apCost')">
+                expand_more
+              </span>
+            </button>
+            @if (isSectionExpanded('apCost')) {
+              <div class="filter-section__content">
+                @for (cost of apCostOptions; track cost.id) {
+                  <label class="filter-checkbox">
+                    <input 
+                      type="checkbox"
+                      [checked]="isFilterActive('apCost', cost.id)"
+                      (change)="toggleFilter('apCost', cost.id)"
+                    />
+                    <span class="filter-checkbox__mark"></span>
+                    <span class="filter-checkbox__label">{{ cost.name }}</span>
+                  </label>
+                }
+              </div>
+            }
+          </div>
         </div>
 
-        <!-- Magic College Filter -->
-        <div class="filter-section">
-          <button class="filter-section__header" (click)="toggleSection('colleges')">
-            <span class="filter-section__title">Magic College</span>
-            <span class="material-symbols-outlined filter-section__chevron" 
-                  [class.expanded]="isSectionExpanded('colleges')">
-              expand_more
-            </span>
+        <!-- Mobile Footer -->
+        <div class="filters-mobile-footer">
+          <button class="btn btn-primary filters-apply-btn" (click)="closeMobileFilters()">
+            Show {{ filteredAbilities().length }} Results
           </button>
-          @if (isSectionExpanded('colleges')) {
-            <div class="filter-section__content">
-              @for (college of colleges; track college.id) {
-                <label class="filter-checkbox" [style.--college-color]="college.color">
-                  <input 
-                    type="checkbox" 
-                    [checked]="isFilterActive('colleges', college.id)"
-                    (change)="toggleFilter('colleges', college.id)"
-                  />
-                  <span class="filter-checkbox__mark"></span>
-                  <span class="filter-checkbox__label">{{ college.name }}</span>
-                </label>
-              }
-            </div>
-          }
-        </div>
-
-        <!-- Schools Filter (grouped by college) -->
-        <div class="filter-section">
-          <button class="filter-section__header" (click)="toggleSection('schools')">
-            <span class="filter-section__title">Schools</span>
-            <span class="material-symbols-outlined filter-section__chevron"
-                  [class.expanded]="isSectionExpanded('schools')">
-              expand_more
-            </span>
-          </button>
-          @if (isSectionExpanded('schools')) {
-            <div class="filter-section__content">
-              @for (college of colleges; track college.id) {
-                <div class="school-group">
-                  <span class="school-group__label" [style.color]="college.color">{{ college.name }}</span>
-                  @for (school of schoolsByCollege[college.id]; track school.id) {
-                    <label class="filter-checkbox filter-checkbox--nested">
-                      <input 
-                        type="checkbox"
-                        [checked]="isFilterActive('schools', school.id)"
-                        (change)="toggleFilter('schools', school.id)"
-                      />
-                      <span class="filter-checkbox__mark"></span>
-                      <span class="filter-checkbox__label">{{ school.name }}</span>
-                    </label>
-                  }
-                </div>
-              }
-            </div>
-          }
-        </div>
-
-        <!-- Stats Used Filter -->
-        <div class="filter-section">
-          <button class="filter-section__header" (click)="toggleSection('stats')">
-            <span class="filter-section__title">Stats Used</span>
-            <span class="material-symbols-outlined filter-section__chevron"
-                  [class.expanded]="isSectionExpanded('stats')">
-              expand_more
-            </span>
-          </button>
-          @if (isSectionExpanded('stats')) {
-            <div class="filter-section__content filter-section__content--grid">
-              @for (stat of statOptions; track stat) {
-                <label class="filter-checkbox filter-checkbox--compact">
-                  <input 
-                    type="checkbox"
-                    [checked]="isFilterActive('stats', stat)"
-                    (change)="toggleFilter('stats', stat)"
-                  />
-                  <span class="filter-checkbox__mark"></span>
-                  <span class="filter-checkbox__label">{{ stat }}</span>
-                </label>
-              }
-            </div>
-          }
-        </div>
-
-        <!-- Source Type Filter -->
-        <div class="filter-section">
-          <button class="filter-section__header" (click)="toggleSection('sourceTypes')">
-            <span class="filter-section__title">Source Type</span>
-            <span class="material-symbols-outlined filter-section__chevron"
-                  [class.expanded]="isSectionExpanded('sourceTypes')">
-              expand_more
-            </span>
-          </button>
-          @if (isSectionExpanded('sourceTypes')) {
-            <div class="filter-section__content">
-              @for (source of sourceTypes; track source.id) {
-                <label class="filter-checkbox">
-                  <input 
-                    type="checkbox"
-                    [checked]="isFilterActive('sourceTypes', source.id)"
-                    (change)="toggleFilter('sourceTypes', source.id)"
-                  />
-                  <span class="filter-checkbox__mark"></span>
-                  <span class="filter-checkbox__label">{{ source.name }}</span>
-                </label>
-              }
-            </div>
-          }
-        </div>
-
-        <!-- Ability Type Filter -->
-        <div class="filter-section">
-          <button class="filter-section__header" (click)="toggleSection('abilityTypes')">
-            <span class="filter-section__title">Ability Type</span>
-            <span class="material-symbols-outlined filter-section__chevron"
-                  [class.expanded]="isSectionExpanded('abilityTypes')">
-              expand_more
-            </span>
-          </button>
-          @if (isSectionExpanded('abilityTypes')) {
-            <div class="filter-section__content">
-              @for (type of abilityTypes; track type.id) {
-                <label class="filter-checkbox">
-                  <input 
-                    type="checkbox"
-                    [checked]="isFilterActive('abilityTypes', type.id)"
-                    (change)="toggleFilter('abilityTypes', type.id)"
-                  />
-                  <span class="filter-checkbox__mark"></span>
-                  <span class="filter-checkbox__label">{{ type.name }}</span>
-                </label>
-              }
-            </div>
-          }
-        </div>
-
-        <!-- AP Cost Filter -->
-        <div class="filter-section">
-          <button class="filter-section__header" (click)="toggleSection('apCost')">
-            <span class="filter-section__title">AP Cost</span>
-            <span class="material-symbols-outlined filter-section__chevron"
-                  [class.expanded]="isSectionExpanded('apCost')">
-              expand_more
-            </span>
-          </button>
-          @if (isSectionExpanded('apCost')) {
-            <div class="filter-section__content">
-              @for (cost of apCostOptions; track cost.id) {
-                <label class="filter-checkbox">
-                  <input 
-                    type="checkbox"
-                    [checked]="isFilterActive('apCost', cost.id)"
-                    (change)="toggleFilter('apCost', cost.id)"
-                  />
-                  <span class="filter-checkbox__mark"></span>
-                  <span class="filter-checkbox__label">{{ cost.name }}</span>
-                </label>
-              }
-            </div>
-          }
         </div>
       </aside>
 
@@ -295,10 +333,8 @@
           <div class="abilities-grid">
             @for (ability of filteredAbilities(); track ability.id) {
               <article class="ability-card" [attr.data-college]="getAbilityCollege(ability)">
-                <!-- College Indicator -->
                 <div class="ability-card__college-indicator"></div>
                 
-                <!-- Header -->
                 <header class="ability-card__header">
                   <h3 class="ability-card__name">{{ ability.name }}</h3>
                   @if (ability.apCost !== null) {
@@ -309,15 +345,12 @@
                   }
                 </header>
 
-                <!-- Source / Focus -->
                 <div class="ability-card__source">
                   {{ getSourceDisplayName(ability) }}
                 </div>
 
-                <!-- Description -->
                 <p class="ability-card__description">{{ ability.description }}</p>
 
-                <!-- Stats Grid -->
                 <div class="ability-card__stats">
                   <div class="ability-stat">
                     <span class="material-symbols-outlined">straighten</span>
@@ -336,7 +369,6 @@
                   </div>
                 </div>
 
-                <!-- Costs -->
                 @if (ability.componentCost?.length || ability.staminaCost) {
                   <div class="ability-card__costs">
                     @if (ability.staminaCost) {
@@ -354,7 +386,6 @@
                   </div>
                 }
 
-                <!-- Tags / Badges -->
                 <footer class="ability-card__footer">
                   <div class="ability-card__tags">
                     @if (ability.isPassive) {
@@ -380,7 +411,6 @@
             }
           </div>
         } @else {
-          <!-- No Results -->
           <div class="no-results">
             <span class="material-symbols-outlined">search_off</span>
             <h3>No Abilities Found</h3>

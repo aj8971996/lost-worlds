@@ -39,6 +39,9 @@ export class AbilitiesComponent implements OnInit {
   isLoading = signal(true);
   error = signal<string | null>(null);
   
+  // Mobile filters drawer state
+  isMobileFiltersOpen = signal(false);
+  
   // Filter state
   filters = signal<AbilityFilters>({
     search: '',
@@ -216,43 +219,41 @@ export class AbilitiesComponent implements OnInit {
 
       // Ability type filter
       if (f.abilityTypes.size > 0) {
-        const types: string[] = [];
-        if (ability.isPassive) types.push('passive');
-        else types.push('active');
-        if (ability.isRitual) types.push('ritual');
-        if (ability.isSustained) types.push('sustained');
-        
-        const hasMatchingType = types.some(t => f.abilityTypes.has(t));
-        if (!hasMatchingType) return false;
+        const abilityTypeFlags = {
+          active: !ability.isPassive && !ability.isRitual && !ability.isSustained,
+          passive: ability.isPassive,
+          ritual: ability.isRitual,
+          sustained: ability.isSustained
+        };
+        const matchesType = Array.from(f.abilityTypes).some(
+          type => abilityTypeFlags[type as keyof typeof abilityTypeFlags]
+        );
+        if (!matchesType) return false;
       }
 
       // AP Cost filter
       if (f.apCost.size > 0) {
-        const ap = ability.apCost;
-        let matches = false;
-        if (f.apCost.has('0') && (ap === 0 || ap === null)) matches = true;
-        if (f.apCost.has('1') && ap === 1) matches = true;
-        if (f.apCost.has('2') && ap === 2) matches = true;
-        if (f.apCost.has('3+') && ap !== null && ap >= 3) matches = true;
-        if (!matches) return false;
+        const apCost = ability.apCost;
+        const matchesCost = Array.from(f.apCost).some(costFilter => {
+          if (costFilter === '3+') return apCost !== null && apCost >= 3;
+          return apCost === parseInt(costFilter, 10);
+        });
+        if (!matchesCost) return false;
       }
 
       return true;
     });
   });
 
-  // Computed: count of active filters
+  // Computed: active filter count
   activeFilterCount = computed(() => {
     const f = this.filters();
-    let count = 0;
-    if (f.search) count++;
-    count += f.colleges.size;
-    count += f.schools.size;
-    count += f.stats.size;
-    count += f.sourceTypes.size;
-    count += f.abilityTypes.size;
-    count += f.apCost.size;
-    return count;
+    return f.colleges.size + 
+           f.schools.size + 
+           f.stats.size + 
+           f.sourceTypes.size + 
+           f.abilityTypes.size + 
+           f.apCost.size;
   });
 
   ngOnInit(): void {
@@ -346,6 +347,22 @@ export class AbilitiesComponent implements OnInit {
       return ability.source.college || null;
     }
     return null;
+  }
+
+  // =========================================================================
+  // MOBILE FILTER DRAWER METHODS
+  // =========================================================================
+
+  openMobileFilters(): void {
+    this.isMobileFiltersOpen.set(true);
+    // Prevent body scroll when drawer is open
+    document.body.style.overflow = 'hidden';
+  }
+
+  closeMobileFilters(): void {
+    this.isMobileFiltersOpen.set(false);
+    // Restore body scroll
+    document.body.style.overflow = '';
   }
 
   // =========================================================================
