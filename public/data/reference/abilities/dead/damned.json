@@ -1,0 +1,787 @@
+{
+  "pact-beast-claw": {
+    "id": "pact-beast-claw",
+    "name": "Pact Beast Claw",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "damned",
+      "focus": "pacts",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "componentCost": [{ "type": "DF", "amount": 1 }],
+    "range": "melee",
+    "target": "enemy",
+    "damage": {
+      "dice": "2D10",
+      "statModifier": "MAG",
+      "type": "physical"
+    },
+    "duration": "instant",
+    "healing": {
+      "dice": "1D6",
+      "target": "hp"
+    },
+    "description": "Channel your bound connection through your hand, which temporarily transforms into a twisted claw of shadow and bone. The pact beast's essence surges through you. On hit, you recover 1D6 HP from stolen life force.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "lesser-pact": {
+    "id": "lesser-pact",
+    "name": "Lesser Pact",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "damned",
+      "focus": "pacts",
+      "requiredLevel": 1
+    },
+    "apCost": 3,
+    "componentCost": [{ "type": "DF", "amount": 2 }],
+    "range": "30 ft",
+    "target": "special",
+    "duration": "until-destroyed",
+    "summon": {
+      "creatureId": "lesser-pact-beast",
+      "creature": {
+        "id": "lesser-pact-beast",
+        "name": "Lesser Pact Beast",
+        "hp": 35,
+        "stamina": 20,
+        "attacks": [
+          {
+            "name": "Shadow Bite",
+            "type": "physical",
+            "damage": "2D10",
+            "damageType": "physical",
+            "apCost": 2,
+            "special": "On hit, target makes GRT check (Diff 25) or loses 5 ST"
+          }
+        ],
+        "passives": ["Immune to Terrified"],
+        "notes": "Bound servant from damned realms"
+      },
+      "duration": "until destroyed, dismissed, or long rest"
+    },
+    "description": "Reach into the damned realms and pull forth a lesser creature willing to serve. The beast emerges snarling, bound by chains of dark energy only you can see.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "blood-debt": {
+    "id": "blood-debt",
+    "name": "Blood Debt",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "damned",
+      "focus": "pacts",
+      "requiredLevel": 1
+    },
+    "apCost": 1,
+    "componentCost": [{ "type": "DF", "amount": 1 }],
+    "range": "30 ft",
+    "target": "ally",
+    "duration": "3 rounds",
+    "effects": {
+      "diceModifiers": [
+        { "amount": 1, "applies": "all rolls", "duration": "3 rounds" }
+      ],
+      "damageIncrease": "+1D8",
+      "special": ["Caster loses 15 HP to empower target Pact Beast"]
+    },
+    "description": "Sacrifice your own vitality to empower a bound creature. Your blood becomes fuel, and your servant grows stronger for it. Target Pact Beast gains +1 D20 on all rolls and +1D8 to damage.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "minor-pact": {
+    "id": "minor-pact",
+    "name": "Minor Pact",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "damned",
+      "focus": "pacts",
+      "requiredLevel": 2
+    },
+    "apCost": 3,
+    "componentCost": [{ "type": "DF", "amount": 3 }],
+    "sanityCost": 5,
+    "range": "30 ft",
+    "target": "special",
+    "duration": "until-destroyed",
+    "summon": {
+      "creatureId": "minor-pact-beast",
+      "creature": {
+        "id": "minor-pact-beast",
+        "name": "Minor Pact Beast",
+        "hp": 55,
+        "stamina": 35,
+        "attacks": [
+          {
+            "name": "Rending Claws",
+            "type": "physical",
+            "damage": "3D10",
+            "damageType": "physical",
+            "apCost": 3,
+            "special": "On hit, target gains Bleeding (1 stack). May attack twice per turn at -1 D20 each."
+          }
+        ],
+        "notes": "Retains fragments of former intelligence"
+      },
+      "duration": "until destroyed, dismissed, or long rest"
+    },
+    "description": "Forge a stronger connection to the damned realms, summoning a beast of greater power. These creatures retain fragments of their former intelligence.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "drain-pact-beast": {
+    "id": "drain-pact-beast",
+    "name": "Drain Pact Beast",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "damned",
+      "focus": "pacts",
+      "requiredLevel": 2
+    },
+    "apCost": 2,
+    "componentCost": [{ "type": "DF", "amount": 1 }],
+    "range": "30 ft",
+    "target": "ally",
+    "duration": "instant",
+    "effects": {
+      "special": [
+        "Dismiss your active Pact Beast",
+        "Recover HP equal to half its remaining HP",
+        "Restore 1D4 DF"
+      ]
+    },
+    "description": "Dissolve your summoned servant, consuming its remaining essence to restore yourself. The beast's final screams echo only in your mind.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "beasts-burden": {
+    "id": "beasts-burden",
+    "name": "Beast's Burden",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "damned",
+      "focus": "pacts",
+      "requiredLevel": 2
+    },
+    "apCost": 1,
+    "componentCost": [{ "type": "DF", "amount": 2 }],
+    "range": "self",
+    "target": "self",
+    "duration": "instant",
+    "timing": "reaction",
+    "isReaction": true,
+    "reactionTrigger": {
+      "event": "You take damage",
+      "conditions": ["Must have active Pact Beast"]
+    },
+    "effects": {
+      "special": ["Redirect up to 20 points of damage to your active Pact Beast"]
+    },
+    "description": "Transfer damage meant for you onto your bound servant. The pact works both ways—your pain becomes its suffering.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "pact-beast-rotting-strike": {
+    "id": "pact-beast-rotting-strike",
+    "name": "Pact Beast Rotting Strike",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "damned",
+      "focus": "pacts",
+      "requiredLevel": 3
+    },
+    "apCost": 2,
+    "componentCost": [{ "type": "DF", "amount": 3 }],
+    "sanityCost": 5,
+    "range": "30 ft",
+    "target": "enemy",
+    "duration": "instant",
+    "effects": {
+      "damageIncrease": "+3D8",
+      "appliesConditions": [
+        { "condition": "rotting", "duration": "until treated" }
+      ],
+      "special": [
+        "Command your Pact Beast to attack",
+        "Beast's next attack deals +3D8 damage",
+        "On hit, inflicts 'Rotting' condition (2D6 damage per turn until treated)",
+        "Costs the beast 10 HP"
+      ]
+    },
+    "description": "Command your bound beast to deliver a devastating attack infused with the corruption of the damned realms. The wound festers with unnatural decay.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "dual-pact-mastery": {
+    "id": "dual-pact-mastery",
+    "name": "Dual Pact Mastery",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "damned",
+      "focus": "pacts",
+      "requiredLevel": 3
+    },
+    "apCost": null,
+    "range": "self",
+    "target": "self",
+    "duration": "permanent",
+    "effects": {
+      "grants": ["May have two Pact Beasts active simultaneously"],
+      "statModifiers": [
+        { "stats": "all", "amount": -1, "duration": "while two beasts active" }
+      ]
+    },
+    "description": "Your binding skills have grown sufficient to maintain two servants simultaneously. The strain is immense, but the tactical advantage is undeniable. While two are active, you suffer -1 to all stat modifiers.",
+    "isPassive": true,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "greater-pact": {
+    "id": "greater-pact",
+    "name": "Greater Pact",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "damned",
+      "focus": "pacts",
+      "requiredLevel": 4
+    },
+    "apCost": 4,
+    "componentCost": [{ "type": "DF", "amount": 5 }],
+    "sanityCost": 10,
+    "range": "30 ft",
+    "target": "special",
+    "duration": "until-destroyed",
+    "usageLimit": { "uses": 1, "per": "long-rest" },
+    "summon": {
+      "creatureId": "greater-pact-beast",
+      "creature": {
+        "id": "greater-pact-beast",
+        "name": "Greater Pact Beast",
+        "hp": 90,
+        "stamina": 50,
+        "attacks": [
+          {
+            "name": "Consuming Maw",
+            "type": "physical",
+            "damage": "4D12",
+            "damageType": "physical",
+            "apCost": 3,
+            "special": "On kill, recovers 20 HP"
+          },
+          {
+            "name": "Fearsome Roar",
+            "type": "special",
+            "damage": "0",
+            "apCost": 3,
+            "special": "All enemies within 20 ft. make COR check (Diff 40) or gain Terrified"
+          }
+        ],
+        "notes": "Fragments of demonic intelligence"
+      },
+      "duration": "until destroyed, dismissed, or long rest"
+    },
+    "description": "Reach deep into the damned realms and forge a bond with a truly powerful entity. Greater Pact Beasts are terrifying combatants with fragments of demonic intelligence.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "whisper-of-vice": {
+    "id": "whisper-of-vice",
+    "name": "Whisper of Vice",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "damned",
+      "focus": "corruption",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "componentCost": [{ "type": "DF", "amount": 1 }],
+    "range": "30 ft",
+    "target": "enemy",
+    "duration": "1 hour",
+    "effects": {
+      "diceModifiers": [
+        { "amount": -2, "applies": "DET checks", "duration": "1 hour" }
+      ],
+      "special": ["If target fails a DET check during duration, caster learns one secret desire or fear"]
+    },
+    "description": "Plant a seed of temptation in a target's mind. They become acutely aware of their darkest desires, making resistance to suggestion increasingly difficult.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "tainted-touch": {
+    "id": "tainted-touch",
+    "name": "Tainted Touch",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "damned",
+      "focus": "corruption",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "componentCost": [{ "type": "DF", "amount": 1 }],
+    "range": "touch",
+    "target": "enemy",
+    "damage": {
+      "dice": "2D8",
+      "statModifier": "MAG",
+      "type": "necrotic"
+    },
+    "duration": "instant",
+    "effects": {
+      "statModifiers": [
+        { "stats": "all", "amount": -1, "duration": "3 rounds" }
+      ]
+    },
+    "description": "Your hand channels the essence of corruption. Flesh you contact begins to darken and wither, marked by the damned. Target gains 'Marked by Corruption': -1 to all stat modifiers for 3 rounds.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "soul-glimpse": {
+    "id": "soul-glimpse",
+    "name": "Soul Glimpse",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "damned",
+      "focus": "corruption",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "componentCost": [{ "type": "DF", "amount": 1 }],
+    "sanityCost": 5,
+    "range": "30 ft",
+    "target": "creature",
+    "duration": "instant",
+    "effects": {
+      "special": [
+        "Learn one of target's fears, weaknesses, or guilty secrets (GM's discretion)",
+        "Your next ability against them gains +1 D20",
+        "Target may sense the intrusion (FRS check Diff 30)"
+      ]
+    },
+    "description": "Peer into a target's soul and witness the darkness lurking within. The knowledge grants you power over them.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "corrupt-will": {
+    "id": "corrupt-will",
+    "name": "Corrupt Will",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "damned",
+      "focus": "corruption",
+      "requiredLevel": 2
+    },
+    "apCost": 3,
+    "componentCost": [{ "type": "DF", "amount": 2 }],
+    "sanityCost": 5,
+    "range": "30 ft",
+    "target": "enemy",
+    "duration": "instant",
+    "effects": {
+      "special": [
+        "Target makes DET check (Diff 35) or takes one action of your choice on their next turn",
+        "Cannot directly self-harm"
+      ]
+    },
+    "description": "Override a target's better judgment, forcing them to act against their nature. The effect is brief but can turn the tide of battle.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "profane-aura": {
+    "id": "profane-aura",
+    "name": "Profane Aura",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "damned",
+      "focus": "corruption",
+      "requiredLevel": 2
+    },
+    "apCost": 2,
+    "componentCost": [{ "type": "DF", "amount": 2 }],
+    "sanityCost": 5,
+    "range": "self",
+    "target": "area",
+    "areaOfEffect": { "shape": "radius", "size": "15 ft" },
+    "duration": "3 rounds",
+    "effects": {
+      "diceModifiers": [
+        { "amount": -1, "applies": "all rolls", "duration": "3 rounds" }
+      ],
+      "special": ["Enemies with 'good' alignments or who serve protective deities suffer -2 D20"]
+    },
+    "description": "Emanate an aura of corruption that saps the strength of the righteous. Those who fight for noble causes find their conviction wavering.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "festering-doubt": {
+    "id": "festering-doubt",
+    "name": "Festering Doubt",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "damned",
+      "focus": "corruption",
+      "requiredLevel": 2
+    },
+    "apCost": 3,
+    "componentCost": [{ "type": "DF", "amount": 2 }],
+    "sanityCost": 5,
+    "range": "30 ft",
+    "target": "enemy",
+    "duration": "2 rounds",
+    "effects": {
+      "ap": { "amount": -2, "affects": "max", "duration": "2 rounds" },
+      "special": ["Cannot use abilities requiring concentration"]
+    },
+    "description": "Infect a target's mind with paralyzing uncertainty. Every decision becomes agony, every action questionable. Target gains 'Doubt' condition: -2 AP per turn.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "mass-corruption": {
+    "id": "mass-corruption",
+    "name": "Mass Corruption",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "damned",
+      "focus": "corruption",
+      "requiredLevel": 3
+    },
+    "apCost": 4,
+    "componentCost": [{ "type": "DF", "amount": 4 }],
+    "sanityCost": 10,
+    "range": "self",
+    "target": "area",
+    "areaOfEffect": { "shape": "radius", "size": "20 ft" },
+    "duration": "instant",
+    "effects": {
+      "statModifiers": [
+        { "stats": "all", "amount": -2, "duration": "3 rounds" }
+      ],
+      "diceModifiers": [
+        { "amount": -1, "applies": "all rolls", "duration": "3 rounds" }
+      ],
+      "special": [
+        "All enemies in area make DET check (Diff 40)",
+        "Success: Half effect for 1 round"
+      ]
+    },
+    "description": "Release a wave of corrupting energy that touches all nearby enemies. Their virtues become vices, their strengths become weaknesses.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "thralls-embrace": {
+    "id": "thralls-embrace",
+    "name": "Thrall's Embrace",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "damned",
+      "focus": "corruption",
+      "requiredLevel": 3
+    },
+    "apCost": 4,
+    "componentCost": [{ "type": "DF", "amount": 4 }],
+    "sanityCost": 10,
+    "range": "30 ft",
+    "target": "enemy",
+    "duration": "1D4 rounds",
+    "effects": {
+      "appliesConditions": [
+        {
+          "condition": "charmed",
+          "duration": "1D4 rounds",
+          "save": { "stat": "DET", "difficulty": 45 }
+        }
+      ],
+      "special": [
+        "Target must be below 25% HP",
+        "Thralls follow commands and use their abilities on caster's behalf"
+      ]
+    },
+    "description": "Temporarily bind a weakened enemy to your will. They fight for you until the corruption fades or they are freed by their allies.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "absolute-corruption": {
+    "id": "absolute-corruption",
+    "name": "Absolute Corruption",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "damned",
+      "focus": "corruption",
+      "requiredLevel": 4
+    },
+    "apCost": 5,
+    "componentCost": [{ "type": "DF", "amount": 6 }],
+    "sanityCost": 15,
+    "range": "touch",
+    "target": "enemy",
+    "duration": "permanent",
+    "usageLimit": { "uses": 1, "per": "long-rest" },
+    "damage": {
+      "dice": "5D12",
+      "type": "sanity"
+    },
+    "effects": {
+      "statModifiers": [
+        { "stats": "all", "amount": -3, "duration": "until long rest" }
+      ],
+      "special": [
+        "Target makes DET check (Diff 50)",
+        "Failure: Target becomes permanent thrall until magically cleansed",
+        "Requires Focus of Healing Level 4 or equivalent to remove",
+        "Success: Take Sanity damage and 'Corrupted Soul' condition"
+      ]
+    },
+    "description": "Channel the full power of the damned realms through a single target, utterly overwhelming their will and transforming them into an avatar of corruption.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "minor-summon": {
+    "id": "minor-summon",
+    "name": "Minor Summon",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "damned",
+      "focus": "infernal",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "componentCost": [{ "type": "DF", "amount": 1 }],
+    "range": "30 ft",
+    "target": "special",
+    "duration": "until-dismissed",
+    "summon": {
+      "creatureId": "minor-damned-spirit",
+      "creature": {
+        "id": "minor-damned-spirit",
+        "name": "Minor Damned Spirit",
+        "hp": 15,
+        "stamina": 10,
+        "attacks": [
+          {
+            "name": "Withering Touch",
+            "type": "ranged",
+            "damage": "1D8",
+            "damageType": "necrotic",
+            "apCost": 2
+          }
+        ],
+        "passives": [
+          "Incorporeal: Physical attacks deal half damage",
+          "Cannot be grappled",
+          "Can move through solid objects"
+        ]
+      },
+      "duration": "until destroyed or dismissed"
+    },
+    "effects": {
+      "special": ["Maximum 3 active at once"]
+    },
+    "description": "Tear a small hole in reality and pull forth a spirit of minor malevolence. These wispy entities are weak individually but can harass enemies and serve as scouts.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "infernal-bolt": {
+    "id": "infernal-bolt",
+    "name": "Infernal Bolt",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "damned",
+      "focus": "infernal",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "componentCost": [{ "type": "DF", "amount": 1 }],
+    "range": "60 ft",
+    "target": "enemy",
+    "damage": {
+      "dice": "3D8",
+      "statModifier": "MAG",
+      "type": "necrotic"
+    },
+    "duration": "instant",
+    "effects": {
+      "appliesConditions": [
+        {
+          "condition": "burned",
+          "stacks": 1,
+          "save": { "stat": "GRT", "difficulty": 25 }
+        }
+      ]
+    },
+    "description": "Hurl a bolt of condensed damned energy. The projectile screams as it flies, trailing dark flames that burn with cold malice.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false,
+    "notes": "Infernal damage: resistance to fire reduces by 25%, immunity to fire reduces by 50%"
+  },
+
+  "demonic-grasp": {
+    "id": "demonic-grasp",
+    "name": "Demonic Grasp",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "damned",
+      "focus": "infernal",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "componentCost": [{ "type": "DF", "amount": 1 }],
+    "range": "30 ft",
+    "target": "enemy",
+    "damage": {
+      "dice": "2D6",
+      "statModifier": "MAG",
+      "type": "necrotic"
+    },
+    "duration": "instant",
+    "effects": {
+      "appliesConditions": [
+        { "condition": "restrained", "duration": "1 round" }
+      ]
+    },
+    "description": "Conjure a spectral hand from the damned realms that grips and burns your target. The hand holds them in place while infernal energies course through their body.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "lesser-summon": {
+    "id": "lesser-summon",
+    "name": "Lesser Summon",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "damned",
+      "focus": "infernal",
+      "requiredLevel": 2
+    },
+    "apCost": 3,
+    "componentCost": [{ "type": "DF", "amount": 3 }],
+    "sanityCost": 5,
+    "range": "30 ft",
+    "target": "special",
+    "duration": "until-destroyed",
+    "summon": {
+      "creatureId": "lesser-damned-spirit",
+      "creature": {
+        "id": "lesser-damned-spirit",
+        "name": "Lesser Damned Spirit",
+        "hp": 45,
+        "stamina": 30,
+        "attacks": [
+          {
+            "name": "Soul Burn",
+            "type": "ranged",
+            "damage": "3D8",
+            "damageType": "necrotic",
+            "apCost": 3,
+            "special": "On hit, target loses 5 SY"
+          },
+          {
+            "name": "Wail",
+            "type": "special",
+            "damage": "0",
+            "apCost": 4,
+            "special": "All enemies within 15 ft. make COR check (Diff 35) or gain Terrified"
+          }
+        ],
+        "passives": ["Incorporeal: Physical attacks deal half damage"]
+      },
+      "duration": "until destroyed, dismissed, or long rest"
+    },
+    "description": "Open a larger rift and call forth a more substantial spirit. Lesser Damned Spirits can engage in direct combat and possess limited intelligence.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "siphon-spirit": {
+    "id": "siphon-spirit",
+    "name": "Siphon Spirit",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "damned",
+      "focus": "infernal",
+      "requiredLevel": 2
+    },
+    "apCost": 2,
+    "componentCost": [{ "type": "DF", "amount": 2 }],
+    "range": "30 ft",
+    "target": "enemy",
+    "damage": {
+      "dice": "2D10",
+      "type": "necrotic"
+    },
+    "duration": "instant",
+    "effects": {
+      "special": [
+        "Heal one summoned creature within 30 ft. for the same amount as damage dealt"
+      ]
+    },
+    "description": "Drain the life essence from a damaged enemy, channeling it through yourself to restore a summoned spirit. Death feeds death.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  }
+}

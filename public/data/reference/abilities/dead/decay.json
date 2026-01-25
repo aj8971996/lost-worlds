@@ -1,0 +1,320 @@
+{
+  "pass-along-ailment": {
+    "id": "pass-along-ailment",
+    "name": "Pass Along Ailment",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "decay",
+      "focus": "disease",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "componentCost": [{ "type": "DS", "amount": 1 }],
+    "range": "touch",
+    "target": "creature",
+    "duration": "instant",
+    "effects": {
+      "special": [
+        "Transfer one disease or poison condition from caster to target",
+        "Target makes GRT check (Difficulty 35) or contracts the condition at full strength"
+      ]
+    },
+    "description": "Touch a creature and transfer a disease or poison affecting you to them. Your suffering becomes their burden, leaving you cleansed while they inherit your affliction.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "manifest-minor-disease": {
+    "id": "manifest-minor-disease",
+    "name": "Manifest Minor Disease",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "decay",
+      "focus": "disease",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "componentCost": [{ "type": "DS", "amount": 1 }],
+    "range": "30 ft",
+    "target": "enemy",
+    "duration": "1 hour",
+    "effects": {
+      "diceModifiers": [
+        { "amount": -1, "applies": "all physical rolls", "duration": "1 hour" }
+      ],
+      "movement": { "amount": -5, "duration": "1 hour" }
+    },
+    "description": "Conjure a mild sickness from nothing, calling forth the echoes of plagues past. The disease is not deadly, but it weakens and distracts. Target gains 'Minor Sickness' condition: -1 D20 on all physical rolls, -5 ft. movement.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "sickened-dagger": {
+    "id": "sickened-dagger",
+    "name": "Sickened Dagger",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "decay",
+      "focus": "disease",
+      "requiredLevel": 1
+    },
+    "apCost": 1,
+    "componentCost": [{ "type": "DS", "amount": 1 }],
+    "range": "touch",
+    "target": "weapon",
+    "duration": "3 rounds",
+    "effects": {
+      "damageIncrease": "+1D6",
+      "special": ["On hit, target must make GRT check (Difficulty 25) or gain Poisoned condition"]
+    },
+    "description": "Infuse a weapon with festering disease. Each cut carries contagion into the wound, ensuring even glancing blows leave lasting damage.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "disease-body": {
+    "id": "disease-body",
+    "name": "Disease Body",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "decay",
+      "focus": "disease",
+      "requiredLevel": 2
+    },
+    "apCost": 2,
+    "componentCost": [{ "type": "DS", "amount": 2 }],
+    "sanityCost": 5,
+    "range": "touch",
+    "target": "enemy",
+    "damage": {
+      "dice": "2D10",
+      "statModifier": "MAG",
+      "type": "necrotic"
+    },
+    "duration": "instant",
+    "effects": {
+      "statModifiers": [
+        { "stats": ["MIT", "GRT", "SPD"], "amount": -2, "duration": "3 rounds" }
+      ]
+    },
+    "description": "Your touch becomes a vector for spreading corruption. Flesh you contact begins to fail, immune systems collapse, and strength drains away. Target gains 'Weakened' condition: -2 to all Physical stat modifiers for 3 rounds.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "manifest-minor-contagion": {
+    "id": "manifest-minor-contagion",
+    "name": "Manifest Minor Contagion",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "decay",
+      "focus": "disease",
+      "requiredLevel": 2
+    },
+    "apCost": 3,
+    "componentCost": [{ "type": "DS", "amount": 3 }],
+    "sanityCost": 5,
+    "range": "40 ft",
+    "target": "area",
+    "areaOfEffect": { "shape": "radius", "size": "15 ft" },
+    "duration": "3 rounds",
+    "effects": {
+      "special": ["All creatures entering or starting turn in cloud make GRT check (Difficulty 30) or gain 'Minor Sickness' condition"]
+    },
+    "description": "Release a cloud of infectious mist that spreads sickness to all who breathe it. The contagion seeks warm bodies with hungry persistence.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "disease-mind": {
+    "id": "disease-mind",
+    "name": "Disease Mind",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "decay",
+      "focus": "disease",
+      "requiredLevel": 3
+    },
+    "apCost": 4,
+    "componentCost": [{ "type": "DS", "amount": 3 }],
+    "sanityCost": 10,
+    "range": "30 ft",
+    "target": "enemy",
+    "damage": {
+      "dice": "3D10",
+      "statModifier": "MAG",
+      "type": "sanity"
+    },
+    "duration": "3 rounds",
+    "effects": {
+      "diceModifiers": [
+        { "amount": -2, "applies": "KNW, FRS, and DET checks", "duration": "3 rounds" }
+      ]
+    },
+    "description": "Infect a target's thoughts with cognitive decay. Their memories blur, decisions become difficult, and the line between reality and fever-dream grows thin.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "manifest-lesser-disease": {
+    "id": "manifest-lesser-disease",
+    "name": "Manifest Lesser Disease",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "decay",
+      "focus": "disease",
+      "requiredLevel": 3
+    },
+    "apCost": 4,
+    "componentCost": [{ "type": "DS", "amount": 4 }],
+    "sanityCost": 10,
+    "range": "30 ft",
+    "target": "enemy",
+    "damage": { "dice": "2D8", "type": "necrotic" },
+    "duration": "until treated or 1 hour",
+    "effects": {
+      "statModifiers": [
+        { "stats": "all", "amount": -2, "duration": "until treated or 1 hour" }
+      ],
+      "special": [
+        "2D8 damage at start of each turn",
+        "Contagious: creatures within 5 ft. make GRT check Difficulty 35 or contract"
+      ]
+    },
+    "description": "Summon a genuine plague, drawing forth diseases that have claimed countless lives throughout history. The sickness burns through the body with terrible efficiency.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "manifest-greater-disease": {
+    "id": "manifest-greater-disease",
+    "name": "Manifest Greater Disease",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "decay",
+      "focus": "disease",
+      "requiredLevel": 4
+    },
+    "apCost": 5,
+    "componentCost": [{ "type": "DS", "amount": 6 }],
+    "sanityCost": 15,
+    "range": "30 ft",
+    "target": "enemy",
+    "damage": {
+      "dice": "5D12",
+      "statModifier": "MAG",
+      "type": "necrotic"
+    },
+    "duration": "until cured",
+    "effects": {
+      "statModifiers": [{ "stats": "all", "amount": -3, "duration": "until cured" }],
+      "diceModifiers": [{ "amount": -2, "applies": "all", "duration": "until cured" }],
+      "special": [
+        "3D10 damage per turn",
+        "Highly contagious: 15 ft. radius, GRT check Difficulty 45",
+        "Requires magical healing to cure"
+      ]
+    },
+    "description": "Call forth one of the legendary plagues, a sickness so terrible it has toppled civilizations. The disease spreads rapidly and resists all but the most powerful treatments.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "eroding-touch": {
+    "id": "eroding-touch",
+    "name": "Eroding Touch",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "decay",
+      "focus": "entropy",
+      "requiredLevel": 1
+    },
+    "apCost": 1,
+    "componentCost": [{ "type": "DS", "amount": 1 }],
+    "range": "touch",
+    "target": "object",
+    "damage": {
+      "dice": "2D8",
+      "statModifier": "MAG",
+      "type": "necrotic"
+    },
+    "duration": "instant",
+    "effects": {
+      "special": ["Reduce target object's HP by an additional 1D10"]
+    },
+    "description": "Your hands carry the inevitability of time's passage. What you touch begins to break down, materials weakening as centuries pass in heartbeats.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "unravel-magic": {
+    "id": "unravel-magic",
+    "name": "Unravel Magic",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "decay",
+      "focus": "entropy",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "componentCost": [{ "type": "DS", "amount": 1 }],
+    "range": "30 ft",
+    "target": "creature",
+    "duration": "instant",
+    "effects": {
+      "special": [
+        "Reduce duration of one magical effect on target by 2 rounds",
+        "If effect has less than 2 rounds remaining, it ends immediately"
+      ]
+    },
+    "description": "Tug at the threads of magical effects, accelerating their natural decay. Even the strongest enchantments bow to entropy eventually.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  },
+
+  "dust-to-dust": {
+    "id": "dust-to-dust",
+    "name": "Dust to Dust",
+    "source": {
+      "type": "magic",
+      "college": "dead",
+      "school": "decay",
+      "focus": "entropy",
+      "requiredLevel": 1
+    },
+    "apCost": 2,
+    "componentCost": [{ "type": "DS", "amount": 2 }],
+    "range": "40 ft",
+    "target": "area",
+    "areaOfEffect": { "shape": "radius", "size": "10 ft" },
+    "damage": { "dice": "3D8", "type": "necrotic" },
+    "duration": "3 rounds",
+    "effects": {
+      "special": ["Non-magical, non-living materials in zone take damage per round"]
+    },
+    "description": "Accelerate the natural breakdown of non-living matter. Stone crumbles, metal rusts, wood rots, all returning to the dust from which they came.",
+    "isPassive": false,
+    "isRitual": false,
+    "isSustained": false
+  }
+}
