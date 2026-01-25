@@ -2,14 +2,23 @@
 @use 'styles/abstracts/mixins' as *;
 
 // =========================================================================
-// ABILITIES PAGE - CLEAN RESTRUCTURE
+// LOST WORLDS LIBRARY - ABILITIES PAGE
 // =========================================================================
 // 
-// Scroll Model:
-// - MOBILE: Normal page scroll. Filter drawer slides in with internal scroll.
-// - DESKTOP: Sidebar is sticky with internal scroll. Page scrolls normally.
+// Row-based expandable list design with:
+// - Compact row headers showing key info at a glance
+// - Smooth expand/collapse animation for details
+// - College-themed color accents
 //
 // =========================================================================
+
+// =========================================================================
+// COLLEGE COLOR SYSTEM
+// =========================================================================
+
+$college-cosmic: #9370db;
+$college-earthly: #4caf50;
+$college-dead: #b71c1c;
 
 // =========================================================================
 // PAGE CONTAINER
@@ -340,48 +349,43 @@
 // FILTERS SIDEBAR
 // =========================================================================
 
-// --- MOBILE: Off-canvas drawer ---
 .filters-sidebar {
   position: fixed;
   top: 0;
   left: 0;
   bottom: 0;
-  width: 320px;
+  width: 300px;
   max-width: 85vw;
-  z-index: $z-index-modal;
   background: var(--color-surface);
+  border-right: $border-width-thin solid var(--color-border);
+  transform: translateX(-100%);
+  z-index: $z-index-modal;
   display: flex;
   flex-direction: column;
-  transform: translateX(-100%);
   @include transition(transform);
 
   &.is-open {
     transform: translateX(0);
   }
 
-  // --- DESKTOP: Inline sticky sidebar ---
   @include respond-to('lg') {
     position: sticky;
     top: $spacing-4;
-    width: auto;
-    max-width: none;
+    height: fit-content;
     max-height: calc(100vh - #{$spacing-8});
-    z-index: auto;
+    transform: none;
     border: $border-width-thin solid var(--color-border);
     border-radius: $border-radius-lg;
-    transform: none;
   }
 }
 
-// Mobile header - only visible on mobile
 .filters-mobile-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: $spacing-4;
-  background: var(--color-surface-alt);
   border-bottom: $border-width-thin solid var(--color-border);
-  flex-shrink: 0;
+  background: var(--color-surface-alt);
 
   @include respond-to('lg') {
     display: none;
@@ -392,72 +396,34 @@
   display: flex;
   align-items: center;
   gap: $spacing-2;
-  font-size: $font-size-lg;
   font-weight: $font-weight-semibold;
   color: var(--color-text);
-
-  .material-symbols-outlined {
-    font-size: 22px;
-    color: var(--color-accent);
-  }
 }
 
 .filters-close-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-center;
   width: 32px;
   height: 32px;
   padding: 0;
   background: transparent;
-  border: $border-width-thin solid var(--color-border);
+  border: none;
   border-radius: $border-radius-base;
   color: var(--color-text-muted);
   cursor: pointer;
-  @include transition(background-color, border-color, color);
+  @include transition(background-color, color);
 
   &:hover {
     background: var(--color-surface);
-    border-color: var(--color-border-strong);
     color: var(--color-text);
-  }
-
-  .material-symbols-outlined {
-    font-size: 18px;
   }
 }
 
-// Scrollable filter content
 .filters-scroll-area {
   flex: 1;
   overflow-y: auto;
   padding: $spacing-4;
-  -webkit-overflow-scrolling: touch;
-
-  @include respond-to('lg') {
-    padding: $spacing-5;
-  }
-
-  // Custom scrollbar
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: var(--color-border-strong);
-    border-radius: 3px;
-
-    &:hover {
-      background: var(--color-text-subtle);
-    }
-  }
 }
 
-// Desktop header - only visible on desktop
 .filters-desktop-header {
   display: none;
 
@@ -466,7 +432,7 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: $spacing-4;
-    padding-bottom: $spacing-3;
+    padding-bottom: $spacing-4;
     border-bottom: $border-width-thin solid var(--color-border);
   }
 }
@@ -475,11 +441,8 @@
   display: flex;
   align-items: center;
   gap: $spacing-2;
-  font-size: $font-size-sm;
   font-weight: $font-weight-semibold;
   color: var(--color-text);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
 
   .material-symbols-outlined {
     font-size: 20px;
@@ -492,33 +455,15 @@
   font-size: $font-size-xs;
   font-weight: $font-weight-medium;
   color: var(--color-error);
-  background: var(--color-error-subtle);
+  background: transparent;
   border: none;
   border-radius: $border-radius-sm;
   cursor: pointer;
-  @include transition(background-color, color);
+  @include transition(background-color);
 
   &:hover {
-    background: var(--color-error);
-    color: #fff;
+    background: var(--color-error-subtle);
   }
-}
-
-// Mobile footer - only visible on mobile
-.filters-mobile-footer {
-  display: block;
-  padding: $spacing-4;
-  background: var(--color-surface-alt);
-  border-top: $border-width-thin solid var(--color-border);
-  flex-shrink: 0;
-
-  @include respond-to('lg') {
-    display: none;
-  }
-}
-
-.filters-apply-btn {
-  width: 100%;
 }
 
 // =========================================================================
@@ -526,57 +471,50 @@
 // =========================================================================
 
 .filter-section {
-  margin-bottom: $spacing-3;
+  margin-bottom: $spacing-2;
 
-  &:last-child {
-    margin-bottom: 0;
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: $spacing-3;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: var(--color-text);
+    background: var(--color-surface-alt);
+    border: none;
+    border-radius: $border-radius-base;
+    cursor: pointer;
+    @include transition(background-color);
+
+    &:hover {
+      background: var(--color-border);
+    }
   }
-}
 
-.filter-section__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: $spacing-2 0;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--color-text);
-  @include transition(color);
-
-  &:hover {
-    color: var(--color-primary);
+  &__title {
+    font-weight: $font-weight-semibold;
   }
-}
 
-.filter-section__title {
-  font-size: $font-size-sm;
-  font-weight: $font-weight-semibold;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
+  &__chevron {
+    font-size: 20px;
+    color: var(--color-text-muted);
+    @include transition(transform);
 
-.filter-section__chevron {
-  font-size: 20px;
-  color: var(--color-text-muted);
-  @include transition(transform);
-
-  &.expanded {
-    transform: rotate(180deg);
+    &.expanded {
+      transform: rotate(180deg);
+    }
   }
-}
 
-.filter-section__content {
-  padding: $spacing-2 0;
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-1;
+  &__content {
+    padding: $spacing-3;
 
-  &--grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: $spacing-1;
+    &--grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: $spacing-2;
+    }
   }
 }
 
@@ -597,11 +535,44 @@
     background: var(--color-surface-alt);
   }
 
-  input {
-    position: absolute;
-    opacity: 0;
-    width: 0;
-    height: 0;
+  input[type="checkbox"] {
+    display: none;
+  }
+
+  &__mark {
+    width: 18px;
+    height: 18px;
+    border: $border-width-base solid var(--color-border);
+    border-radius: $border-radius-sm;
+    @include transition(background-color, border-color);
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 5px;
+      width: 5px;
+      height: 9px;
+      border: solid #fff;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg) scale(0);
+      @include transition(transform);
+    }
+  }
+
+  input:checked + &__mark {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+
+    &::after {
+      transform: rotate(45deg) scale(1);
+    }
+  }
+
+  &__label {
+    font-size: $font-size-sm;
+    color: var(--color-text);
   }
 
   &--nested {
@@ -609,63 +580,31 @@
   }
 
   &--compact {
-    padding: $spacing-1 $spacing-2;
+    padding: $spacing-1;
+
+    .filter-checkbox__mark {
+      width: 16px;
+      height: 16px;
+    }
+
+    .filter-checkbox__label {
+      font-size: $font-size-xs;
+      font-weight: $font-weight-semibold;
+    }
   }
 }
 
-.filter-checkbox__mark {
-  width: 18px;
-  height: 18px;
-  border: 2px solid var(--color-border-strong);
-  border-radius: $border-radius-sm;
-  position: relative;
-  flex-shrink: 0;
-  @include transition(border-color, background-color);
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 2px;
-    left: 5px;
-    width: 4px;
-    height: 8px;
-    border: solid #fff;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg) scale(0);
-    @include transition(transform);
-  }
-}
-
-.filter-checkbox input:checked + .filter-checkbox__mark {
-  background: var(--college-color, var(--color-primary));
-  border-color: var(--college-color, var(--color-primary));
-
-  &::after {
-    transform: rotate(45deg) scale(1);
-  }
-}
-
-.filter-checkbox__label {
-  font-size: $font-size-sm;
-  color: var(--color-text);
-}
-
-// School groups
 .school-group {
-  margin-bottom: $spacing-2;
+  margin-bottom: $spacing-3;
 
-  &:last-child {
-    margin-bottom: 0;
+  &__label {
+    display: block;
+    padding: $spacing-1 $spacing-2;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
-}
-
-.school-group__label {
-  display: block;
-  padding: $spacing-1 $spacing-2;
-  font-size: $font-size-xs;
-  font-weight: $font-weight-semibold;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 
 // =========================================================================
@@ -673,7 +612,7 @@
 // =========================================================================
 
 .results-area {
-  min-width: 0; // Prevent grid blowout
+  min-width: 0;
 }
 
 .results-header {
@@ -694,10 +633,6 @@
   }
 }
 
-// =========================================================================
-// ACTIVE FILTER PILLS
-// =========================================================================
-
 .active-filters {
   display: flex;
   flex-wrap: wrap;
@@ -708,7 +643,7 @@
   display: inline-flex;
   align-items: center;
   gap: $spacing-1;
-  padding: $spacing-1 $spacing-3;
+  padding: $spacing-1 $spacing-2;
   font-size: $font-size-xs;
   font-weight: $font-weight-medium;
   color: var(--color-text);
@@ -716,13 +651,10 @@
   border: $border-width-thin solid var(--color-border);
   border-radius: $border-radius-full;
   cursor: pointer;
-  text-transform: capitalize;
-  @include transition(background-color, border-color);
+  @include transition(background-color);
 
   &:hover {
-    background: var(--color-error-subtle);
-    border-color: var(--color-error);
-    color: var(--color-error);
+    background: var(--color-border);
   }
 
   .material-symbols-outlined {
@@ -731,12 +663,8 @@
 
   &--college {
     background: color-mix(in srgb, var(--pill-color) 15%, transparent);
-    border-color: var(--pill-color);
+    border-color: color-mix(in srgb, var(--pill-color) 40%, transparent);
     color: var(--pill-color);
-
-    &:hover {
-      background: color-mix(in srgb, var(--pill-color) 25%, transparent);
-    }
   }
 
   &--stat {
@@ -747,149 +675,339 @@
 }
 
 // =========================================================================
-// ABILITIES GRID
+// ABILITIES LIST (ROW-BASED)
 // =========================================================================
 
-.abilities-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: $spacing-4;
-
-  @include respond-to('xl') {
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  }
-}
-
-// =========================================================================
-// ABILITY CARD
-// =========================================================================
-
-.ability-card {
-  position: relative;
+.abilities-list {
   display: flex;
   flex-direction: column;
+  gap: $spacing-2;
+}
+
+.ability-row {
   background: var(--color-surface);
   border: $border-width-thin solid var(--color-border);
   border-radius: $border-radius-lg;
-  padding: $spacing-5;
   overflow: hidden;
-  @include transition(transform, box-shadow, border-color);
+  @include transition(box-shadow, border-color);
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-card);
     border-color: var(--color-border-strong);
   }
 
-  // College-specific styling
+  &.is-expanded {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 1px var(--color-primary);
+
+    .ability-row__chevron {
+      transform: rotate(180deg);
+    }
+
+    .ability-row__details {
+      grid-template-rows: 1fr;
+    }
+  }
+
+  // College-specific accent colors
   &[data-college="cosmic"] {
-    .ability-card__college-indicator { background: #9370db; }
-    .ability-card__source { color: #9370db; }
+    .ability-row__college-bar { background: $college-cosmic; }
+    .ability-row__level { 
+      background: color-mix(in srgb, $college-cosmic 15%, transparent);
+      color: $college-cosmic;
+      border-color: color-mix(in srgb, $college-cosmic 30%, transparent);
+    }
   }
 
   &[data-college="earthly"] {
-    .ability-card__college-indicator { background: var(--color-success); }
-    .ability-card__source { color: var(--color-success); }
+    .ability-row__college-bar { background: $college-earthly; }
+    .ability-row__level { 
+      background: color-mix(in srgb, $college-earthly 15%, transparent);
+      color: $college-earthly;
+      border-color: color-mix(in srgb, $college-earthly 30%, transparent);
+    }
   }
 
   &[data-college="dead"] {
-    .ability-card__college-indicator { background: #b71c1c; }
-    .ability-card__source { color: #b71c1c; }
+    .ability-row__college-bar { background: $college-dead; }
+    .ability-row__level { 
+      background: color-mix(in srgb, $college-dead 15%, transparent);
+      color: $college-dead;
+      border-color: color-mix(in srgb, $college-dead 30%, transparent);
+    }
   }
 }
 
-.ability-card__college-indicator {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--color-border);
-}
+// =========================================================================
+// ABILITY ROW HEADER
+// =========================================================================
 
-.ability-card__header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+.ability-row__header {
+  display: grid;
+  grid-template-columns: 4px 1fr auto auto auto auto;
+  align-items: center;
   gap: $spacing-3;
-  margin-bottom: $spacing-2;
+  width: 100%;
+  padding: $spacing-3 $spacing-4;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  @include transition(background-color);
+
+  &:hover {
+    background: var(--color-surface-alt);
+  }
+
+  @include respond-to('md') {
+    grid-template-columns: 4px minmax(200px, 1fr) auto minmax(120px, auto) auto auto;
+    padding: $spacing-3 $spacing-5;
+  }
 }
 
-.ability-card__name {
+.ability-row__college-bar {
+  width: 4px;
+  height: 100%;
+  min-height: 40px;
+  border-radius: $border-radius-full;
+  align-self: stretch;
+}
+
+.ability-row__primary {
+  min-width: 0;
+}
+
+.ability-row__name {
   margin: 0;
-  font-size: $font-size-lg;
+  font-size: $font-size-base;
   font-weight: $font-weight-semibold;
   color: var(--color-text);
-  line-height: $line-height-tight;
-}
+  @include truncate;
 
-.ability-card__ap-badge {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-width: 40px;
-  height: 40px;
-  background: var(--color-warning-subtle);
-  border: 2px solid var(--color-warning);
-  border-radius: $border-radius-base;
-  flex-shrink: 0;
-
-  .ap-value {
-    font-size: $font-size-base;
-    font-weight: $font-weight-bold;
-    color: var(--color-warning);
-    line-height: 1;
-  }
-
-  .ap-label {
-    font-size: 9px;
-    font-weight: $font-weight-semibold;
-    color: var(--color-warning);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    line-height: 1;
+  @include respond-to('md') {
+    font-size: $font-size-lg;
   }
 }
 
-.ability-card__source {
+.ability-row__focus {
+  display: block;
   font-size: $font-size-xs;
-  font-weight: $font-weight-medium;
   color: var(--color-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  margin-bottom: $spacing-3;
+  @include truncate;
 }
 
-.ability-card__description {
-  margin: 0 0 $spacing-4;
-  font-size: $font-size-sm;
-  color: var(--color-text);
-  line-height: $line-height-relaxed;
-  flex: 1;
-
-  // Clamp to 4 lines
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-// =========================================================================
-// ABILITY STATS GRID
-// =========================================================================
-
-.ability-card__stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: $spacing-2;
-  padding: $spacing-3;
-  background: var(--color-surface-alt);
+.ability-row__level {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: $spacing-1 $spacing-2;
   border-radius: $border-radius-base;
-  margin-bottom: $spacing-3;
+  border: $border-width-thin solid;
+  font-weight: $font-weight-bold;
+
+  &-value {
+    font-size: $font-size-base;
+  }
+
+  &-label {
+    font-size: $font-size-2xs;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
 }
 
-.ability-stat {
+.ability-row__output {
+  display: none;
+
+  @include respond-to('md') {
+    display: block;
+  }
+}
+
+.ability-row__ap {
+  display: flex;
+  align-items: center;
+}
+
+.ability-row__chevron {
+  font-size: 24px;
+  color: var(--color-text-muted);
+  @include transition(transform);
+}
+
+// =========================================================================
+// OUTPUT BADGES
+// =========================================================================
+
+.output-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-1;
+  padding: $spacing-1 $spacing-2;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  border-radius: $border-radius-base;
+  white-space: nowrap;
+
+  .material-symbols-outlined {
+    font-size: 16px;
+  }
+
+  &__value {
+    font-weight: $font-weight-semibold;
+  }
+
+  &__type {
+    font-size: $font-size-xs;
+    opacity: 0.8;
+    text-transform: capitalize;
+  }
+
+  &--damage {
+    background: var(--color-error-subtle);
+    color: var(--color-error);
+
+    &[data-damage-type="sanity"] {
+      background: color-mix(in srgb, #9b59b6 15%, transparent);
+      color: #9b59b6;
+    }
+
+    &[data-damage-type="necrotic"] {
+      background: color-mix(in srgb, #7f8c8d 15%, transparent);
+      color: #7f8c8d;
+    }
+
+    &[data-damage-type="radiant"] {
+      background: color-mix(in srgb, #f1c40f 15%, transparent);
+      color: #d4a700;
+    }
+
+    &[data-damage-type="fire"] {
+      background: color-mix(in srgb, #e74c3c 15%, transparent);
+      color: #e74c3c;
+    }
+
+    &[data-damage-type="cold"] {
+      background: color-mix(in srgb, #3498db 15%, transparent);
+      color: #3498db;
+    }
+  }
+
+  &--healing {
+    background: var(--color-success-subtle);
+    color: var(--color-success);
+  }
+
+  &--summon {
+    background: color-mix(in srgb, #9b59b6 15%, transparent);
+    color: #9b59b6;
+  }
+
+  &--effect {
+    background: var(--color-info-subtle);
+    color: var(--color-info);
+  }
+}
+
+// =========================================================================
+// AP BADGE
+// =========================================================================
+
+.ap-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 44px;
+  padding: $spacing-1 $spacing-2;
+  background: var(--color-warning-subtle);
+  border-radius: $border-radius-base;
+
+  &__value {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: var(--color-warning);
+  }
+
+  &__label {
+    font-size: $font-size-2xs;
+    font-weight: $font-weight-semibold;
+    color: var(--color-warning);
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+
+  &--passive {
+    background: var(--color-accent-subtle);
+    min-width: 36px;
+
+    .material-symbols-outlined {
+      font-size: 20px;
+      color: var(--color-accent);
+    }
+  }
+}
+
+// =========================================================================
+// ABILITY ROW DETAILS (EXPANDABLE)
+// =========================================================================
+
+.ability-row__details {
+  display: grid;
+  grid-template-rows: 0fr;
+  @include transition(grid-template-rows);
+}
+
+.ability-details {
+  overflow: hidden;
+  border-top: $border-width-thin solid var(--color-border);
+  background: var(--color-surface-alt);
+}
+
+.ability-details__section {
+  padding: $spacing-4 $spacing-5;
+
+  &:not(:last-child) {
+    border-bottom: $border-width-thin solid var(--color-border);
+  }
+
+  &-title {
+    margin: 0 0 $spacing-3;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+}
+
+.ability-details__description {
+  p {
+    margin: 0;
+    font-size: $font-size-base;
+    line-height: $line-height-relaxed;
+    color: var(--color-text);
+  }
+}
+
+// =========================================================================
+// STATS GRID
+// =========================================================================
+
+.ability-details__stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-3;
+  padding: $spacing-4 $spacing-5;
+  border-bottom: $border-width-thin solid var(--color-border);
+
+  @include respond-to('sm') {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.stat-item {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -897,74 +1015,235 @@
   gap: 2px;
 
   .material-symbols-outlined {
-    font-size: 16px;
+    font-size: 18px;
     color: var(--color-text-subtle);
   }
 
   &__label {
-    font-size: 10px;
+    font-size: $font-size-2xs;
+    font-weight: $font-weight-medium;
     color: var(--color-text-subtle);
     text-transform: uppercase;
     letter-spacing: 0.03em;
   }
 
   &__value {
-    font-size: $font-size-xs;
-    font-weight: $font-weight-medium;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
     color: var(--color-text);
     text-transform: capitalize;
   }
 }
 
 // =========================================================================
-// ABILITY COSTS
+// COSTS
 // =========================================================================
 
-.ability-card__costs {
+.ability-details__costs {
   display: flex;
   flex-wrap: wrap;
   gap: $spacing-2;
-  margin-bottom: $spacing-3;
 }
 
 .cost-tag {
   display: inline-flex;
   align-items: center;
   gap: $spacing-1;
-  padding: $spacing-1 $spacing-2;
-  font-size: $font-size-xs;
+  padding: $spacing-2 $spacing-3;
+  font-size: $font-size-sm;
   font-weight: $font-weight-medium;
-  color: var(--color-text-muted);
-  background: var(--color-surface-alt);
-  border-radius: $border-radius-sm;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: $border-width-thin solid var(--color-border);
+  border-radius: $border-radius-base;
 
   .material-symbols-outlined {
-    font-size: 14px;
+    font-size: 16px;
+    color: var(--color-text-muted);
+  }
+
+  &--sanity {
+    background: color-mix(in srgb, #9b59b6 10%, transparent);
+    border-color: color-mix(in srgb, #9b59b6 30%, transparent);
+    color: #9b59b6;
+
+    .material-symbols-outlined {
+      color: #9b59b6;
+    }
   }
 }
 
 // =========================================================================
-// ABILITY FOOTER
+// SUMMON SECTION
 // =========================================================================
 
-.ability-card__footer {
+.summon-stats {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: $spacing-2;
-  padding-top: $spacing-3;
-  border-top: $border-width-thin solid var(--color-border);
-  margin-top: auto;
+  gap: $spacing-4;
+  margin-bottom: $spacing-3;
 }
 
-.ability-card__tags {
+.summon-stat {
   display: flex;
+  align-items: center;
   gap: $spacing-1;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: var(--color-text);
+
+  .material-symbols-outlined {
+    font-size: 16px;
+    color: var(--color-text-muted);
+  }
+}
+
+.summon-attacks {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+}
+
+.summon-attack {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $spacing-2;
+  padding: $spacing-2 $spacing-3;
+  background: var(--color-surface);
+  border-radius: $border-radius-base;
+  font-size: $font-size-sm;
+
+  &__name {
+    font-weight: $font-weight-semibold;
+    color: var(--color-text);
+  }
+
+  &__damage {
+    color: var(--color-error);
+    font-weight: $font-weight-medium;
+  }
+
+  &__cost {
+    padding: 2px $spacing-2;
+    background: var(--color-warning-subtle);
+    color: var(--color-warning);
+    border-radius: $border-radius-sm;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+  }
+
+  &__special {
+    flex-basis: 100%;
+    font-size: $font-size-xs;
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+}
+
+// =========================================================================
+// EFFECTS
+// =========================================================================
+
+.ability-effects {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+}
+
+.effect-item {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  padding: $spacing-2 $spacing-3;
+  background: var(--color-surface);
+  border-radius: $border-radius-base;
+  font-size: $font-size-sm;
+  color: var(--color-text);
+
+  .material-symbols-outlined {
+    font-size: 16px;
+    color: var(--color-info);
+  }
+
+  &--condition {
+    .material-symbols-outlined {
+      color: var(--color-warning);
+    }
+  }
+
+  &--buff {
+    .material-symbols-outlined {
+      color: var(--color-success);
+    }
+  }
+}
+
+.effect-duration {
+  font-size: $font-size-xs;
+  color: var(--color-text-muted);
+}
+
+// =========================================================================
+// REACTION TRIGGER
+// =========================================================================
+
+.reaction-trigger {
+  margin: 0;
+  padding: $spacing-3;
+  background: color-mix(in srgb, #e67e22 10%, transparent);
+  border-left: 3px solid #e67e22;
+  border-radius: $border-radius-sm;
+  font-size: $font-size-sm;
+  color: var(--color-text);
+}
+
+// =========================================================================
+// NOTES
+// =========================================================================
+
+.ability-details__notes {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-2;
+  background: var(--color-info-subtle);
+
+  .material-symbols-outlined {
+    font-size: 18px;
+    color: var(--color-info);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  p {
+    margin: 0;
+    font-size: $font-size-sm;
+    color: var(--color-text-muted);
+  }
+}
+
+// =========================================================================
+// FOOTER TAGS
+// =========================================================================
+
+.ability-details__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-3;
+  padding: $spacing-4 $spacing-5;
+  background: var(--color-surface);
+}
+
+.ability-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-2;
 }
 
 .ability-tag {
-  padding: 2px $spacing-2;
-  font-size: 10px;
+  padding: $spacing-1 $spacing-2;
+  font-size: $font-size-xs;
   font-weight: $font-weight-semibold;
   text-transform: uppercase;
   letter-spacing: 0.03em;
@@ -984,16 +1263,32 @@
     background: var(--color-info);
     color: #fff;
   }
+
+  &--reaction {
+    background: #e67e22;
+    color: #fff;
+  }
+
+  &--summon {
+    background: #9b59b6;
+    color: #fff;
+  }
 }
 
-.ability-card__detected-stats {
+.ability-stats-used {
   display: flex;
-  gap: $spacing-1;
+  align-items: center;
+  gap: $spacing-2;
+}
+
+.stats-label {
+  font-size: $font-size-xs;
+  color: var(--color-text-muted);
 }
 
 .stat-chip {
   padding: 2px $spacing-2;
-  font-size: 10px;
+  font-size: $font-size-xs;
   font-weight: $font-weight-semibold;
   color: var(--color-primary);
   background: var(--color-primary-subtle);
@@ -1044,168 +1339,4 @@
 
 .btn-secondary {
   @include button-secondary;
-}
-
-// =========================================================================
-// ABILITY OUTPUT (DAMAGE/HEALING DISPLAY)
-// =========================================================================
-
-.ability-card__output {
-  display: flex;
-  flex-wrap: wrap;
-  gap: $spacing-2;
-  margin-bottom: $spacing-3;
-}
-
-.ability-output {
-  display: inline-flex;
-  align-items: center;
-  gap: $spacing-1;
-  padding: $spacing-1 $spacing-2;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-medium;
-  border-radius: $border-radius-base;
-
-  .material-symbols-outlined {
-    font-size: 16px;
-  }
-
-  &__value {
-    font-weight: $font-weight-semibold;
-  }
-
-  &__type {
-    font-size: $font-size-xs;
-    font-weight: $font-weight-medium;
-    text-transform: capitalize;
-    opacity: 0.8;
-  }
-
-  // Damage styling
-  &--damage {
-    background: var(--color-error-subtle);
-    color: var(--color-error);
-
-    // Damage type specific colors
-    &[data-damage-type="sanity"] {
-      background: color-mix(in srgb, #9b59b6 15%, transparent);
-      color: #9b59b6;
-    }
-
-    &[data-damage-type="necrotic"] {
-      background: color-mix(in srgb, #2c3e50 15%, transparent);
-      color: #7f8c8d;
-    }
-
-    &[data-damage-type="radiant"] {
-      background: color-mix(in srgb, #f1c40f 15%, transparent);
-      color: #d4a700;
-    }
-
-    &[data-damage-type="fire"] {
-      background: color-mix(in srgb, #e74c3c 15%, transparent);
-      color: #e74c3c;
-    }
-
-    &[data-damage-type="cold"] {
-      background: color-mix(in srgb, #3498db 15%, transparent);
-      color: #3498db;
-    }
-
-    &[data-damage-type="lightning"] {
-      background: color-mix(in srgb, #9b59b6 15%, transparent);
-      color: #8e44ad;
-    }
-
-    &[data-damage-type="poison"] {
-      background: color-mix(in srgb, #27ae60 15%, transparent);
-      color: #27ae60;
-    }
-  }
-
-  // Healing styling
-  &--healing {
-    background: var(--color-success-subtle);
-    color: var(--color-success);
-  }
-}
-
-// =========================================================================
-// ADDITIONAL ABILITY TAGS
-// =========================================================================
-
-.ability-tag {
-  // Existing styles...
-
-  &--reaction {
-    background: #e67e22;
-    color: #fff;
-  }
-
-  &--summon {
-    background: #9b59b6;
-    color: #fff;
-  }
-}
-
-// =========================================================================
-// SANITY COST TAG STYLING
-// =========================================================================
-
-.cost-tag {
-  // Existing styles...
-
-  &--sanity {
-    background: color-mix(in srgb, #9b59b6 15%, transparent);
-    color: #9b59b6;
-    border: 1px solid color-mix(in srgb, #9b59b6 30%, transparent);
-  }
-}
-
-// =========================================================================
-// COMPONENT COST ICONS BY TYPE
-// Add distinctive styling for different component types
-// =========================================================================
-
-// Cosmic components
-.cost-tag[title="Star Runes"] {
-  .material-symbols-outlined { color: #9370db; }
-}
-
-.cost-tag[title="Light Runes"] {
-  .material-symbols-outlined { color: #f1c40f; }
-}
-
-.cost-tag[title="Hours"] {
-  .material-symbols-outlined { color: #3498db; }
-}
-
-.cost-tag[title="Void Shards"] {
-  .material-symbols-outlined { color: #2c3e50; }
-}
-
-// Earthly components
-.cost-tag[title="Focus Points"] {
-  .material-symbols-outlined { color: #27ae60; }
-}
-
-.cost-tag[title="Life Seeds"] {
-  .material-symbols-outlined { color: #2ecc71; }
-}
-
-.cost-tag[title="Craft Points"] {
-  .material-symbols-outlined { color: #e67e22; }
-}
-
-// Dead components
-.cost-tag[title="Funeral Essence"] {
-  .material-symbols-outlined { color: #7f8c8d; }
-}
-
-.cost-tag[title="Decay Essence"] {
-  .material-symbols-outlined { color: #95a5a6; }
-}
-
-.cost-tag[title="Damned Coins"] {
-  .material-symbols-outlined { color: #c0392b; }
 }

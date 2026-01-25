@@ -6,15 +6,15 @@
       <span>Home</span>
     </a>
     <span class="breadcrumb-separator material-symbols-outlined">chevron_right</span>
-    <span class="breadcrumb-current">Ability Codex</span>
+    <span class="breadcrumb-current">Lost Worlds Library</span>
   </nav>
 
   <!-- Page Header -->
   <header class="page-header">
     <div class="header-content">
       <h1 class="page-title">
-        <span class="material-symbols-outlined">auto_fix_high</span>
-        Ability Codex
+        <span class="material-symbols-outlined">local_library</span>
+        Lost Worlds Library
       </h1>
       <p class="page-subtitle">Browse and search all abilities across schools of magic</p>
     </div>
@@ -187,33 +187,7 @@
             }
           </div>
 
-          <!-- Source Type Filter -->
-          <div class="filter-section">
-            <button class="filter-section__header" (click)="toggleSection('sourceTypes')">
-              <span class="filter-section__title">Source Type</span>
-              <span class="material-symbols-outlined filter-section__chevron"
-                    [class.expanded]="isSectionExpanded('sourceTypes')">
-                expand_more
-              </span>
-            </button>
-            @if (isSectionExpanded('sourceTypes')) {
-              <div class="filter-section__content">
-                @for (type of sourceTypes; track type.id) {
-                  <label class="filter-checkbox">
-                    <input 
-                      type="checkbox"
-                      [checked]="isFilterActive('sourceTypes', type.id)"
-                      (change)="toggleFilter('sourceTypes', type.id)"
-                    />
-                    <span class="filter-checkbox__mark"></span>
-                    <span class="filter-checkbox__label">{{ type.name }}</span>
-                  </label>
-                }
-              </div>
-            }
-          </div>
-
-          <!-- Ability Type Filter -->
+          <!-- Ability Types Filter -->
           <div class="filter-section">
             <button class="filter-section__header" (click)="toggleSection('abilityTypes')">
               <span class="filter-section__title">Ability Type</span>
@@ -264,13 +238,32 @@
               </div>
             }
           </div>
-        </div>
 
-        <!-- Mobile Footer -->
-        <div class="filters-mobile-footer">
-          <button class="btn btn-primary filters-apply-btn" (click)="closeMobileFilters()">
-            Show {{ filteredAbilities().length }} Results
-          </button>
+          <!-- Source Type Filter -->
+          <div class="filter-section">
+            <button class="filter-section__header" (click)="toggleSection('sourceTypes')">
+              <span class="filter-section__title">Source Type</span>
+              <span class="material-symbols-outlined filter-section__chevron"
+                    [class.expanded]="isSectionExpanded('sourceTypes')">
+                expand_more
+              </span>
+            </button>
+            @if (isSectionExpanded('sourceTypes')) {
+              <div class="filter-section__content">
+                @for (source of sourceTypes; track source.id) {
+                  <label class="filter-checkbox">
+                    <input 
+                      type="checkbox"
+                      [checked]="isFilterActive('sourceTypes', source.id)"
+                      (change)="toggleFilter('sourceTypes', source.id)"
+                    />
+                    <span class="filter-checkbox__mark"></span>
+                    <span class="filter-checkbox__label">{{ source.name }}</span>
+                  </label>
+                }
+              </div>
+            }
+          </div>
         </div>
       </aside>
 
@@ -328,119 +321,290 @@
           }
         </div>
 
-        <!-- Abilities Grid -->
+        <!-- Abilities List -->
         @if (filteredAbilities().length > 0) {
-          <div class="abilities-grid">
+          <div class="abilities-list">
             @for (ability of filteredAbilities(); track ability.id) {
-              <article class="ability-card" [attr.data-college]="getAbilityCollege(ability)">
-                <div class="ability-card__college-indicator"></div>
-                
-                <header class="ability-card__header">
-                  <h3 class="ability-card__name">{{ ability.name }}</h3>
-                  @if (ability.apCost !== null) {
-                    <div class="ability-card__ap-badge">
-                      <span class="ap-value">{{ ability.apCost }}</span>
-                      <span class="ap-label">AP</span>
-                    </div>
-                  }
-                </header>
-
-                <div class="ability-card__source">
-                  {{ getSourceDisplayName(ability) }}
-                </div>
-
-                <p class="ability-card__description">{{ ability.description }}</p>
-
-                <!-- Damage/Healing Display -->
-                @if (getDamageDisplay(ability) || getHealingDisplay(ability)) {
-                  <div class="ability-card__output">
+              <article 
+                class="ability-row" 
+                [attr.data-college]="getAbilityCollege(ability)"
+                [class.is-expanded]="isAbilityExpanded(ability.id)"
+              >
+                <!-- Row Header (always visible) -->
+                <button 
+                  class="ability-row__header"
+                  (click)="toggleAbilityExpanded(ability.id)"
+                  [attr.aria-expanded]="isAbilityExpanded(ability.id)"
+                >
+                  <!-- College indicator bar -->
+                  <div class="ability-row__college-bar"></div>
+                  
+                  <!-- Name + Focus -->
+                  <div class="ability-row__primary">
+                    <h3 class="ability-row__name">{{ ability.name }}</h3>
+                    <span class="ability-row__focus">{{ formatFocusName(ability.source | abilityFocus) }}</span>
+                  </div>
+                  
+                  <!-- Level badge -->
+                  <div class="ability-row__level" [title]="'Required Focus Level'">
+                    <span class="ability-row__level-value">{{ getRequiredLevel(ability) }}</span>
+                    <span class="ability-row__level-label">Lv</span>
+                  </div>
+                  
+                  <!-- Key output -->
+                  <div class="ability-row__output">
                     @if (getDamageDisplay(ability)) {
-                      <div class="ability-output ability-output--damage" [attr.data-damage-type]="getDamageType(ability)">
+                      <div class="output-badge output-badge--damage" [attr.data-damage-type]="getDamageType(ability)">
                         <span class="material-symbols-outlined">swords</span>
-                        <span class="ability-output__value">{{ getDamageDisplay(ability) }}</span>
+                        <span class="output-badge__value">{{ getDamageDisplay(ability) }}</span>
                         @if (getDamageType(ability)) {
-                          <span class="ability-output__type">{{ getDamageType(ability) }}</span>
+                          <span class="output-badge__type">{{ getDamageType(ability) }}</span>
                         }
                       </div>
-                    }
-                    @if (getHealingDisplay(ability)) {
-                      <div class="ability-output ability-output--healing">
+                    } @else if (getHealingDisplay(ability)) {
+                      <div class="output-badge output-badge--healing">
                         <span class="material-symbols-outlined">healing</span>
-                        <span class="ability-output__value">{{ getHealingDisplay(ability) }}</span>
+                        <span class="output-badge__value">{{ getHealingDisplay(ability) }}</span>
                       </div>
-                    }
-                  </div>
-                }
-
-                <div class="ability-card__stats">
-                  <div class="ability-stat">
-                    <span class="material-symbols-outlined">straighten</span>
-                    <span class="ability-stat__label">Range</span>
-                    <span class="ability-stat__value">{{ ability.range }}</span>
-                  </div>
-                  <div class="ability-stat">
-                    <span class="material-symbols-outlined">schedule</span>
-                    <span class="ability-stat__label">Duration</span>
-                    <span class="ability-stat__value">{{ ability.duration }}</span>
-                  </div>
-                  <div class="ability-stat">
-                    <span class="material-symbols-outlined">target</span>
-                    <span class="ability-stat__label">Target</span>
-                    <span class="ability-stat__value">{{ ability.target }}</span>
-                  </div>
-                </div>
-
-                <!-- Costs Section -->
-                @if (ability.componentCost?.length || ability.staminaCost || hasSanityCost(ability)) {
-                  <div class="ability-card__costs">
-                    @if (ability.staminaCost) {
-                      <span class="cost-tag">
-                        <span class="material-symbols-outlined">{{ getCostIcon('ST') }}</span>
-                        {{ ability.staminaCost }} ST
-                      </span>
-                    }
-                    @if (hasSanityCost(ability)) {
-                      <span class="cost-tag cost-tag--sanity">
-                        <span class="material-symbols-outlined">{{ getCostIcon('SY') }}</span>
-                        {{ ability.sanityCost }} SY
-                      </span>
-                    }
-                    @for (cost of ability.componentCost; track cost.type) {
-                      <span class="cost-tag" [title]="getCostTypeName(cost.type)">
-                        <span class="material-symbols-outlined">{{ getCostIcon(cost.type) }}</span>
-                        {{ formatComponentCost(cost) }}
-                      </span>
-                    }
-                  </div>
-                }
-
-                <footer class="ability-card__footer">
-                  <div class="ability-card__tags">
-                    @if (ability.isPassive) {
-                      <span class="ability-tag ability-tag--passive">Passive</span>
-                    }
-                    @if (ability.isRitual) {
-                      <span class="ability-tag ability-tag--ritual">Ritual</span>
-                    }
-                    @if (ability.isSustained) {
-                      <span class="ability-tag ability-tag--sustained">Sustained</span>
-                    }
-                    @if (isReaction(ability)) {
-                      <span class="ability-tag ability-tag--reaction">Reaction</span>
-                    }
-                    @if (isSummon(ability)) {
-                      <span class="ability-tag ability-tag--summon">Summon</span>
+                    } @else if (isSummon(ability)) {
+                      <div class="output-badge output-badge--summon">
+                        <span class="material-symbols-outlined">pets</span>
+                        <span class="output-badge__value">{{ getSummonName(ability) }}</span>
+                      </div>
+                    } @else if (getEffectSummary(ability)) {
+                      <div class="output-badge output-badge--effect">
+                        <span class="material-symbols-outlined">auto_awesome</span>
+                        <span class="output-badge__value">{{ getEffectSummary(ability) }}</span>
+                      </div>
                     }
                   </div>
                   
-                  @if (ability.detectedStats.length > 0) {
-                    <div class="ability-card__detected-stats">
-                      @for (stat of ability.detectedStats; track stat) {
-                        <span class="stat-chip">{{ stat }}</span>
+                  <!-- AP cost -->
+                  <div class="ability-row__ap">
+                    @if (ability.apCost !== null) {
+                      <span class="ap-badge">
+                        <span class="ap-badge__value">{{ ability.apCost }}</span>
+                        <span class="ap-badge__label">AP</span>
+                      </span>
+                    } @else {
+                      <span class="ap-badge ap-badge--passive">
+                        <span class="material-symbols-outlined">brightness_auto</span>
+                      </span>
+                    }
+                  </div>
+                  
+                  <!-- Expand chevron -->
+                  <span class="material-symbols-outlined ability-row__chevron">
+                    expand_more
+                  </span>
+                </button>
+
+                <!-- Expanded Details (collapsible) -->
+                <div class="ability-row__details">
+                  <div class="ability-details">
+                    <!-- Description -->
+                    <div class="ability-details__section ability-details__description">
+                      <p>{{ ability.description }}</p>
+                    </div>
+
+                    <!-- Stats Grid -->
+                    <div class="ability-details__stats-grid">
+                      <div class="stat-item">
+                        <span class="material-symbols-outlined">straighten</span>
+                        <span class="stat-item__label">Range</span>
+                        <span class="stat-item__value">{{ ability.range }}</span>
+                      </div>
+                      <div class="stat-item">
+                        <span class="material-symbols-outlined">schedule</span>
+                        <span class="stat-item__label">Duration</span>
+                        <span class="stat-item__value">{{ ability.duration }}</span>
+                      </div>
+                      <div class="stat-item">
+                        <span class="material-symbols-outlined">target</span>
+                        <span class="stat-item__label">Target</span>
+                        <span class="stat-item__value">{{ ability.target }}</span>
+                      </div>
+                      @if (ability.areaOfEffect) {
+                        <div class="stat-item">
+                          <span class="material-symbols-outlined">radio_button_unchecked</span>
+                          <span class="stat-item__label">Area</span>
+                          <span class="stat-item__value">{{ ability.areaOfEffect.size }} {{ ability.areaOfEffect.shape }}</span>
+                        </div>
                       }
                     </div>
-                  }
-                </footer>
+
+                    <!-- Costs Section -->
+                    @if (ability.componentCost?.length || ability.staminaCost || hasSanityCost(ability)) {
+                      <div class="ability-details__section">
+                        <h4 class="ability-details__section-title">Costs</h4>
+                        <div class="ability-details__costs">
+                          @if (ability.staminaCost) {
+                            <span class="cost-tag">
+                              <span class="material-symbols-outlined">{{ getCostIcon('ST') }}</span>
+                              {{ ability.staminaCost }} Stamina
+                            </span>
+                          }
+                          @if (hasSanityCost(ability)) {
+                            <span class="cost-tag cost-tag--sanity">
+                              <span class="material-symbols-outlined">{{ getCostIcon('SY') }}</span>
+                              {{ ability.sanityCost }} Sanity
+                            </span>
+                          }
+                          @for (cost of ability.componentCost; track cost.type) {
+                            <span class="cost-tag" [title]="getCostTypeName(cost.type)">
+                              <span class="material-symbols-outlined">{{ getCostIcon(cost.type) }}</span>
+                              {{ formatComponentCost(cost) }}
+                            </span>
+                          }
+                        </div>
+                      </div>
+                    }
+
+                    <!-- Summon Details -->
+                    @if (ability.summon?.creature; as creature) {
+                      <div class="ability-details__section">
+                        <h4 class="ability-details__section-title">Summon: {{ creature.name }}</h4>
+                        <div class="summon-stats">
+                          <span class="summon-stat">
+                            <span class="material-symbols-outlined">favorite</span>
+                            HP: {{ creature.hp }}
+                          </span>
+                          <span class="summon-stat">
+                            <span class="material-symbols-outlined">directions_run</span>
+                            ST: {{ creature.stamina }}
+                          </span>
+                        </div>
+                        @if (creature.attacks?.length) {
+                          <div class="summon-attacks">
+                            @for (attack of creature.attacks; track attack.name) {
+                              <div class="summon-attack">
+                                <span class="summon-attack__name">{{ attack.name }}</span>
+                                <span class="summon-attack__damage">{{ attack.damage }} {{ attack.damageType || '' }}</span>
+                                <span class="summon-attack__cost">{{ attack.apCost }} AP</span>
+                                @if (attack.special) {
+                                  <span class="summon-attack__special">{{ attack.special }}</span>
+                                }
+                              </div>
+                            }
+                          </div>
+                        }
+                      </div>
+                    }
+
+                    <!-- Effects Section -->
+                    @if (ability.effects) {
+                      <div class="ability-details__section">
+                        <h4 class="ability-details__section-title">Effects</h4>
+                        <div class="ability-effects">
+                          @if (ability.effects.diceModifiers?.length) {
+                            @for (mod of ability.effects.diceModifiers; track $index) {
+                              <div class="effect-item">
+                                <span class="material-symbols-outlined">casino</span>
+                                <span>{{ mod.amount > 0 ? '+' : '' }}{{ mod.amount }} D20 on {{ mod.applies }}</span>
+                                @if (mod.duration) {
+                                  <span class="effect-duration">({{ mod.duration }})</span>
+                                }
+                              </div>
+                            }
+                          }
+                          @if (ability.effects.statModifiers?.length) {
+                            @for (mod of ability.effects.statModifiers; track $index) {
+                              <div class="effect-item">
+                                <span class="material-symbols-outlined">trending_up</span>
+                                <span>{{ mod.amount > 0 ? '+' : '' }}{{ mod.amount }} to {{ mod.stats === 'all' ? 'all stats' : mod.stats }}</span>
+                              </div>
+                            }
+                          }
+                          @if (ability.effects.movement) {
+                            <div class="effect-item">
+                              <span class="material-symbols-outlined">directions_walk</span>
+                              <span>{{ ability.effects.movement.amount > 0 ? '+' : '' }}{{ ability.effects.movement.amount }} ft. movement</span>
+                            </div>
+                          }
+                          @if (ability.effects.appliesConditions?.length) {
+                            @for (cond of ability.effects.appliesConditions; track cond.condition) {
+                              <div class="effect-item effect-item--condition">
+                                <span class="material-symbols-outlined">warning</span>
+                                <span>Applies {{ cond.condition }}</span>
+                                @if (cond.duration) {
+                                  <span class="effect-duration">({{ cond.duration }})</span>
+                                }
+                              </div>
+                            }
+                          }
+                          @if (ability.effects?.resistances?.length) {
+                            <div class="effect-item effect-item--buff">
+                              <span class="material-symbols-outlined">shield</span>
+                              <span>Resistance to {{ ability.effects.resistances!.join(', ') }}</span>
+                            </div>
+                          }
+                          @if (ability.effects.grants?.length) {
+                            @for (grant of ability.effects.grants; track grant) {
+                              <div class="effect-item effect-item--buff">
+                                <span class="material-symbols-outlined">add_circle</span>
+                                <span>{{ grant }}</span>
+                              </div>
+                            }
+                          }
+                          @if (ability.effects.special?.length) {
+                            @for (special of ability.effects.special; track special) {
+                              <div class="effect-item">
+                                <span class="material-symbols-outlined">star</span>
+                                <span>{{ special }}</span>
+                              </div>
+                            }
+                          }
+                        </div>
+                      </div>
+                    }
+
+                    <!-- Reaction Trigger -->
+                    @if (ability.reactionTrigger) {
+                      <div class="ability-details__section">
+                        <h4 class="ability-details__section-title">Trigger</h4>
+                        <p class="reaction-trigger">{{ ability.reactionTrigger.event }}</p>
+                      </div>
+                    }
+
+                    <!-- Notes -->
+                    @if (ability.notes) {
+                      <div class="ability-details__section ability-details__notes">
+                        <span class="material-symbols-outlined">info</span>
+                        <p>{{ ability.notes }}</p>
+                      </div>
+                    }
+
+                    <!-- Tags & Meta -->
+                    <div class="ability-details__footer">
+                      <div class="ability-tags">
+                        @if (ability.isPassive) {
+                          <span class="ability-tag ability-tag--passive">Passive</span>
+                        }
+                        @if (ability.isRitual) {
+                          <span class="ability-tag ability-tag--ritual">Ritual</span>
+                        }
+                        @if (ability.isSustained) {
+                          <span class="ability-tag ability-tag--sustained">Sustained</span>
+                        }
+                        @if (isReaction(ability)) {
+                          <span class="ability-tag ability-tag--reaction">Reaction</span>
+                        }
+                        @if (isSummon(ability)) {
+                          <span class="ability-tag ability-tag--summon">Summon</span>
+                        }
+                      </div>
+                      
+                      @if (ability.detectedStats.length > 0) {
+                        <div class="ability-stats-used">
+                          <span class="stats-label">Uses:</span>
+                          @for (stat of ability.detectedStats; track stat) {
+                            <span class="stat-chip">{{ stat }}</span>
+                          }
+                        </div>
+                      }
+                    </div>
+                  </div>
+                </div>
               </article>
             }
           </div>

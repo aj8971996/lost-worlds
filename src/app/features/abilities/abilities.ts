@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, Pipe, PipeTransform } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -19,6 +19,30 @@ import {
 import { MagicCollege, MagicSchool } from '@core/models/magic.model';
 import { StatAbbr, STAT_NAMES } from '@core/models/stats.model';
 
+// =========================================================================
+// PIPES
+// =========================================================================
+
+/**
+ * Pipe to extract focus from AbilitySource
+ */
+@Pipe({
+  name: 'abilityFocus',
+  standalone: true
+})
+export class AbilityFocusPipe implements PipeTransform {
+  transform(source: AbilitySource): string {
+    if (hasCollegeAndFocus(source)) {
+      return source.focus;
+    }
+    return '';
+  }
+}
+
+// =========================================================================
+// INTERFACES
+// =========================================================================
+
 // Filter state interface
 interface AbilityFilters {
   search: string;
@@ -36,23 +60,33 @@ interface ParsedAbility extends AbilityReference {
   schoolId: string | null;
 }
 
+// =========================================================================
+// COMPONENT
+// =========================================================================
+
 @Component({
   selector: 'app-abilities',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule, AbilityFocusPipe],
   templateUrl: './abilities.html',
   styleUrl: './abilities.scss'
 })
 export class AbilitiesComponent implements OnInit {
   private readonly refData = inject(ReferenceDataService);
 
-  // State
+  // =========================================================================
+  // STATE
+  // =========================================================================
+
   abilities = signal<ParsedAbility[]>([]);
   isLoading = signal(true);
   error = signal<string | null>(null);
   
   // Mobile filters drawer state
   isMobileFiltersOpen = signal(false);
+  
+  // Expanded abilities state (independent - multiple can be open)
+  expandedAbilities = signal<Set<string>>(new Set());
   
   // Filter state
   filters = signal<AbilityFilters>({
@@ -65,10 +99,13 @@ export class AbilitiesComponent implements OnInit {
     apCost: new Set()
   });
 
-  // Collapsible sections state
+  // Collapsible filter sections state
   expandedSections = signal<Set<string>>(new Set(['colleges', 'stats']));
 
-  // Available filter options
+  // =========================================================================
+  // STATIC DATA
+  // =========================================================================
+
   readonly colleges: { id: string; name: string; color: string }[] = [
     { id: 'cosmic', name: 'Cosmic', color: '#9370db' },
     { id: 'earthly', name: 'Earthly', color: '#4caf50' },
@@ -101,7 +138,6 @@ export class AbilitiesComponent implements OnInit {
 
   readonly statOptions: StatAbbr[] = ['MIT', 'GRT', 'SPD', 'KNW', 'FRS', 'COR', 'DET', 'AST', 'MAG', 'NAT'];
 
-  // Schools grouped by college for filter UI
   readonly schoolsByCollege: Record<string, { id: string; name: string }[]> = {
     cosmic: [
       { id: 'stars', name: 'School of Stars' },
@@ -124,7 +160,7 @@ export class AbilitiesComponent implements OnInit {
     ]
   };
 
-  // Fallback: Focus to School mapping (for abilities that don't have school in source)
+  // Focus to School mapping
   private readonly focusToSchool: Record<string, { school: string; schoolName: string; college: string }> = {
     // Cosmic - Stars
     divination: { school: 'stars', schoolName: 'School of Stars', college: 'cosmic' },
@@ -192,7 +228,10 @@ export class AbilitiesComponent implements OnInit {
     reaper: { school: 'endings', schoolName: 'School of Endings', college: 'dead' },
   };
 
-  // Computed: filtered abilities
+  // =========================================================================
+  // COMPUTED
+  // =========================================================================
+
   filteredAbilities = computed(() => {
     const all = this.abilities();
     const f = this.filters();
@@ -259,7 +298,6 @@ export class AbilitiesComponent implements OnInit {
     });
   });
 
-  // Computed: active filter count
   activeFilterCount = computed(() => {
     const f = this.filters();
     return f.colleges.size + 
@@ -269,6 +307,10 @@ export class AbilitiesComponent implements OnInit {
            f.abilityTypes.size + 
            f.apCost.size;
   });
+
+  // =========================================================================
+  // LIFECYCLE
+  // =========================================================================
 
   ngOnInit(): void {
     this.loadAbilities();
@@ -312,10 +354,8 @@ export class AbilitiesComponent implements OnInit {
     // Handle damage - could be string (legacy) or AbilityDamage object (new)
     if (ability.damage) {
       if (typeof ability.damage === 'string') {
-        // Legacy format
         textParts.push(ability.damage);
       } else {
-        // New structured format
         const dmg = ability.damage as AbilityDamage;
         textParts.push(dmg.dice);
         if (dmg.statModifier) {
@@ -327,10 +367,8 @@ export class AbilitiesComponent implements OnInit {
     // Handle healing - could be string (legacy) or AbilityHealing object (new)
     if (ability.healing) {
       if (typeof ability.healing === 'string') {
-        // Legacy format
         textParts.push(ability.healing);
       } else {
-        // New structured format
         const heal = ability.healing as AbilityHealing;
         textParts.push(heal.dice);
         if (heal.statModifier) {
@@ -343,14 +381,12 @@ export class AbilitiesComponent implements OnInit {
     if (ability.effects?.statModifiers) {
       for (const mod of ability.effects.statModifiers) {
         if (Array.isArray(mod.stats)) {
-          // Specific stats listed
           for (const stat of mod.stats) {
             if (this.statOptions.includes(stat as StatAbbr)) {
               stats.add(stat as StatAbbr);
             }
           }
         }
-        // "all" doesn't add specific stats to detection
       }
     }
 
@@ -371,9 +407,8 @@ export class AbilitiesComponent implements OnInit {
 
     // Check for stat abbreviations in text
     for (const stat of this.statOptions) {
-      if (stats.has(stat)) continue; // Already detected from structured data
+      if (stats.has(stat)) continue;
       
-      // Match stat abbreviation as whole word or in common patterns
       const patterns = [
         new RegExp(`\\b${stat}\\b`, 'i'),
         new RegExp(`\\+ ?${stat}`, 'i'),
@@ -413,11 +448,9 @@ export class AbilitiesComponent implements OnInit {
    */
   private getSchoolFromAbility(ability: AbilityReference): string | null {
     if (hasCollegeAndFocus(ability.source)) {
-      // New format: school is directly on source
       if ('school' in ability.source && ability.source.school) {
         return ability.source.school;
       }
-      // Fallback: derive from focus
       const focus = ability.source.focus;
       if (focus && this.focusToSchool[focus]) {
         return this.focusToSchool[focus].school;
@@ -431,6 +464,26 @@ export class AbilitiesComponent implements OnInit {
       return ability.source.college || null;
     }
     return null;
+  }
+
+  // =========================================================================
+  // ABILITY EXPANSION (INDEPENDENT - MULTIPLE CAN BE OPEN)
+  // =========================================================================
+
+  toggleAbilityExpanded(abilityId: string): void {
+    this.expandedAbilities.update(set => {
+      const newSet = new Set(set);
+      if (newSet.has(abilityId)) {
+        newSet.delete(abilityId);
+      } else {
+        newSet.add(abilityId);
+      }
+      return newSet;
+    });
+  }
+
+  isAbilityExpanded(abilityId: string): boolean {
+    return this.expandedAbilities().has(abilityId);
   }
 
   // =========================================================================
@@ -488,7 +541,7 @@ export class AbilitiesComponent implements OnInit {
   }
 
   // =========================================================================
-  // UI HELPERS
+  // FILTER SECTION TOGGLE
   // =========================================================================
 
   toggleSection(sectionId: string): void {
@@ -507,6 +560,10 @@ export class AbilitiesComponent implements OnInit {
     return this.expandedSections().has(sectionId);
   }
 
+  // =========================================================================
+  // DISPLAY HELPERS
+  // =========================================================================
+
   getCollegeColor(collegeId: string): string {
     const college = this.colleges.find(c => c.id === collegeId);
     return college?.color || '#888';
@@ -516,7 +573,22 @@ export class AbilitiesComponent implements OnInit {
     return STAT_NAMES[abbr] || abbr;
   }
 
+  /**
+   * Get the required focus level for an ability
+   */
+  getRequiredLevel(ability: AbilityReference): number {
+    const source = ability.source;
+    if (hasCollegeAndFocus(source)) {
+      return source.requiredLevel;
+    }
+    if ('requiredLevel' in source) {
+      return (source as any).requiredLevel ?? 1;
+    }
+    return 1;
+  }
+
   formatFocusName(focus: string): string {
+    if (!focus) return '';
     return focus
       .replace(/([A-Z])/g, ' $1')
       .trim()
@@ -528,7 +600,6 @@ export class AbilitiesComponent implements OnInit {
   getSourceDisplayName(ability: AbilityReference): string {
     const source = ability.source;
     if (hasCollegeAndFocus(source)) {
-      // Show school if available, otherwise focus
       if ('school' in source && source.school) {
         const schoolName = this.getSchoolDisplayName(source.school);
         return source.focus ? `${schoolName} · ${this.formatFocusName(source.focus)}` : schoolName;
@@ -558,7 +629,115 @@ export class AbilitiesComponent implements OnInit {
   }
 
   // =========================================================================
-  // COST & DAMAGE DISPLAY HELPERS
+  // OUTPUT DISPLAY HELPERS (FOR ROW PREVIEW)
+  // =========================================================================
+
+  /**
+   * Get formatted damage string for display
+   */
+  getDamageDisplay(ability: AbilityReference): string | null {
+    if (!ability.damage) return null;
+    
+    if (typeof ability.damage === 'string') {
+      return ability.damage;
+    }
+    
+    return formatDamage(ability.damage);
+  }
+
+  /**
+   * Get damage type for styling
+   */
+  getDamageType(ability: AbilityReference): string | null {
+    if (!ability.damage || typeof ability.damage === 'string') {
+      return null;
+    }
+    return ability.damage.type;
+  }
+
+  /**
+   * Get formatted healing string for display
+   */
+  getHealingDisplay(ability: AbilityReference): string | null {
+    if (!ability.healing) return null;
+    
+    if (typeof ability.healing === 'string') {
+      return ability.healing;
+    }
+    
+    return formatHealing(ability.healing);
+  }
+
+  /**
+   * Get summon creature name for display
+   */
+  getSummonName(ability: AbilityReference): string {
+    return ability.summon?.creature?.name ?? 'Summon';
+  }
+
+  /**
+   * Get a brief effect summary for the row preview
+   */
+  getEffectSummary(ability: AbilityReference): string | null {
+    const effects = ability.effects;
+    if (!effects) return null;
+
+    // Dice modifiers - most common effect
+    if (effects.diceModifiers?.length) {
+      const mod = effects.diceModifiers[0];
+      return `${mod.amount > 0 ? '+' : ''}${mod.amount} D20 ${mod.applies}`;
+    }
+
+    // Stat modifiers
+    if (effects.statModifiers?.length) {
+      const mod = effects.statModifiers[0];
+      const statsText = mod.stats === 'all' ? 'all stats' : 
+        Array.isArray(mod.stats) ? mod.stats.join(', ') : mod.stats;
+      return `${mod.amount > 0 ? '+' : ''}${mod.amount} ${statsText}`;
+    }
+
+    // Movement
+    if (effects.movement) {
+      return `${effects.movement.amount > 0 ? '+' : ''}${effects.movement.amount} ft. movement`;
+    }
+
+    // Damage reduction
+    if (effects.damageReduction) {
+      return `${effects.damageReduction.dice} damage reduction`;
+    }
+
+    // Conditions applied
+    if (effects.appliesConditions?.length) {
+      return `Applies ${effects.appliesConditions[0].condition}`;
+    }
+
+    // Conditions removed
+    if (effects.removesConditions?.length) {
+      return `Removes ${effects.removesConditions[0]}`;
+    }
+
+    // Resistances granted
+    if (effects.resistances?.length) {
+      return `Resist ${effects.resistances[0]}`;
+    }
+
+    // Grants
+    if (effects.grants?.length) {
+      const grant = effects.grants[0];
+      return grant.length > 25 ? grant.substring(0, 22) + '...' : grant;
+    }
+
+    // Special effects
+    if (effects.special?.length) {
+      const special = effects.special[0];
+      return special.length > 25 ? special.substring(0, 22) + '...' : special;
+    }
+
+    return null;
+  }
+
+  // =========================================================================
+  // COST DISPLAY HELPERS
   // =========================================================================
 
   getCostIcon(type: string): string {
@@ -627,45 +806,9 @@ export class AbilitiesComponent implements OnInit {
     return `${cost.amount} ${cost.type}`;
   }
 
-  /**
-   * Get formatted damage string for display
-   */
-  getDamageDisplay(ability: AbilityReference): string | null {
-    if (!ability.damage) return null;
-    
-    if (typeof ability.damage === 'string') {
-      // Legacy format
-      return ability.damage;
-    }
-    
-    // New structured format
-    return formatDamage(ability.damage);
-  }
-
-  /**
-   * Get damage type for styling
-   */
-  getDamageType(ability: AbilityReference): string | null {
-    if (!ability.damage || typeof ability.damage === 'string') {
-      return null;
-    }
-    return ability.damage.type;
-  }
-
-  /**
-   * Get formatted healing string for display
-   */
-  getHealingDisplay(ability: AbilityReference): string | null {
-    if (!ability.healing) return null;
-    
-    if (typeof ability.healing === 'string') {
-      // Legacy format
-      return ability.healing;
-    }
-    
-    // New structured format
-    return formatHealing(ability.healing);
-  }
+  // =========================================================================
+  // ABILITY TYPE HELPERS
+  // =========================================================================
 
   /**
    * Check if ability is a reaction
