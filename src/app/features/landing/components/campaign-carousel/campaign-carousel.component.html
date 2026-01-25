@@ -1,0 +1,96 @@
+<section class="campaigns-section">
+  <!-- Dynamic background based on active campaign -->
+  <div 
+    class="campaigns-bg"
+    [style.background]="activeCampaign().bgGradient"
+  ></div>
+  <div class="campaigns-grain"></div>
+  <div class="campaigns-vignette"></div>
+
+  <div class="campaigns-content">
+    <header class="section-header">
+      <span class="section-label">Campaign Books</span>
+      <h2 class="section-title">Explore the Lost Worlds</h2>
+      <p class="section-description">
+        Journey through different eras of Earth's hidden magical history
+      </p>
+    </header>
+
+    <!-- Campaign Cards -->
+    <div class="campaigns-carousel">
+      @for (campaign of campaigns(); track campaign.id; let i = $index) {
+        <button
+          type="button"
+          class="campaign-card"
+          [class.active]="i === activeIndex()"
+          [class.coming-soon]="campaign.status === 'coming-soon'"
+          [style.--accent]="campaign.accentColor"
+          (click)="selectCampaign(i)"
+        >
+          <div class="card-inner">
+            <p class="campaign-label">{{ campaign.label }}</p>
+            
+            <h3 class="campaign-title">{{ campaign.title }}</h3>
+            
+            <p class="campaign-subtitle">{{ campaign.subtitle }}</p>
+            
+            <!-- Diamond decoration -->
+            <div class="campaign-divider">
+              <span class="divider-line"></span>
+              <span class="divider-diamond">◆</span>
+              <span class="divider-line"></span>
+            </div>
+
+            @if (campaign.status === 'available' && i === activeIndex()) {
+              <a 
+                [href]="campaign.externalUrl" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                class="campaign-cta"
+                (click)="$event.stopPropagation()"
+              >
+                Explore Campaign
+                <span class="material-symbols-outlined">arrow_outward</span>
+              </a>
+            }
+          </div>
+        </button>
+      }
+    </div>
+
+    <!-- Carousel Indicators -->
+    <div class="carousel-indicators">
+      @for (campaign of campaigns(); track campaign.id; let i = $index) {
+        <button
+          type="button"
+          class="indicator"
+          [class.active]="i === activeIndex()"
+          [style.--accent]="activeCampaign().accentColor"
+          (click)="selectCampaign(i)"
+          [attr.aria-label]="'View ' + campaign.title"
+        ></button>
+      }
+    </div>
+
+    <!-- Requirements Footer -->
+    <div class="requirements">
+      <span class="requirements-label">Requirements:</span>
+      <span class="requirement-item">
+        <span class="material-symbols-outlined">menu_book</span>
+        Rule Book
+      </span>
+      <span class="requirement-item">
+        <span class="material-symbols-outlined">casino</span>
+        Polyhedral Dice
+      </span>
+      <span class="requirement-item">
+        <span class="material-symbols-outlined">group</span>
+        2-4 Players
+      </span>
+      <span class="requirement-item">
+        <span class="material-symbols-outlined">psychology</span>
+        Imagination
+      </span>
+    </div>
+  </div>
+</section>

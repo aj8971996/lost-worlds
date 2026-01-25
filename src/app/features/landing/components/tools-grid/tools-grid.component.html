@@ -1,0 +1,31 @@
+<section class="tools-section">
+  <div class="container">
+    <header class="section-header">
+      <span class="section-label">Tools & Resources</span>
+      <h2 class="section-title">Everything You Need to Play</h2>
+      <p class="section-description">
+        Manage your party, track your battles, and chronicle your adventures
+      </p>
+    </header>
+
+    <div class="tools-grid">
+      @for (tool of tools(); track tool.path) {
+        <a 
+          [routerLink]="tool.path" 
+          class="tool-card"
+          [style.--card-accent]="tool.accentColor"
+        >
+          <div class="card-icon-wrapper">
+            <span class="material-symbols-outlined">{{ tool.icon }}</span>
+          </div>
+          <h3 class="card-title">{{ tool.title }}</h3>
+          <p class="card-description">{{ tool.description }}</p>
+          <span class="card-action">
+            <span>Enter</span>
+            <span class="material-symbols-outlined arrow">arrow_forward</span>
+          </span>
+        </a>
+      }
+    </div>
+  </div>
+</section>

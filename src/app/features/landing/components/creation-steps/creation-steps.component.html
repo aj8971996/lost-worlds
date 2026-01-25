@@ -1,0 +1,48 @@
+<section class="creation-section">
+  <div class="container">
+    <header class="section-header">
+      <span class="section-label">Getting Started</span>
+      <h2 class="section-title">Character Creation</h2>
+      <p class="section-description">
+        Create your adventurer in six straightforward steps
+      </p>
+    </header>
+
+    <div class="timeline">
+      @for (step of creationSteps(); track step.number) {
+        <div class="timeline-item">
+          <div class="timeline-marker">
+            <span class="step-number">{{ step.number }}</span>
+          </div>
+          
+          <div class="timeline-content">
+            <h3 class="step-title">{{ step.title }}</h3>
+            <p class="step-description">{{ step.description }}</p>
+            
+            <ul class="step-details">
+              @for (detail of step.details; track detail) {
+                <li>{{ detail }}</li>
+              }
+            </ul>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Quick Reference -->
+    <div class="quick-reference">
+      <h3 class="reference-title">
+        <span class="material-symbols-outlined">lightbulb</span>
+        Quick Reference
+      </h3>
+      <div class="reference-grid">
+        @for (ref of quickReferences(); track ref.label) {
+          <div class="reference-item">
+            <span class="reference-label">{{ ref.label }}</span>
+            <span class="reference-value">{{ ref.value }}</span>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>

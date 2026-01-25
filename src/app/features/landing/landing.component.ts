@@ -15,20 +15,7 @@ import { CampaignCarouselComponent } from './components/campaign-carousel/campai
     CreationStepsComponent,
     CampaignCarouselComponent,
   ],
-  template: `
-    <div class="landing-page">
-      <app-hero />
-      <app-tools-grid />
-      <app-synopsis />
-      <app-creation-steps />
-      <app-campaign-carousel />
-    </div>
-  `,
-  styles: [`
-    .landing-page {
-      display: flex;
-      flex-direction: column;
-    }
-  `]
+  templateUrl: './landing.component.html',
+  styleUrl: './landing.component.scss'
 })
 export class LandingComponent {}

@@ -1,0 +1,87 @@
+<section id="synopsis" class="synopsis-section">
+  <div class="container">
+    <div class="synopsis-grid">
+      <!-- Main Content -->
+      <div class="synopsis-content">
+        <span class="section-label">The Game</span>
+        <h2 class="section-title">What is Lost Worlds?</h2>
+        
+        <div class="synopsis-text">
+          <p>
+            Lost Worlds is a tabletop roleplaying game set across different eras of Earth's 
+            hidden magical history. This is not a world where magic belongs only to wizards 
+            in towers or creatures from distant realms. Magic is woven into the fabric of 
+            existence itself.
+          </p>
+          
+          <p>
+            The Cosmic Realms and the Earthly Realms have never held a single, stable 
+            relationship. Throughout history, the two have drifted together and pulled 
+            apart like tides governed by no single moon. There have been ages of unity 
+            when cosmic beings walked openly among mortals. There have been ages of 
+            separation when humanity forgot what it had lost.
+          </p>
+          
+          <p>
+            Your party will step into one of these turbulent eras and uncover truths 
+            that history tried to bury. Will you fight to reunite the severed realms 
+            or ensure they remain apart? Will your names echo through history like the 
+            beings who gave form to abstract ideas?
+          </p>
+        </div>
+      </div>
+
+      <!-- Highlights Sidebar -->
+      <aside class="synopsis-highlights">
+        @for (highlight of highlights(); track highlight.title) {
+          <div class="highlight-card">
+            <div class="highlight-icon">
+              <span class="material-symbols-outlined">{{ highlight.icon }}</span>
+            </div>
+            <div class="highlight-content">
+              <h4 class="highlight-title">{{ highlight.title }}</h4>
+              <p class="highlight-description">{{ highlight.description }}</p>
+            </div>
+          </div>
+        }
+      </aside>
+    </div>
+
+    <!-- Core Features Row -->
+    <div class="features-row">
+      <div class="feature-card">
+        <h3 class="feature-title">
+          <span class="material-symbols-outlined">groups</span>
+          Nine Playable Species
+        </h3>
+        <p class="feature-text">
+          Human, Elf, Orc, Dwarf, Gnome, Goblin, Fairy, Giant, and Cosmikin. 
+          Each carries magic differently, with unique stat bonuses and rich lore.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <h3 class="feature-title">
+          <span class="material-symbols-outlined">auto_fix_high</span>
+          Three Colleges of Magic
+        </h3>
+        <p class="feature-text">
+          <strong>Earthly</strong> (elements, body, speech), 
+          <strong>Cosmic</strong> (stars, light, time, void), and 
+          <strong>Dead</strong> (decay, damned, endings).
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <h3 class="feature-title">
+          <span class="material-symbols-outlined">casino</span>
+          Dice Pool System
+        </h3>
+        <p class="feature-text">
+          Roll multiple D20s as your stats grow. Higher stats mean more dice, 
+          creating dynamic and rewarding progression.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

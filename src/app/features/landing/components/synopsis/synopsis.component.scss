@@ -1,0 +1,162 @@
+.synopsis-section {
+  padding: 5rem 1rem;
+  background-color: var(--color-surface);
+
+  @media (min-width: 768px) {
+    padding: 6rem 1.5rem;
+  }
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+// Grid Layout
+.synopsis-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  margin-bottom: 4rem;
+
+  @media (min-width: 1024px) {
+    grid-template-columns: 1fr 320px;
+    gap: 4rem;
+  }
+}
+
+// Content
+.synopsis-content {
+  max-width: 720px;
+}
+
+.section-label {
+  display: inline-block;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-primary);
+  margin-bottom: 0.75rem;
+}
+
+.section-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 500;
+  color: var(--color-text);
+  margin-bottom: 1.5rem;
+}
+
+.synopsis-text {
+  p {
+    font-size: 1.0625rem;
+    line-height: 1.85;
+    color: var(--color-text-muted);
+    margin-bottom: 1.25rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+// Highlights Sidebar
+.synopsis-highlights {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.highlight-card {
+  display: flex;
+  gap: 1rem;
+  padding: 1.25rem;
+  background-color: var(--color-bg);
+  border-radius: 0.625rem;
+  border: 1px solid var(--color-border);
+}
+
+.highlight-icon {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-primary-subtle);
+  border-radius: 0.5rem;
+
+  .material-symbols-outlined {
+    font-size: 22px;
+    color: var(--color-primary);
+  }
+}
+
+.highlight-content {
+  flex: 1;
+}
+
+.highlight-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-text);
+  margin-bottom: 0.25rem;
+}
+
+.highlight-description {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+// Features Row
+.features-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.feature-card {
+  padding: 1.5rem;
+  background-color: var(--color-bg);
+  border-radius: 0.625rem;
+  border: 1px solid var(--color-border);
+}
+
+.feature-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text);
+  margin-bottom: 0.75rem;
+
+  .material-symbols-outlined {
+    font-size: 20px;
+    color: var(--color-primary);
+  }
+}
+
+.feature-text {
+  font-size: 0.9375rem;
+  color: var(--color-text-muted);
+  line-height: 1.65;
+
+  strong {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+}
