@@ -1,10 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
 interface CreationStep {
-  number: number;
-  title: string;
-  description: string;
-  details: string[];
+  readonly number: number;
+  readonly title: string;
+  readonly description: string;
+  readonly details: readonly string[];
+}
+
+interface QuickReference {
+  readonly label: string;
+  readonly value: string;
 }
 
 @Component({
@@ -22,7 +27,7 @@ interface CreationStep {
         </header>
 
         <div class="timeline">
-          @for (step of creationSteps; track step.number) {
+          @for (step of creationSteps(); track step.number) {
             <div class="timeline-item">
               <div class="timeline-marker">
                 <span class="step-number">{{ step.number }}</span>
@@ -49,22 +54,12 @@ interface CreationStep {
             Quick Reference
           </h3>
           <div class="reference-grid">
-            <div class="reference-item">
-              <span class="reference-label">Starting Resources</span>
-              <span class="reference-value">3D100 for HP, SY, ST</span>
-            </div>
-            <div class="reference-item">
-              <span class="reference-label">Starting Stat Points</span>
-              <span class="reference-value">30 points to distribute</span>
-            </div>
-            <div class="reference-item">
-              <span class="reference-label">Starting Focus Levels</span>
-              <span class="reference-value">2 levels to assign</span>
-            </div>
-            <div class="reference-item">
-              <span class="reference-label">Starting Skill Levels</span>
-              <span class="reference-value">2 levels to assign</span>
-            </div>
+            @for (ref of quickReferences(); track ref.label) {
+              <div class="reference-item">
+                <span class="reference-label">{{ ref.label }}</span>
+                <span class="reference-value">{{ ref.value }}</span>
+              </div>
+            }
           </div>
         </div>
       </div>
@@ -97,23 +92,25 @@ interface CreationStep {
 
     .section-label {
       display: inline-block;
+      font-family: 'Cormorant Garamond', Georgia, serif;
       font-size: 0.875rem;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.15em;
       color: var(--color-primary);
       margin-bottom: 0.75rem;
     }
 
     .section-title {
+      font-family: 'Playfair Display', Georgia, serif;
       font-size: clamp(1.75rem, 4vw, 2.25rem);
-      font-weight: 700;
+      font-weight: 500;
       color: var(--color-text);
       margin-bottom: 1rem;
     }
 
     .section-description {
-      font-size: 1.125rem;
+      font-size: 1.0625rem;
       color: var(--color-text-muted);
     }
 
@@ -137,7 +134,7 @@ interface CreationStep {
         background: linear-gradient(
           180deg,
           var(--color-primary) 0%,
-          var(--color-primary) 80%,
+          var(--color-primary) 85%,
           transparent 100%
         );
 
@@ -177,8 +174,9 @@ interface CreationStep {
     }
 
     .step-number {
+      font-family: 'Playfair Display', Georgia, serif;
       font-size: 0.875rem;
-      font-weight: 700;
+      font-weight: 600;
       color: white;
 
       @media (min-width: 768px) {
@@ -195,8 +193,9 @@ interface CreationStep {
     }
 
     .step-title {
+      font-family: 'Playfair Display', Georgia, serif;
       font-size: 1.125rem;
-      font-weight: 600;
+      font-weight: 500;
       color: var(--color-text);
       margin-bottom: 0.5rem;
 
@@ -258,8 +257,9 @@ interface CreationStep {
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      font-family: 'Playfair Display', Georgia, serif;
       font-size: 1rem;
-      font-weight: 600;
+      font-weight: 500;
       color: var(--color-text);
       margin-bottom: 1.25rem;
 
@@ -300,7 +300,7 @@ interface CreationStep {
   `]
 })
 export class CreationStepsComponent {
-  readonly creationSteps: CreationStep[] = [
+  protected readonly creationSteps = signal<readonly CreationStep[]>([
     {
       number: 1,
       title: 'Character Origins',
@@ -337,5 +337,12 @@ export class CreationStepsComponent {
       description: 'Your character is complete and ready to begin their adventure!',
       details: ['Review character sheet', 'Join your party', 'Begin the journey']
     }
-  ];
+  ]);
+
+  protected readonly quickReferences = signal<readonly QuickReference[]>([
+    { label: 'Starting Resources', value: '3D100 for HP, SY, ST' },
+    { label: 'Starting Stat Points', value: '30 points to distribute' },
+    { label: 'Starting Focus Levels', value: '2 levels to assign' },
+    { label: 'Starting Skill Levels', value: '2 levels to assign' }
+  ]);
 }

@@ -1,27 +1,27 @@
 import { Component } from '@angular/core';
 import { HeroComponent } from './components/hero/hero.component';
-import { FeatureCardsComponent } from './components/feature-cards/feature-cards.component';
+import { ToolsGridComponent } from './components/tools-grid/tools-grid.component';
 import { SynopsisComponent } from './components/synopsis/synopsis.component';
 import { CreationStepsComponent } from './components/creation-steps/creation-steps.component';
-import { CtaComponent } from './components/cta/cta.component';
+import { CampaignCarouselComponent } from './components/campaign-carousel/campaign-carousel.component';
 
 @Component({
   selector: 'app-landing',
   standalone: true,
   imports: [
     HeroComponent,
-    FeatureCardsComponent,
+    ToolsGridComponent,
     SynopsisComponent,
     CreationStepsComponent,
-    CtaComponent
+    CampaignCarouselComponent,
   ],
   template: `
     <div class="landing-page">
       <app-hero />
-      <app-feature-cards />
+      <app-tools-grid />
       <app-synopsis />
       <app-creation-steps />
-      <app-cta />
+      <app-campaign-carousel />
     </div>
   `,
   styles: [`

@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
 interface Highlight {
-  icon: string;
-  title: string;
-  description: string;
+  readonly icon: string;
+  readonly title: string;
+  readonly description: string;
 }
 
 @Component({
@@ -45,7 +45,7 @@ interface Highlight {
 
           <!-- Highlights Sidebar -->
           <aside class="synopsis-highlights">
-            @for (highlight of highlights; track highlight.title) {
+            @for (highlight of highlights(); track highlight.title) {
               <div class="highlight-card">
                 <div class="highlight-icon">
                   <span class="material-symbols-outlined">{{ highlight.icon }}</span>
@@ -59,37 +59,37 @@ interface Highlight {
           </aside>
         </div>
 
-        <!-- Species & Magic Row -->
-        <div class="info-row">
-          <div class="info-card">
-            <h3 class="info-title">
+        <!-- Core Features Row -->
+        <div class="features-row">
+          <div class="feature-card">
+            <h3 class="feature-title">
               <span class="material-symbols-outlined">groups</span>
               Nine Playable Species
             </h3>
-            <p class="info-text">
+            <p class="feature-text">
               Human, Elf, Orc, Dwarf, Gnome, Goblin, Fairy, Giant, and Cosmikin. 
               Each carries magic differently, with unique stat bonuses and rich lore.
             </p>
           </div>
 
-          <div class="info-card">
-            <h3 class="info-title">
+          <div class="feature-card">
+            <h3 class="feature-title">
               <span class="material-symbols-outlined">auto_fix_high</span>
               Three Colleges of Magic
             </h3>
-            <p class="info-text">
+            <p class="feature-text">
               <strong>Earthly</strong> (elements, body, speech), 
               <strong>Cosmic</strong> (stars, light, time, void), and 
               <strong>Dead</strong> (decay, damned, endings).
             </p>
           </div>
 
-          <div class="info-card">
-            <h3 class="info-title">
+          <div class="feature-card">
+            <h3 class="feature-title">
               <span class="material-symbols-outlined">casino</span>
               Dice Pool System
             </h3>
-            <p class="info-text">
+            <p class="feature-text">
               Roll multiple D20s as your stats grow. Higher stats mean more dice, 
               creating dynamic and rewarding progression.
             </p>
@@ -133,17 +133,19 @@ interface Highlight {
 
     .section-label {
       display: inline-block;
+      font-family: 'Cormorant Garamond', Georgia, serif;
       font-size: 0.875rem;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.15em;
       color: var(--color-primary);
       margin-bottom: 0.75rem;
     }
 
     .section-title {
+      font-family: 'Playfair Display', Georgia, serif;
       font-size: clamp(1.75rem, 4vw, 2.25rem);
-      font-weight: 700;
+      font-weight: 500;
       color: var(--color-text);
       margin-bottom: 1.5rem;
     }
@@ -151,7 +153,7 @@ interface Highlight {
     .synopsis-text {
       p {
         font-size: 1.0625rem;
-        line-height: 1.8;
+        line-height: 1.85;
         color: var(--color-text-muted);
         margin-bottom: 1.25rem;
 
@@ -173,7 +175,7 @@ interface Highlight {
       gap: 1rem;
       padding: 1.25rem;
       background-color: var(--color-bg);
-      border-radius: 0.75rem;
+      border-radius: 0.625rem;
       border: 1px solid var(--color-border);
     }
 
@@ -198,8 +200,9 @@ interface Highlight {
     }
 
     .highlight-title {
+      font-family: 'Playfair Display', Georgia, serif;
       font-size: 0.9375rem;
-      font-weight: 600;
+      font-weight: 500;
       color: var(--color-text);
       margin-bottom: 0.25rem;
     }
@@ -210,8 +213,8 @@ interface Highlight {
       line-height: 1.5;
     }
 
-    // Info Row
-    .info-row {
+    // Features Row
+    .features-row {
       display: grid;
       grid-template-columns: 1fr;
       gap: 1.5rem;
@@ -225,19 +228,20 @@ interface Highlight {
       }
     }
 
-    .info-card {
+    .feature-card {
       padding: 1.5rem;
       background-color: var(--color-bg);
-      border-radius: 0.75rem;
+      border-radius: 0.625rem;
       border: 1px solid var(--color-border);
     }
 
-    .info-title {
+    .feature-title {
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      font-family: 'Playfair Display', Georgia, serif;
       font-size: 1rem;
-      font-weight: 600;
+      font-weight: 500;
       color: var(--color-text);
       margin-bottom: 0.75rem;
 
@@ -247,10 +251,10 @@ interface Highlight {
       }
     }
 
-    .info-text {
+    .feature-text {
       font-size: 0.9375rem;
       color: var(--color-text-muted);
-      line-height: 1.6;
+      line-height: 1.65;
 
       strong {
         color: var(--color-text);
@@ -260,7 +264,7 @@ interface Highlight {
   `]
 })
 export class SynopsisComponent {
-  readonly highlights: Highlight[] = [
+  protected readonly highlights = signal<readonly Highlight[]>([
     {
       icon: 'history',
       title: 'Any Era',
@@ -281,5 +285,5 @@ export class SynopsisComponent {
       title: 'Flexible Play',
       description: '2-4 players recommended, any group size works'
     }
-  ];
+  ]);
 }

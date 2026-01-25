@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -7,41 +7,50 @@ import { RouterLink } from '@angular/router';
   imports: [RouterLink],
   template: `
     <section class="hero">
+      <!-- Animated background layers -->
       <div class="hero-bg"></div>
-      <div class="hero-overlay"></div>
+      <div class="hero-grain"></div>
+      <div class="hero-vignette"></div>
       
       <div class="hero-content">
-        <h1 class="hero-title">
-          <span class="title-main">Lost Worlds</span>
-        </h1>
+        <!-- Eyebrow -->
+        <p class="hero-eyebrow">Enter the Lost Worlds</p>
         
+        <!-- Main Title -->
+        <h1 class="hero-title">Lost Worlds</h1>
+        
+        <!-- Decorative divider -->
         <div class="hero-divider">
           <span class="divider-line"></span>
-          <span class="divider-icon material-symbols-outlined">auto_awesome</span>
+          <span class="divider-diamond">◆</span>
           <span class="divider-line"></span>
         </div>
         
+        <!-- Tagline -->
         <p class="hero-tagline">Where realms converge and history remembers</p>
         
+        <!-- Description -->
         <p class="hero-description">
           A tabletop roleplaying game set across different eras of Earth's hidden magical history.
           Play as one of nine species, master three colleges of magic, and shape the fate of worlds.
         </p>
         
+        <!-- Actions -->
         <div class="hero-actions">
-          <a routerLink="/characters" class="btn btn-primary btn-lg">
+          <a routerLink="/characters" class="btn btn-primary">
             <span class="material-symbols-outlined">person_add</span>
             <span>View Characters</span>
           </a>
-          <a href="#synopsis" class="btn btn-secondary btn-lg">
+          <a href="#synopsis" class="btn btn-secondary">
             <span class="material-symbols-outlined">info</span>
             <span>Learn More</span>
           </a>
         </div>
       </div>
       
+      <!-- Scroll indicator -->
       <div class="hero-scroll-indicator">
-        <span class="material-symbols-outlined">keyboard_arrow_down</span>
+        <span class="material-symbols-outlined">keyboard_double_arrow_down</span>
       </div>
     </section>
   `,
@@ -56,7 +65,7 @@ import { RouterLink } from '@angular/router';
       overflow: hidden;
     }
 
-    // Animated gradient background
+    // Animated gradient background - using palette colors
     .hero-bg {
       position: absolute;
       inset: 0;
@@ -69,7 +78,7 @@ import { RouterLink } from '@angular/router';
         var(--palette-1) 100%
       );
       background-size: 400% 400%;
-      animation: gradientShift 15s ease infinite;
+      animation: gradientShift 20s ease infinite;
     }
 
     @keyframes gradientShift {
@@ -78,26 +87,35 @@ import { RouterLink } from '@angular/router';
       100% { background-position: 0% 50%; }
     }
 
-    // Overlay for text readability
-    .hero-overlay {
+    // Film grain texture overlay
+    .hero-grain {
       position: absolute;
       inset: 0;
-      background: linear-gradient(
-        180deg,
-        transparent 0%,
-        rgba(0, 0, 0, 0.2) 50%,
-        rgba(0, 0, 0, 0.4) 100%
-      );
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      pointer-events: none;
     }
 
-    // Content
+    // Vignette overlay for depth
+    .hero-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        ellipse at center,
+        transparent 40%,
+        rgba(0, 0, 0, 0.5) 100%
+      );
+      pointer-events: none;
+    }
+
+    // Content container
     .hero-content {
       position: relative;
-      z-index: 1;
+      z-index: 10;
       max-width: 800px;
       padding: 2rem 1.5rem;
       text-align: center;
-      animation: fadeInUp 0.8s ease;
+      animation: fadeInUp 1s ease;
 
       @media (min-width: 768px) {
         padding: 3rem 2rem;
@@ -115,21 +133,34 @@ import { RouterLink } from '@angular/router';
       }
     }
 
-    // Title
-    .hero-title {
+    // Eyebrow text
+    .hero-eyebrow {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 0.875rem;
+      font-weight: 600;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--color-accent);
       margin-bottom: 1.5rem;
+
+      @media (min-width: 768px) {
+        font-size: 1rem;
+      }
     }
 
-    .title-main {
-      display: block;
-      font-size: clamp(2.5rem, 8vw, 4.5rem);
-      font-weight: 700;
-      color: #ffffff;
-      text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+    // Main title
+    .hero-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(3rem, 10vw, 5.5rem);
+      font-weight: 400;
+      color: var(--color-accent);
       letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
     }
 
-    // Divider
+    // Decorative divider
     .hero-divider {
       display: flex;
       align-items: center;
@@ -140,11 +171,11 @@ import { RouterLink } from '@angular/router';
 
     .divider-line {
       width: 60px;
-      height: 2px;
+      height: 1px;
       background: linear-gradient(
         90deg,
         transparent,
-        var(--palette-3),
+        var(--color-accent),
         transparent
       );
 
@@ -153,36 +184,37 @@ import { RouterLink } from '@angular/router';
       }
     }
 
-    .divider-icon {
-      color: var(--palette-3);
-      font-size: 24px;
-      animation: pulse 2s ease-in-out infinite;
+    .divider-diamond {
+      color: var(--color-accent);
+      font-size: 0.875rem;
+      animation: pulse 3s ease-in-out infinite;
     }
 
     @keyframes pulse {
       0%, 100% { opacity: 1; }
-      50% { opacity: 0.6; }
+      50% { opacity: 0.5; }
     }
 
     // Tagline
     .hero-tagline {
+      font-family: 'Cormorant Garamond', Georgia, serif;
       font-size: clamp(1.125rem, 3vw, 1.5rem);
       font-style: italic;
-      color: rgba(255, 255, 255, 0.9);
+      color: rgba(255, 255, 255, 0.85);
       margin-bottom: 1.5rem;
       letter-spacing: 0.02em;
     }
 
     // Description
     .hero-description {
-      font-size: clamp(1rem, 2vw, 1.125rem);
-      color: rgba(255, 255, 255, 0.8);
-      line-height: 1.7;
+      font-size: clamp(0.9375rem, 2vw, 1.0625rem);
+      color: rgba(255, 255, 255, 0.75);
+      line-height: 1.8;
       max-width: 600px;
-      margin: 0 auto 2rem;
+      margin: 0 auto 2.5rem;
     }
 
-    // Actions
+    // Action buttons
     .hero-actions {
       display: flex;
       flex-direction: column;
@@ -200,12 +232,12 @@ import { RouterLink } from '@angular/router';
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
-      padding: 0.875rem 1.75rem;
-      font-size: 1rem;
+      padding: 0.9375rem 1.75rem;
+      font-size: 0.9375rem;
       font-weight: 600;
       text-decoration: none;
-      border-radius: 0.5rem;
-      transition: all 0.2s ease;
+      border-radius: 0.375rem;
+      transition: all 0.25s ease;
       cursor: pointer;
 
       .material-symbols-outlined {
@@ -214,33 +246,28 @@ import { RouterLink } from '@angular/router';
     }
 
     .btn-primary {
-      background-color: var(--palette-3);
-      color: #1a1a1a;
-      border: 2px solid var(--palette-3);
+      background-color: var(--color-accent);
+      color: var(--color-text-inverse);
+      border: 2px solid var(--color-accent);
 
       &:hover {
-        background-color: var(--palette-4);
-        border-color: var(--palette-4);
+        background-color: var(--color-accent-hover);
+        border-color: var(--color-accent-hover);
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
       }
     }
 
     .btn-secondary {
       background-color: transparent;
-      color: #ffffff;
-      border: 2px solid rgba(255, 255, 255, 0.5);
+      color: var(--color-accent);
+      border: 2px solid rgba(255, 255, 255, 0.4);
 
       &:hover {
         background-color: rgba(255, 255, 255, 0.1);
-        border-color: rgba(255, 255, 255, 0.8);
+        border-color: rgba(255, 255, 255, 0.7);
         transform: translateY(-2px);
       }
-    }
-
-    .btn-lg {
-      padding: 1rem 2rem;
-      font-size: 1.0625rem;
     }
 
     // Scroll indicator
@@ -249,12 +276,12 @@ import { RouterLink } from '@angular/router';
       bottom: 2rem;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 1;
-      color: rgba(255, 255, 255, 0.6);
-      animation: bounce 2s infinite;
+      z-index: 10;
+      color: rgba(255, 255, 255, 0.5);
+      animation: bounce 2.5s infinite;
 
       .material-symbols-outlined {
-        font-size: 32px;
+        font-size: 28px;
       }
     }
 
@@ -263,10 +290,10 @@ import { RouterLink } from '@angular/router';
         transform: translateX(-50%) translateY(0);
       }
       40% {
-        transform: translateX(-50%) translateY(-10px);
+        transform: translateX(-50%) translateY(-12px);
       }
       60% {
-        transform: translateX(-50%) translateY(-5px);
+        transform: translateX(-50%) translateY(-6px);
       }
     }
   `]
