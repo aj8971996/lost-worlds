@@ -1055,6 +1055,14 @@
         "stamina": 35,
         "attacks": [
           {
+            "name": "Star Claw Slash",
+            "type": "physical",
+            "damage": "4D6",
+            "statModifiers": ["MIT"],
+            "damageType": "physical",
+            "apCost": 1
+          },
+          {
             "name": "Fledgling Claws",
             "type": "physical",
             "damage": "4D12",
