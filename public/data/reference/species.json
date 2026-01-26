@@ -1,33 +1,160 @@
 {
-  "cosmo-goblin": {
-    "id": "cosmo-goblin",
-    "name": "Cosmokin Goblin",
-    "description": "Goblins touched by cosmic energies, often found in the spaces between realms.",
-    "statBonuses": {
-      "SPD": 10,
-      "KNW": 10
-    },
-    "abilities": [],
-    "traits": [
-      "Darkvision 60 ft",
-      "Cosmic Affinity"
+  "orc": {
+    "id": "orc",
+    "name": "Orc",
+    "description": "Large, muscular humanoids with prominent tusks, horns, and greenish to blue-tinged skin. Known for physical prowess and a direct approach to problem-solving. Orcs value strength and honour.",
+    "modifiers": [
+      { "stat": "MIT", "amount": 10 },
+      { "stat": "GRT", "amount": 10 },
+      { "stat": "HP", "amount": 5 },
+      { "stat": "FRS", "amount": -15 },
+      { "stat": "KNW", "amount": -10 }
     ],
-    "componentAccess": ["voidShards", "focusPoints", "craftPoints"]
-  },
-  "fairy-giant": {
-    "id": "fairy-giant",
-    "name": "Fairy Giant",
-    "description": "A rare hybrid of fairy and giant ancestry, combining delicate wings with formidable strength.",
-    "statBonuses": {
-      "MIT": 10,
-      "NAT": 5
-    },
-    "abilities": [],
     "traits": [
-      "Wings (limited flight)",
-      "Size: Small",
-      "Nature Affinity"
+      "Tusks and horns",
+      "Greenish to blue-tinged skin",
+      "Values strength and honour"
+    ]
+  },
+  "goblin": {
+    "id": "goblin",
+    "name": "Goblin",
+    "description": "Tall, gangly, and nimble creatures with sharp features and clever minds. Masters of quick thinking and quicker movement. Often underestimated due to their size.",
+    "modifiers": [
+      { "stat": "SPD", "amount": 10 },
+      { "stat": "FRS", "amount": 10 },
+      { "stat": "STA", "amount": 5 },
+      { "stat": "MIT", "amount": -15 },
+      { "stat": "GRT", "amount": -10 }
+    ],
+    "traits": [
+      "Tall and gangly build",
+      "Sharp, clever features",
+      "Quick thinkers"
+    ]
+  },
+  "gnome": {
+    "id": "gnome",
+    "name": "Gnome",
+    "description": "Diminutive folk with an innate connection to magic and mechanical innovation. Their small stature belies their vast knowledge and magical aptitude.",
+    "modifiers": [
+      { "stat": "KNW", "amount": 10 },
+      { "stat": "MAG", "amount": 10 },
+      { "stat": "NAT", "amount": 5 },
+      { "stat": "MIT", "amount": -15 },
+      { "stat": "SPD", "amount": -10 }
+    ],
+    "traits": [
+      "Diminutive stature",
+      "Innate magical aptitude",
+      "Mechanical innovators"
     ],
     "componentAccess": ["focusPoints", "lifeSeeds"]
+  },
+  "dwarf": {
+    "id": "dwarf",
+    "name": "Dwarf",
+    "description": "Stocky, bearded people are renowned for their craftsmanship and resilience. Dwarves endure hardships that would break others and create works of lasting beauty.",
+    "modifiers": [
+      { "stat": "GRT", "amount": 10 },
+      { "stat": "DET", "amount": 10 },
+      { "stat": "HP", "amount": 5 },
+      { "stat": "SPD", "amount": -15 },
+      { "stat": "AST", "amount": -10 }
+    ],
+    "traits": [
+      "Stocky, bearded",
+      "Masterful craftsmen",
+      "Exceptional endurance"
+    ],
+    "componentAccess": ["craftPoints"]
+  },
+  "fairy": {
+    "id": "fairy",
+    "name": "Fairy",
+    "description": "Ethereal beings are closely tied to nature and magic. Delicate in appearance but possessing powerful magical abilities and profound woodland wisdom.",
+    "modifiers": [
+      { "stat": "NAT", "amount": 10 },
+      { "stat": "MAG", "amount": 10 },
+      { "stat": "SPD", "amount": 5 },
+      { "stat": "MIT", "amount": -15 },
+      { "stat": "GRT", "amount": -10 }
+    ],
+    "traits": [
+      "Ethereal appearance",
+      "Deep connection to nature",
+      "Powerful natural magic"
+    ],
+    "componentAccess": ["lifeSeeds", "focusPoints"]
+  },
+  "human": {
+    "id": "human",
+    "name": "Human",
+    "description": "Adaptable and diverse people who once shared closer ties with cosmic forces. Humans show remarkable variation and potential across all areas.",
+    "modifiers": [
+      { "stat": "NAT", "amount": 15 },
+      { "stat": "MIT", "amount": 10 },
+      { "stat": "MAG", "amount": -15 },
+      { "stat": "AST", "amount": -10 }
+    ],
+    "traits": [
+      "Highly adaptable",
+      "Diverse capabilities",
+      "Lost cosmic connection"
+    ]
+  },
+  "elf": {
+    "id": "elf",
+    "name": "Elf",
+    "description": "Graceful, long-lived people with pointed ears and an affinity for magic. Their extended lifespans grant them deep knowledge and magical insight.",
+    "modifiers": [
+      { "stat": "AST", "amount": 10 },
+      { "stat": "KNW", "amount": 10 },
+      { "stat": "MAG", "amount": 5 },
+      { "stat": "GRT", "amount": -10 },
+      { "stat": "MIT", "amount": -15 }
+    ],
+    "traits": [
+      "Pointed ears",
+      "Long-lived",
+      "Natural magical affinity"
+    ],
+    "componentAccess": ["starRunes", "lightRunes", "voidShards", "realmPoints"]
+  },
+  "giant": {
+    "id": "giant",
+    "name": "Giant",
+    "description": "Towering humanoids of immense size and strength. Their great stature makes them formidable but less agile than smaller folk. These giants tend to spend most of their time with fairies or other cosmic folk to avoid the anger of humans.",
+    "modifiers": [
+      { "stat": "MIT", "amount": 10 },
+      { "stat": "HP", "amount": 10 },
+      { "stat": "GRT", "amount": 5 },
+      { "stat": "SPD", "amount": -15 },
+      { "stat": "FRS", "amount": -10 }
+    ],
+    "traits": [
+      "Towering stature",
+      "Immense strength",
+      "Often associate with cosmic folk"
+    ]
+  },
+  "cosmikin": {
+    "id": "cosmikin",
+    "name": "Cosmikin",
+    "description": "Otherworldly beings bearing traits of both angelic and demonic heritage. Their cosmic nature makes them powerful magic users but unstable in earthly realms.",
+    "modifiers": [
+      { "stat": "AST", "amount": 10 },
+      { "stat": "MAG", "amount": 10 },
+      { "stat": "SPD", "amount": 5 },
+      { "stat": "GRT", "amount": -10 },
+      { "stat": "NAT", "amount": -10 },
+      { "stat": "DET", "amount": -5 }
+    ],
+    "traits": [
+      "Otherworldly appearance",
+      "Angelic and demonic traits",
+      "Unstable in earthly realms"
+    ],
+    "componentAccess": ["starRunes", "lightRunes", "voidShards", "realmPoints"]
   }
 }

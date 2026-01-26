@@ -6,8 +6,10 @@ import {
   Character,
   CharacterSummary,
   ResolvedCharacter,
-  SpeciesReference
+  CharacterSpeciesSelection,
+  migrateSpeciesId
 } from '../models/character.model';
+import { SpeciesReference } from '../models/species.model';
 import {
   WeaponInstance,
   ArmorInstance,
@@ -24,6 +26,14 @@ import {
 import { ResolvedAbility } from '../models/ability.model';
 import { ResolvedSkill, SkillId } from '../models/skills.model';
 import { calculateMod } from '../models/stats.model';
+
+/**
+ * Raw character data that might have legacy species format
+ */
+interface RawCharacter extends Omit<Character, 'species'> {
+  species: CharacterSpeciesSelection | string;  // Can be new format or legacy string
+  speciesId?: string;  // Legacy field
+}
 
 /**
  * Service for loading characters and resolving all references.
@@ -44,7 +54,8 @@ export class CharacterService {
    * Get list of all characters (summary only)
    */
   getCharacterList(): Observable<CharacterSummary[]> {
-    return this.http.get<CharacterSummary[]>(`${this.basePath}/index.json`).pipe(
+    return this.http.get<RawCharacter[]>(`${this.basePath}/index.json`).pipe(
+      map(rawChars => rawChars.map(raw => this.normalizeCharacterSummary(raw))),
       catchError(error => {
         console.error('Failed to load character index', error);
         return of([]);
@@ -56,7 +67,8 @@ export class CharacterService {
    * Load raw character data (unresolved)
    */
   getCharacter(id: string): Observable<Character | null> {
-    return this.http.get<Character>(`${this.basePath}/${id}.json`).pipe(
+    return this.http.get<RawCharacter>(`${this.basePath}/${id}.json`).pipe(
+      map(raw => this.normalizeCharacter(raw)),
       catchError(error => {
         console.error(`Failed to load character: ${id}`, error);
         return of(null);
@@ -80,11 +92,65 @@ export class CharacterService {
   }
 
   // ============================================================================
+  // NORMALIZATION (Legacy Support)
+  // ============================================================================
+
+  /**
+   * Normalize raw character data to current format
+   * Handles legacy species format
+   */
+  private normalizeCharacter(raw: RawCharacter): Character {
+    // Handle species migration
+    let species: CharacterSpeciesSelection;
+    
+    if (typeof raw.species === 'string') {
+      // Legacy format: just a string ID
+      species = migrateSpeciesId(raw.species);
+    } else if (raw.speciesId && typeof raw.speciesId === 'string') {
+      // Legacy format: speciesId field
+      species = migrateSpeciesId(raw.speciesId);
+    } else {
+      // New format: already a CharacterSpeciesSelection
+      species = raw.species as CharacterSpeciesSelection;
+    }
+
+    const { speciesId, ...rest } = raw as any;
+    
+    return {
+      ...rest,
+      species
+    } as Character;
+  }
+
+  /**
+   * Normalize character summary from raw data
+   */
+  private normalizeCharacterSummary(raw: RawCharacter): CharacterSummary {
+    let species: CharacterSpeciesSelection;
+    
+    if (typeof raw.species === 'string') {
+      species = migrateSpeciesId(raw.species);
+    } else if (raw.speciesId && typeof raw.speciesId === 'string') {
+      species = migrateSpeciesId(raw.speciesId);
+    } else {
+      species = raw.species as CharacterSpeciesSelection;
+    }
+
+    return {
+      id: raw.id,
+      name: raw.name,
+      level: raw.level,
+      species,
+      player: (raw as any).player
+    };
+  }
+
+  // ============================================================================
   // RESOLUTION
   // ============================================================================
 
   private resolveCharacter(character: Character, refData: AllReferenceData): ResolvedCharacter {
-    const species = refData.species[character.speciesId] || this.unknownSpecies(character.speciesId);
+    const species = this.resolveSpecies(character.species, refData);
 
     return {
       ...character,
@@ -98,6 +164,29 @@ export class CharacterService {
       resolvedSkills: this.resolveSkills(character.skills, refData),
       computed: this.computeDerivedValues(character)
     };
+  }
+
+  /**
+   * Resolve species selection to actual species data
+   */
+  private resolveSpecies(
+    selection: CharacterSpeciesSelection,
+    refData: AllReferenceData
+  ): SpeciesReference {
+    if (selection.type === 'pure') {
+      const species = refData.species[selection.speciesId];
+      if (species) return species;
+      
+      // Fallback for unknown species
+      return this.unknownSpecies(selection.speciesId);
+    } else {
+      // Mixed heritage
+      const species = refData.species[selection.mixedHeritageId];
+      if (species) return species;
+      
+      // Fallback for unknown mixed heritage
+      return this.unknownSpecies(selection.mixedHeritageId);
+    }
   }
 
   private resolveEquipment(
@@ -141,7 +230,6 @@ export class CharacterService {
   private resolveAccessory(instance: AccessoryInstance, refData: AllReferenceData): ResolvedAccessory {
     const ref = refData.accessories?.[instance.refId];
     if (!ref) {
-      // Return a placeholder for unknown accessories
       return {
         id: instance.refId,
         name: `Unknown (${instance.refId})`,
@@ -289,7 +377,8 @@ export class CharacterService {
     return {
       id,
       name: `Unknown (${id})`,
-      description: 'Unknown species'
-    };
+      description: 'Unknown species',
+      modifiers: []
+    } as any;
   }
 }

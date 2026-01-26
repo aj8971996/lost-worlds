@@ -1,8 +1,7 @@
 /**
- * Lost Worlds - Character Model
+ * Lost Worlds - Character Model (Species Updates)
  * 
- * Main character structure combining all subsystems.
- * Characters reference data from /data/reference/ files.
+ * Updated to support both pure species and mixed heritage
  */
 
 import { CharacterStats, CharacterResources, CharacterComponents, CombatStats } from './stats.model';
@@ -10,20 +9,21 @@ import { CharacterMagic } from './magic.model';
 import { CharacterEquipment, CharacterInventory, ResolvedEquipment, ResolvedInventory } from './equipment.model';
 import { CharacterAbilities, ResolvedAbility } from './ability.model';
 import { CharacterSkills, ResolvedSkill } from './skills.model';
+import { SpeciesReference, PureSpeciesId } from './species.model';
+
+// Re-export for convenience
+export type { SpeciesReference, PureSpeciesId } from './species.model';
 
 // ============================================================================
-// SPECIES
+// SPECIES SELECTION
 // ============================================================================
 
-export interface SpeciesReference {
-  id: string;
-  name: string;
-  description?: string;
-  statBonuses?: Partial<Record<string, number>>;
-  abilities?: string[];       // Innate ability IDs
-  traits?: string[];          // Descriptive traits
-  componentAccess?: string[]; // Which components this species can use
-}
+/**
+ * Character's species can be pure or mixed heritage
+ */
+export type CharacterSpeciesSelection = 
+  | { type: 'pure'; speciesId: PureSpeciesId }
+  | { type: 'mixed'; mixedHeritageId: string };
 
 // ============================================================================
 // ALIGNMENT & PERSONALITY
@@ -33,11 +33,11 @@ export type AlignmentValue = 'heroic' | 'neutral' | 'villain';
 export type OverallAlignment = 'hero' | 'undecided' | 'villain';
 
 export interface AlignmentTraits {
-  compassion: AlignmentValue;   // Compassionate <-> Cruel
-  mercy: AlignmentValue;        // Merciful <-> Ruthless
-  humility: AlignmentValue;     // Humble <-> Arrogant
-  forgiveness: AlignmentValue;  // Forgiving <-> Vindictive
-  protection: AlignmentValue;   // Protective <-> Exploitative
+  compassion: AlignmentValue;
+  mercy: AlignmentValue;
+  humility: AlignmentValue;
+  forgiveness: AlignmentValue;
+  protection: AlignmentValue;
 }
 
 export interface CharacterAlignment {
@@ -63,7 +63,7 @@ export interface Relationship {
 
 export interface SessionLogEntry {
   session: number;
-  date?: string;        // ISO date string
+  date?: string;
   xpGained: number;
   notes?: string;
 }
@@ -73,8 +73,8 @@ export interface SessionLogEntry {
 // ============================================================================
 
 export interface CharacterCurrency {
-  era: string;          // Campaign setting (e.g., "Las Vegas", "Lost Vegas")
-  wealth: number;       // Total wealth in setting's currency
+  era: string;
+  wealth: number;
 }
 
 // ============================================================================
@@ -91,7 +91,7 @@ export interface Character {
   name: string;
   level: number;
   xp: number;
-  speciesId: string;          // Reference to species
+  species: CharacterSpeciesSelection;  // Updated to support mixed heritage
   age: number;
   height: string;
   
@@ -121,8 +121,8 @@ export interface Character {
   sessionLog: SessionLogEntry[];
   
   // Metadata
-  createdAt?: string;         // ISO timestamp
-  updatedAt?: string;         // ISO timestamp
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 // ============================================================================
@@ -131,10 +131,9 @@ export interface Character {
 
 /**
  * Character with all references resolved.
- * This is what components and templates work with.
  */
-export interface ResolvedCharacter extends Omit<Character, 'speciesId' | 'equipment' | 'inventory' | 'abilities'> {
-  species: SpeciesReference;
+export interface ResolvedCharacter extends Omit<Character, 'species' | 'equipment' | 'inventory' | 'abilities'> {
+  species: SpeciesReference;  // Resolved to actual species data
   equipment: ResolvedEquipment;
   inventory: ResolvedInventory;
   abilities: {
@@ -163,14 +162,40 @@ export interface ResolvedCharacter extends Omit<Character, 'speciesId' | 'equipm
 // CHARACTER INDEX (For listing)
 // ============================================================================
 
-/**
- * Minimal character info for list views.
- * Stored in characters/index.json
- */
 export interface CharacterSummary {
   id: string;
   name: string;
   level: number;
-  speciesId: string;
-  player?: string;            // Real-world player name
+  species: CharacterSpeciesSelection;  // Updated
+  player?: string;
+}
+
+// ============================================================================
+// LEGACY SUPPORT
+// ============================================================================
+
+/**
+ * Helper to convert legacy speciesId string to new format
+ */
+export function migrateSpeciesId(speciesId: string): CharacterSpeciesSelection {
+  // Check if it's a mixed heritage ID (contains hyphen between two species)
+  const parts = speciesId.split('-');
+  
+  if (parts.length === 2) {
+    // Could be mixed heritage like "elf-cosmikin"
+    const validSpecies = ['orc', 'goblin', 'gnome', 'dwarf', 'fairy', 'human', 'elf', 'giant', 'cosmikin'];
+    
+    if (validSpecies.includes(parts[0]) && validSpecies.includes(parts[1])) {
+      return {
+        type: 'mixed',
+        mixedHeritageId: speciesId
+      };
+    }
+  }
+  
+  // Default to pure species
+  return {
+    type: 'pure',
+    speciesId: speciesId as PureSpeciesId
+  };
 }

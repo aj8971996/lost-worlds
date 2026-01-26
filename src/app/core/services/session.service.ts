@@ -257,7 +257,7 @@ export class SessionService {
       id,
       name: this.formatCharacterName(id),
       level: 1,
-      speciesId: 'unknown'
+      species: { type: 'pure', speciesId: 'human' } // Fixed: use CharacterSpeciesSelection
     }));
 
     // Resolve campaign

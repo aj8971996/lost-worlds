@@ -9,7 +9,16 @@ import {
 } from '../models/equipment.model';
 import { AbilityReference, hasCollegeAndFocus } from '../models/ability.model';
 import { SkillReference } from '../models/skills.model';
-import { SpeciesReference } from '../models/character.model';
+import {
+  PureSpeciesReference,
+  MixedHeritageReference,
+  SpeciesReference,
+  PureSpeciesId,
+  isPureSpecies,
+  calculateMixedHeritageRules,
+  getMixedHeritageName,
+  getMixedHeritageComponentAccess
+} from '../models/species.model';
 
 /**
  * Service for loading and caching all reference data.
@@ -42,14 +51,15 @@ export class ReferenceDataService {
     'abilities/dead/endings'
   ];
 
-  // Cached observables (shareReplay ensures single load)
+  // Cached observables
   private weapons$?: Observable<Record<string, WeaponReference>>;
   private armor$?: Observable<Record<string, ArmorReference>>;
   private accessories$?: Observable<Record<string, AccessoryReference>>;
   private items$?: Observable<Record<string, ItemReference>>;
   private abilities$?: Observable<Record<string, AbilityReference>>;
   private skills$?: Observable<Record<string, SkillReference>>;
-  private species$?: Observable<Record<string, SpeciesReference>>;
+  private pureSpecies$?: Observable<Record<string, PureSpeciesReference>>;
+  private mixedHeritage$?: Observable<Record<string, MixedHeritageReference>>;
   private magicSchools$?: Observable<Record<string, unknown>>;
 
   // ============================================================================
@@ -92,10 +102,6 @@ export class ReferenceDataService {
     return this.items$;
   }
 
-  /**
-   * Load all abilities from multiple school files and merge them.
-   * Files are organized by college/school for maintainability.
-   */
   getAbilities(): Observable<Record<string, AbilityReference>> {
     if (!this.abilities$) {
       this.abilities$ = this.loadAllAbilities().pipe(
@@ -114,13 +120,45 @@ export class ReferenceDataService {
     return this.skills$;
   }
 
-  getSpecies(): Observable<Record<string, SpeciesReference>> {
-    if (!this.species$) {
-      this.species$ = this.loadJson<Record<string, SpeciesReference>>('species').pipe(
+  // ============================================================================
+  // SPECIES LOADERS (UPDATED)
+  // ============================================================================
+
+  /**
+   * Get pure species definitions
+   */
+  getPureSpecies(): Observable<Record<string, PureSpeciesReference>> {
+    if (!this.pureSpecies$) {
+      this.pureSpecies$ = this.loadJson<Record<string, PureSpeciesReference>>('species').pipe(
         shareReplay(1)
       );
     }
-    return this.species$;
+    return this.pureSpecies$;
+  }
+
+  /**
+   * Get mixed heritage definitions
+   */
+  getMixedHeritage(): Observable<Record<string, MixedHeritageReference>> {
+    if (!this.mixedHeritage$) {
+      this.mixedHeritage$ = this.loadJson<Record<string, MixedHeritageReference>>('mixed-heritage').pipe(
+        catchError(() => of({})), // File may not exist if no custom mixed heritage defined
+        shareReplay(1)
+      );
+    }
+    return this.mixedHeritage$;
+  }
+
+  /**
+   * Get all species (both pure and mixed)
+   */
+  getAllSpecies(): Observable<Record<string, SpeciesReference>> {
+    return forkJoin({
+      pure: this.getPureSpecies(),
+      mixed: this.getMixedHeritage()
+    }).pipe(
+      map(({ pure, mixed }) => ({ ...pure, ...mixed }))
+    );
   }
 
   getMagicSchools(): Observable<Record<string, unknown>> {
@@ -136,10 +174,6 @@ export class ReferenceDataService {
   // BULK LOADER
   // ============================================================================
 
-  /**
-   * Load all reference data at once.
-   * Useful for initial app load or ensuring all data is cached.
-   */
   loadAllReferenceData(): Observable<AllReferenceData> {
     return forkJoin({
       weapons: this.getWeapons(),
@@ -148,7 +182,7 @@ export class ReferenceDataService {
       items: this.getItems(),
       abilities: this.getAbilities(),
       skills: this.getSkills(),
-      species: this.getSpecies(),
+      species: this.getAllSpecies(),
       magicSchools: this.getMagicSchools()
     });
   }
@@ -182,16 +216,81 @@ export class ReferenceDataService {
   }
 
   getSpeciesById(id: string): Observable<SpeciesReference | undefined> {
-    return this.getSpecies().pipe(map(species => species[id]));
+    return this.getAllSpecies().pipe(map(species => species[id]));
   }
 
   // ============================================================================
-  // ABILITY-SPECIFIC HELPERS
+  // SPECIES-SPECIFIC HELPERS
   // ============================================================================
 
   /**
-   * Get abilities filtered by college
+   * Get a pure species by ID
    */
+  getPureSpeciesById(id: PureSpeciesId): Observable<PureSpeciesReference | undefined> {
+    return this.getPureSpecies().pipe(map(species => species[id]));
+  }
+
+  /**
+   * Get mixed heritage rules for two species
+   */
+  getMixedHeritageRulesFor(parent1Id: PureSpeciesId, parent2Id: PureSpeciesId): Observable<any> {
+    return forkJoin({
+      parent1: this.getPureSpeciesById(parent1Id),
+      parent2: this.getPureSpeciesById(parent2Id)
+    }).pipe(
+      map(({ parent1, parent2 }) => {
+        if (!parent1 || !parent2) {
+          throw new Error('Species not found');
+        }
+        return calculateMixedHeritageRules(parent1, parent2);
+      })
+    );
+  }
+
+  /**
+   * Create a mixed heritage species reference dynamically
+   */
+  createMixedHeritageSpecies(
+    parent1Id: PureSpeciesId,
+    parent2Id: PureSpeciesId,
+    selectedModifiers: any[]
+  ): Observable<MixedHeritageReference> {
+    return forkJoin({
+      parent1: this.getPureSpeciesById(parent1Id),
+      parent2: this.getPureSpeciesById(parent2Id)
+    }).pipe(
+      map(({ parent1, parent2 }) => {
+        if (!parent1 || !parent2) {
+          throw new Error('Species not found');
+        }
+
+        const id = `${parent1Id}-${parent2Id}`;
+        const name = getMixedHeritageName(parent1.name, parent2.name);
+        const componentAccess = getMixedHeritageComponentAccess(parent1, parent2);
+
+        // Combine traits from both parents
+        const traits = [
+          ...(parent1.traits || []),
+          ...(parent2.traits || [])
+        ];
+
+        return {
+          id,
+          name,
+          parent1: parent1Id,
+          parent2: parent2Id,
+          selectedModifiers,
+          traits,
+          componentAccess
+        };
+      })
+    );
+  }
+
+  // ============================================================================
+  // ABILITY-SPECIFIC HELPERS (unchanged from original)
+  // ============================================================================
+
   getAbilitiesByCollege(college: 'cosmic' | 'earthly' | 'dead'): Observable<Record<string, AbilityReference>> {
     return this.getAbilities().pipe(
       map(abilities => {
@@ -208,22 +307,15 @@ export class ReferenceDataService {
     );
   }
 
-  /**
-   * Get abilities filtered by school
-   * Supports both new format (school in source) and legacy (derived from focus)
-   */
   getAbilitiesBySchool(school: string): Observable<Record<string, AbilityReference>> {
     return this.getAbilities().pipe(
       map(abilities => {
         const filtered: Record<string, AbilityReference> = {};
         for (const [id, ability] of Object.entries(abilities)) {
           if (hasCollegeAndFocus(ability.source)) {
-            // Check new format first
             if ('school' in ability.source && ability.source.school === school) {
               filtered[id] = ability;
-            }
-            // Fallback to focus-based school detection
-            else if (this.focusToSchool(ability.source.focus) === school) {
+            } else if (this.focusToSchool(ability.source.focus) === school) {
               filtered[id] = ability;
             }
           }
@@ -233,9 +325,6 @@ export class ReferenceDataService {
     );
   }
 
-  /**
-   * Get abilities filtered by focus
-   */
   getAbilitiesByFocus(focus: string): Observable<Record<string, AbilityReference>> {
     return this.getAbilities().pipe(
       map(abilities => {
@@ -252,9 +341,6 @@ export class ReferenceDataService {
     );
   }
 
-  /**
-   * Get abilities available at a specific focus level
-   */
   getAbilitiesAtLevel(focus: string, level: number): Observable<Record<string, AbilityReference>> {
     return this.getAbilities().pipe(
       map(abilities => {
@@ -271,9 +357,6 @@ export class ReferenceDataService {
     );
   }
 
-  /**
-   * Get abilities for a school at a specific level
-   */
   getAbilitiesBySchoolAtLevel(school: string, level: number): Observable<Record<string, AbilityReference>> {
     return this.getAbilitiesBySchool(school).pipe(
       map(abilities => {
@@ -290,9 +373,6 @@ export class ReferenceDataService {
     );
   }
 
-  /**
-   * Get all summon abilities
-   */
   getSummonAbilities(): Observable<Record<string, AbilityReference>> {
     return this.getAbilities().pipe(
       map(abilities => {
@@ -307,9 +387,6 @@ export class ReferenceDataService {
     );
   }
 
-  /**
-   * Get all reaction abilities
-   */
   getReactionAbilities(): Observable<Record<string, AbilityReference>> {
     return this.getAbilities().pipe(
       map(abilities => {
@@ -324,9 +401,6 @@ export class ReferenceDataService {
     );
   }
 
-  /**
-   * Get abilities that deal a specific damage type
-   */
   getAbilitiesByDamageType(damageType: string): Observable<Record<string, AbilityReference>> {
     return this.getAbilities().pipe(
       map(abilities => {
@@ -345,9 +419,6 @@ export class ReferenceDataService {
   // PRIVATE HELPERS
   // ============================================================================
 
-  /**
-   * Map focus to school (legacy support)
-   */
   private focusToSchool(focus: string): string | null {
     const mapping: Record<string, string> = {
       // Cosmic - Stars
@@ -382,14 +453,10 @@ export class ReferenceDataService {
     return mapping[focus] || null;
   }
 
-  /**
-   * Load all ability files and merge them into a single record
-   */
   private loadAllAbilities(): Observable<Record<string, AbilityReference>> {
     const abilityLoaders = this.abilityFiles.map(file =>
       this.loadJson<Record<string, AbilityReference>>(file).pipe(
         catchError(error => {
-          // Log but don't fail - file might not exist yet
           console.warn(`Ability file not found: ${file}.json`);
           return of({} as Record<string, AbilityReference>);
         })
@@ -398,7 +465,6 @@ export class ReferenceDataService {
 
     return forkJoin(abilityLoaders).pipe(
       map(abilityRecords => {
-        // Merge all ability records into one
         const merged: Record<string, AbilityReference> = {};
         for (const record of abilityRecords) {
           Object.assign(merged, record);

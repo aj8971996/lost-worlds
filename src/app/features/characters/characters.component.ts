@@ -20,8 +20,17 @@ export class CharactersComponent implements OnInit {
 
   // Computed values for footer stats
   uniqueSpeciesCount = computed(() => {
-    const species = new Set(this.characters().map(c => c.speciesId));
-    return species.size;
+    const speciesSet = new Set<string>();
+    
+    for (const char of this.characters()) {
+      if (char.species.type === 'pure') {
+        speciesSet.add(char.species.speciesId);
+      } else {
+        speciesSet.add(char.species.mixedHeritageId);
+      }
+    }
+    
+    return speciesSet.size;
   });
 
   averageLevel = computed(() => {

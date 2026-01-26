@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { ReferenceDataService, AllReferenceData } from '@core/services/reference-data.service';
 import { 
   Character, 
+  CharacterSpeciesSelection, 
   SpeciesReference 
 } from '@core/models/character.model';
 import { 
@@ -28,6 +29,7 @@ import {
   calculateCollegeProgression
 } from '@core/models/magic.model';
 import { calculateMod, calculateDice } from '@core/models/stats.model';
+import { PureSpeciesId } from '@core/models/species.model';
 
 // ============================================================================
 // INTERFACES
@@ -981,12 +983,18 @@ export class CreateCharacterComponent implements OnInit {
       .replace(/[^a-z0-9\s]/g, '')
       .replace(/\s+/g, '-');
 
+    // Create species selection - use new format
+    const species: CharacterSpeciesSelection = {
+      type: 'pure',
+      speciesId: this.selectedSpeciesId() as PureSpeciesId
+    };
+
     const character: Character = {
       id: characterId,
       name: this.characterName(),
       level: this.characterLevel(),
       xp: this.characterXp(),
-      speciesId: this.selectedSpeciesId(),
+      species, // Updated to use CharacterSpeciesSelection
       age: this.characterAge(),
       height: this.characterHeight(),
       stats: characterStats,

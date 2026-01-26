@@ -1,0 +1,87 @@
+{
+  "elf-cosmikin": {
+    "id": "elf-cosmikin",
+    "name": "Half-Elf, Half-Cosmikin",
+    "parent1": "elf",
+    "parent2": "cosmikin",
+    "selectedModifiers": [
+      { "stat": "AST", "amount": 10 },
+      { "stat": "MAG", "amount": 10 },
+      { "stat": "KNW", "amount": 10 },
+      { "stat": "GRT", "amount": -10 },
+      { "stat": "DET", "amount": -10 },
+      { "stat": "NAT", "amount": -5 }
+    ],
+    "traits": [
+      "Pointed ears",
+      "Long-lived",
+      "Natural magical affinity",
+      "Otherworldly appearance",
+      "Angelic and demonic traits",
+      "Unstable in earthly realms"
+    ],
+    "componentAccess": ["starRunes", "lightRunes", "voidShards", "realmPoints"]
+  },
+  "human-elf": {
+    "id": "human-elf",
+    "name": "Half-Human, Half-Elf",
+    "parent1": "human",
+    "parent2": "elf",
+    "selectedModifiers": [
+      { "stat": "NAT", "amount": 15 },
+      { "stat": "MAG", "amount": 5 },
+      { "stat": "MIT", "amount": -15 },
+      { "stat": "AST", "amount": -10 }
+    ],
+    "traits": [
+      "Adaptable",
+      "Subtle elven features",
+      "Some magical aptitude",
+      "Lost cosmic connection"
+    ],
+    "componentAccess": ["starRunes", "lightRunes", "voidShards", "realmPoints"]
+  },
+  "fairy-giant": {
+    "id": "fairy-giant",
+    "name": "Half-Fairy, Half-Giant",
+    "parent1": "fairy",
+    "parent2": "giant",
+    "selectedModifiers": [
+      { "stat": "MIT", "amount": 10 },
+      { "stat": "NAT", "amount": 10 },
+      { "stat": "HP", "amount": 10 },
+      { "stat": "SPD", "amount": -15 },
+      { "stat": "FRS", "amount": -10 }
+    ],
+    "traits": [
+      "Unusual size variation",
+      "Wings (limited flight)",
+      "Nature affinity",
+      "Great strength",
+      "Ethereal yet imposing"
+    ],
+    "componentAccess": ["lifeSeeds", "focusPoints"]
+  },
+  "cosmikin-goblin": {
+    "id": "cosmikin-goblin",
+    "name": "Half-Cosmikin, Half-Goblin",
+    "parent1": "cosmikin",
+    "parent2": "goblin",
+    "selectedModifiers": [
+      { "stat": "SPD", "amount": 10 },
+      { "stat": "AST", "amount": 10 },
+      { "stat": "FRS", "amount": 10 },
+      { "stat": "MIT", "amount": -15 },
+      { "stat": "GRT", "amount": -10 },
+      { "stat": "NAT", "amount": -10 }
+    ],
+    "traits": [
+      "Tall and gangly build",
+      "Otherworldly appearance",
+      "Quick thinker",
+      "Cosmic affinity",
+      "Nimble and magically attuned"
+    ],
+    "componentAccess": ["starRunes", "lightRunes", "voidShards", "realmPoints", "focusPoints", "craftPoints"]
+  }
+}

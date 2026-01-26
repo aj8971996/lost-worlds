@@ -36,7 +36,7 @@ import { CharacterSummary } from '@core/models';
       <!-- Character info -->
       <div class="character-info">
         <h3 class="character-name">{{ character.name }}</h3>
-        <p class="character-species">{{ formatSpecies(character.speciesId) }}</p>
+        <p class="character-species">{{ speciesDisplayName() }}</p>
         @if (character.player) {
           <p class="character-player">
             <span class="material-symbols-outlined icon-sm" aria-hidden="true">person</span>
@@ -298,9 +298,27 @@ export class CharacterCardComponent {
     return this.character?.name?.charAt(0) || '?';
   });
 
-  formatSpecies(speciesId: string): string {
+  /**
+   * Get display name for species (handles both pure and mixed heritage)
+   */
+  speciesDisplayName = computed(() => {
+    const species = this.character?.species;
+    if (!species) return 'Unknown';
+
+    if (species.type === 'pure') {
+      return this.formatSpeciesId(species.speciesId);
+    } else {
+      // Mixed heritage
+      return this.formatSpeciesId(species.mixedHeritageId);
+    }
+  });
+
+  /**
+   * Format species ID to display name
+   */
+  private formatSpeciesId(id: string): string {
     // Convert kebab-case to Title Case
-    return speciesId
+    return id
       .split('-')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
