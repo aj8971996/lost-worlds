@@ -67,7 +67,7 @@ interface ParsedAbility extends AbilityReference {
 @Component({
   selector: 'app-abilities',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule, AbilityFocusPipe],
+  imports: [CommonModule, FormsModule, AbilityFocusPipe],
   templateUrl: './abilities.html',
   styleUrl: './abilities.scss'
 })

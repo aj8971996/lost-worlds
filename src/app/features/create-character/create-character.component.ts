@@ -216,7 +216,7 @@ const SCHOOL_COMPONENT_CONFIG: Record<string, {
 @Component({
   selector: 'app-create-character',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule],
   templateUrl: './create-character.component.html',
   styleUrl: './create-character.component.scss'
 })

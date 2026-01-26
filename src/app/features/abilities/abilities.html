@@ -1,14 +1,4 @@
 <div class="abilities-page">
-  <!-- Breadcrumb Navigation -->
-  <nav class="breadcrumb-nav">
-    <a routerLink="/" class="breadcrumb-link">
-      <span class="material-symbols-outlined">home</span>
-      <span>Home</span>
-    </a>
-    <span class="breadcrumb-separator material-symbols-outlined">chevron_right</span>
-    <span class="breadcrumb-current">Lost Worlds Library</span>
-  </nav>
-
   <!-- Page Header -->
   <header class="page-header">
     <div class="header-content">
@@ -474,7 +464,7 @@
                             ST: {{ creature.stamina }}
                           </span>
                         </div>
-                        @if (creature.attacks?.length) {
+                        @if (creature.attacks.length) {
                           <div class="summon-attacks">
                             @for (attack of creature.attacks; track attack.name) {
                               <div class="summon-attack">
@@ -532,7 +522,7 @@
                               </div>
                             }
                           }
-                          @if (ability.effects?.resistances?.length) {
+                          @if (ability.effects.resistances?.length) {
                             <div class="effect-item effect-item--buff">
                               <span class="material-symbols-outlined">shield</span>
                               <span>Resistance to {{ ability.effects.resistances!.join(', ') }}</span>

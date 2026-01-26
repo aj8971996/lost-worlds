@@ -8,7 +8,7 @@ import { CharacterCardComponent } from './components/character-card/character-ca
 @Component({
   selector: 'app-characters',
   standalone: true,
-  imports: [CommonModule, RouterLink, CharacterCardComponent],
+  imports: [CommonModule, CharacterCardComponent],
   templateUrl: './characters.component.html',
   styleUrl: './characters.component.scss'
 })
