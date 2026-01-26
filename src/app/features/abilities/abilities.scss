@@ -349,6 +349,8 @@ $college-dead: #b71c1c;
 // FILTERS SIDEBAR
 // =========================================================================
 
+// In your abilities.scss, update the .filters-sidebar section:
+
 .filters-sidebar {
   position: fixed;
   top: 0;
@@ -359,7 +361,7 @@ $college-dead: #b71c1c;
   background: var(--color-surface);
   border-right: $border-width-thin solid var(--color-border);
   transform: translateX(-100%);
-  z-index: $z-index-modal;
+  z-index: $z-index-modal; // High z-index for mobile overlay
   display: flex;
   flex-direction: column;
   @include transition(transform);
@@ -376,6 +378,7 @@ $college-dead: #b71c1c;
     transform: none;
     border: $border-width-thin solid var(--color-border);
     border-radius: $border-radius-lg;
+    z-index: 1; 
   }
 }
 
