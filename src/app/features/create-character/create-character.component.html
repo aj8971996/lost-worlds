@@ -88,19 +88,38 @@
                 </select>
                 @if (getSelectedSpecies(); as species) {
                   <div class="species-info">
-                    <p class="species-description">{{ species.description }}</p>
+                    <!-- Description -->
+                    @if (getSpeciesDescription(species)) {
+                      <p class="species-description">{{ getSpeciesDescription(species) }}</p>
+                    }
+                    
+                    <!-- Traits -->
                     @if (species.traits?.length) {
                       <div class="species-traits">
                         <strong>Traits:</strong>
                         <span class="trait-list">{{ species.traits?.join(', ') }}</span>
                       </div>
                     }
-                    @if (species.statBonuses) {
-                      <div class="species-bonuses">
-                        <strong>Stat Bonuses:</strong>
-                        @for (bonus of species.statBonuses | keyvalue; track bonus.key) {
-                          <span class="bonus-tag">{{ bonus.key }} +{{ bonus.value }}</span>
-                        }
+                    
+                    <!-- Modifiers (replaces statBonuses) -->
+                    @if (getSpeciesModifiers(species); as modifiers) {
+                      @if (modifiers.length > 0) {
+                        <div class="species-bonuses">
+                          <strong>Stat Modifiers:</strong>
+                          @for (mod of modifiers; track mod.stat) {
+                            <span class="bonus-tag" [class.penalty]="mod.amount < 0">
+                              {{ mod.stat }} {{ mod.amount >= 0 ? '+' : '' }}{{ mod.amount }}
+                            </span>
+                          }
+                        </div>
+                      }
+                    }
+                    
+                    <!-- Component Access (if any) -->
+                    @if (species.componentAccess?.length) {
+                      <div class="species-components">
+                        <strong>Component Access:</strong>
+                        <span class="component-list">{{ species.componentAccess?.join(', ') }}</span>
                       </div>
                     }
                   </div>

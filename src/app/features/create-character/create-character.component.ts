@@ -29,7 +29,7 @@ import {
   calculateCollegeProgression
 } from '@core/models/magic.model';
 import { calculateMod, calculateDice } from '@core/models/stats.model';
-import { PureSpeciesId } from '@core/models/species.model';
+import { PureSpeciesId, isPureSpecies, StatModifier } from '@core/models/species.model';
 
 // ============================================================================
 // INTERFACES
@@ -528,6 +528,30 @@ export class CreateCharacterComponent implements OnInit {
       category: skill.category
     }));
     this.skills.set(skillInputs);
+  }
+
+  /**
+   * Get species description - handles both pure and mixed heritage
+   */
+  getSpeciesDescription(species: SpeciesReference): string {
+    if (isPureSpecies(species)) {
+      return species.description;
+    } else {
+      // Mixed heritage - show parent info
+      return `Mixed heritage: ${species.parent1} and ${species.parent2}`;
+    }
+  }
+
+  /**
+   * Get species modifiers - unified for both types
+   */
+  getSpeciesModifiers(species: SpeciesReference): StatModifier[] {
+    if (isPureSpecies(species)) {
+      return species.modifiers;
+    } else {
+      // Mixed heritage already has selectedModifiers
+      return species.selectedModifiers;
+    }
   }
 
   private initializeMagicFocuses(magicSchools: Record<string, unknown>): void {

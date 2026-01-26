@@ -414,7 +414,7 @@ $transition-slow: 0.4s ease;
   padding: 1rem;
   background: rgba($color-accent, 0.05);
   border: 1px solid rgba($color-accent, 0.2);
-  border-radius: $radius-md;
+  border-radius: $radius-sm;
   
   .species-description {
     color: $color-text-secondary;
@@ -423,7 +423,8 @@ $transition-slow: 0.4s ease;
   }
   
   .species-traits,
-  .species-bonuses {
+  .species-bonuses,
+  .species-components {
     font-size: 0.85rem;
     color: $color-text-secondary;
     margin-top: 0.5rem;
@@ -433,7 +434,8 @@ $transition-slow: 0.4s ease;
     }
   }
   
-  .trait-list {
+  .trait-list,
+  .component-list {
     margin-left: 0.5rem;
   }
   
@@ -441,10 +443,17 @@ $transition-slow: 0.4s ease;
     display: inline-block;
     padding: 0.2rem 0.5rem;
     margin-left: 0.5rem;
+    margin-top: 0.25rem;
     background: rgba($color-success, 0.2);
     border-radius: $radius-sm;
     color: $color-success;
     font-weight: 500;
+    
+    // NEW: Style for negative modifiers
+    &.penalty {
+      background: rgba($color-danger, 0.2);
+      color: $color-danger;
+    }
   }
 }
 
