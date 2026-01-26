@@ -1,14 +1,22 @@
+// ============================================================================
+// HERO COMPONENT
+// Full viewport intro section with animated background
+// Note: Header padding is handled by the navigation shell
+// ============================================================================
+
 .hero {
   position: relative;
-  min-height: 100vh;
-  min-height: 100dvh;
+  min-height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
 }
 
-// Animated gradient background - using palette colors
+// ============================================================================
+// BACKGROUND LAYERS
+// ============================================================================
+
 .hero-bg {
   position: absolute;
   inset: 0;
@@ -30,7 +38,6 @@
   100% { background-position: 0% 50%; }
 }
 
-// Film grain texture overlay
 .hero-grain {
   position: absolute;
   inset: 0;
@@ -39,7 +46,6 @@
   pointer-events: none;
 }
 
-// Vignette overlay for depth
 .hero-vignette {
   position: absolute;
   inset: 0;
@@ -51,17 +57,20 @@
   pointer-events: none;
 }
 
-// Content container
+// ============================================================================
+// CONTENT
+// ============================================================================
+
 .hero-content {
   position: relative;
   z-index: 10;
   max-width: 800px;
-  padding: 2rem 1.5rem;
+  padding: 3rem 1.5rem;
   text-align: center;
   animation: fadeInUp 1s ease;
 
   @media (min-width: 768px) {
-    padding: 3rem 2rem;
+    padding: 4rem 2rem;
   }
 }
 
@@ -76,7 +85,6 @@
   }
 }
 
-// Eyebrow text
 .hero-eyebrow {
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 0.875rem;
@@ -91,7 +99,6 @@
   }
 }
 
-// Main title
 .hero-title {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: clamp(3rem, 10vw, 5.5rem);
@@ -103,7 +110,10 @@
   text-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
 }
 
-// Decorative divider
+// ============================================================================
+// DECORATIVE DIVIDER
+// ============================================================================
+
 .hero-divider {
   display: flex;
   align-items: center;
@@ -138,7 +148,10 @@
   50% { opacity: 0.5; }
 }
 
-// Tagline
+// ============================================================================
+// TEXT
+// ============================================================================
+
 .hero-tagline {
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: clamp(1.125rem, 3vw, 1.5rem);
@@ -148,7 +161,6 @@
   letter-spacing: 0.02em;
 }
 
-// Description
 .hero-description {
   font-size: clamp(0.9375rem, 2vw, 1.0625rem);
   color: rgba(255, 255, 255, 0.75);
@@ -157,7 +169,10 @@
   margin: 0 auto 2.5rem;
 }
 
-// Action buttons
+// ============================================================================
+// BUTTONS
+// ============================================================================
+
 .hero-actions {
   display: flex;
   flex-direction: column;
@@ -213,7 +228,10 @@
   }
 }
 
-// Scroll indicator
+// ============================================================================
+// SCROLL INDICATOR
+// ============================================================================
+
 .hero-scroll-indicator {
   position: absolute;
   bottom: 2rem;
@@ -225,6 +243,10 @@
 
   .material-symbols-outlined {
     font-size: 28px;
+  }
+
+  @media (min-width: 768px) {
+    bottom: 2.5rem;
   }
 }
 

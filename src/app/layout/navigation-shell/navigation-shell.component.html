@@ -1,0 +1,117 @@
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     APP NAVIGATION SHELL - Wraps entire application
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<div class="app-shell" [class.nav-open]="navOpen()">
+  
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       HEADER - Always visible
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <header class="shell-header" [class.is-scrolled]="isScrolled()">
+    <!-- Nav Toggle (Left) -->
+    <button 
+      type="button"
+      class="nav-toggle"
+      [class.is-active]="navOpen()"
+      (click)="toggleNav()"
+      [attr.aria-expanded]="navOpen()"
+      aria-label="Toggle navigation"
+    >
+      <span class="toggle-bar"></span>
+      <span class="toggle-bar"></span>
+      <span class="toggle-bar"></span>
+    </button>
+
+    <!-- Logo (Center on mobile, left-center on desktop) -->
+    <a routerLink="/" class="header-logo" (click)="closeNav()">
+      <span class="logo-text">Lost Worlds</span>
+    </a>
+
+    <!-- Spacer to balance the layout -->
+    <div class="header-spacer"></div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       NAVIGATION DRAWER - Slides in from left
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <div 
+    class="nav-backdrop"
+    [class.is-visible]="navOpen()"
+    (click)="closeNav()"
+  ></div>
+  
+  <nav 
+    class="nav-drawer"
+    [class.is-open]="navOpen()"
+    aria-label="Main navigation"
+  >
+    <div class="nav-drawer-content">
+      <!-- Primary Navigation -->
+      <div class="nav-section">
+        <p class="nav-section-label">Explore</p>
+        <ul class="nav-list">
+          @for (item of primaryNav(); track item.path) {
+            <li>
+              <a
+                class="nav-link"
+                [routerLink]="item.path"
+                routerLinkActive="is-active"
+                [routerLinkActiveOptions]="{ exact: item.exact }"
+                (click)="closeNav()"
+              >
+                <span class="material-symbols-outlined nav-link-icon">{{ item.icon }}</span>
+                <span class="nav-link-label">{{ item.label }}</span>
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <!-- Tools Navigation -->
+      <div class="nav-section">
+        <p class="nav-section-label">Tools</p>
+        <ul class="nav-list">
+          @for (item of toolsNav(); track item.path) {
+            <li>
+              <a
+                class="nav-link"
+                [routerLink]="item.path"
+                routerLinkActive="is-active"
+                (click)="closeNav()"
+              >
+                <span class="material-symbols-outlined nav-link-icon">{{ item.icon }}</span>
+                <span class="nav-link-label">{{ item.label }}</span>
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <!-- Footer -->
+      <div class="nav-footer">
+        <button 
+          type="button" 
+          class="theme-toggle"
+          (click)="toggleTheme()"
+          [attr.aria-label]="'Switch to ' + (isDarkTheme() ? 'light' : 'dark') + ' theme'"
+        >
+          <span class="material-symbols-outlined">
+            {{ isDarkTheme() ? 'light_mode' : 'dark_mode' }}
+          </span>
+          <span>{{ isDarkTheme() ? 'Light Mode' : 'Dark Mode' }}</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       MAIN CONTENT AREA
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <main 
+    class="shell-content"
+    #contentArea
+    (scroll)="onScroll($event)"
+  >
+    <router-outlet />
+  </main>
+
+</div>

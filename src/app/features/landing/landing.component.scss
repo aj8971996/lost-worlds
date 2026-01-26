@@ -1,4 +1,46 @@
+// ============================================================================
+// LANDING PAGE
+// Content sections only - navigation handled by app shell
+// ============================================================================
+
 .landing-page {
-  display: flex;
-  flex-direction: column;
+  width: 100%;
+}
+
+// ============================================================================
+// SECTIONS
+// ============================================================================
+
+.landing-section {
+  position: relative;
+  width: 100%;
+  
+  // Fade-in animation
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+
+  &.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  // Hero section is always visible immediately
+  &[data-section="hero"] {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  // Full-height sections (hero, campaigns)
+  &--hero {
+    min-height: calc(100vh - 56px); // Account for header
+    min-height: calc(100dvh - 56px);
+    display: flex;
+    flex-direction: column;
+
+    @media (min-width: 768px) {
+      min-height: calc(100vh - 60px);
+      min-height: calc(100dvh - 60px);
+    }
+  }
 }

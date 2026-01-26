@@ -1,7 +1,26 @@
-<div class="landing-page">
-  <app-hero />
-  <app-tools-grid />
-  <app-synopsis />
-  <app-creation-steps />
-  <app-campaign-carousel />
+<div class="landing-page" #landingContainer>
+  <!-- Hero Section -->
+  <section class="landing-section landing-section--hero" data-section="hero">
+    <app-hero />
+  </section>
+
+  <!-- Tools Section -->
+  <section class="landing-section" data-section="tools">
+    <app-tools-grid />
+  </section>
+
+  <!-- Synopsis Section -->
+  <section class="landing-section" data-section="synopsis">
+    <app-synopsis />
+  </section>
+
+  <!-- Creation Steps Section -->
+  <section class="landing-section" data-section="creation">
+    <app-creation-steps />
+  </section>
+
+  <!-- Campaigns Section -->
+  <section class="landing-section landing-section--hero" data-section="campaigns">
+    <app-campaign-carousel />
+  </section>
 </div>

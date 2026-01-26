@@ -1,0 +1,415 @@
+// ============================================================================
+// NAVIGATION SHELL - App-level navigation wrapper
+// ============================================================================
+// Wraps the entire application, provides:
+// - Fixed header with hamburger (left) and logo
+// - Slide-in drawer from left
+// - Scrollable content area with router-outlet
+// ============================================================================
+
+// ============================================================================
+// VARIABLES
+// ============================================================================
+
+$header-height: 60px;
+$header-height-mobile: 56px;
+$drawer-width: 280px;
+$transition-base: 0.3s ease;
+$transition-drawer: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+// ============================================================================
+// SHELL CONTAINER
+// ============================================================================
+
+.app-shell {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: var(--color-bg);
+}
+
+// ============================================================================
+// HEADER
+// ============================================================================
+
+.shell-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: $header-height-mobile;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  background: var(--color-bg);
+  border-bottom: 1px solid transparent;
+  transition: 
+    background $transition-base, 
+    border-color $transition-base,
+    box-shadow $transition-base;
+
+  @media (min-width: 768px) {
+    height: $header-height;
+    padding: 0 1.5rem;
+  }
+
+  &.is-scrolled {
+    background: var(--color-surface);
+    border-bottom-color: var(--color-border);
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+// ============================================================================
+// NAV TOGGLE (Hamburger - Left Side)
+// ============================================================================
+
+.nav-toggle {
+  position: relative;
+  z-index: 200;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  margin-left: -8px; // Optical alignment
+
+  @media (min-width: 768px) {
+    width: 44px;
+    height: 44px;
+    gap: 6px;
+  }
+}
+
+.toggle-bar {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--color-text);
+  border-radius: 1px;
+  transition: 
+    transform $transition-base, 
+    opacity $transition-base,
+    background $transition-base;
+
+  @media (min-width: 768px) {
+    width: 22px;
+  }
+
+  .nav-toggle:hover & {
+    background: var(--color-primary);
+  }
+
+  .nav-toggle.is-active & {
+    background: var(--color-accent);
+
+    &:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+
+      @media (min-width: 768px) {
+        transform: translateY(8px) rotate(45deg);
+      }
+    }
+
+    &:nth-child(2) {
+      opacity: 0;
+      transform: translateX(-8px);
+    }
+
+    &:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+
+      @media (min-width: 768px) {
+        transform: translateY(-8px) rotate(-45deg);
+      }
+    }
+  }
+}
+
+// ============================================================================
+// LOGO
+// ============================================================================
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: opacity $transition-base;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.logo-text {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.125rem;
+  font-weight: 400;
+  color: var(--color-text);
+  letter-spacing: 0.01em;
+
+  @media (min-width: 768px) {
+    font-size: 1.25rem;
+  }
+}
+
+// Spacer for balanced header layout
+.header-spacer {
+  width: 40px;
+
+  @media (min-width: 768px) {
+    width: 44px;
+  }
+}
+
+// ============================================================================
+// NAV BACKDROP
+// ============================================================================
+
+.nav-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity $transition-drawer, visibility $transition-drawer;
+
+  &.is-visible {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+// ============================================================================
+// NAV DRAWER (Slides from LEFT)
+// ============================================================================
+
+.nav-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: $drawer-width;
+  max-width: 85vw;
+  z-index: 175;
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  transform: translateX(-100%);
+  transition: transform $transition-drawer;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  &.is-open {
+    transform: translateX(0);
+  }
+}
+
+.nav-drawer-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: calc(#{$header-height-mobile} + 1.5rem) 1.25rem 1.5rem;
+
+  @media (min-width: 768px) {
+    padding: calc(#{$header-height} + 2rem) 1.5rem 2rem;
+  }
+}
+
+// ============================================================================
+// NAV SECTIONS
+// ============================================================================
+
+.nav-section {
+  margin-bottom: 2rem;
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
+.nav-section-label {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-subtle);
+  margin-bottom: 0.75rem;
+  padding-left: 0.75rem;
+
+  @media (min-width: 768px) {
+    font-size: 0.75rem;
+    margin-bottom: 1rem;
+  }
+}
+
+.nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  width: 100%;
+  padding: 0.75rem;
+  background: transparent;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all $transition-base;
+
+  @media (min-width: 768px) {
+    padding: 0.875rem 1rem;
+  }
+
+  &:hover {
+    background: var(--color-surface-alt);
+
+    .nav-link-label {
+      color: var(--color-text);
+    }
+
+    .nav-link-icon {
+      color: var(--color-primary);
+    }
+  }
+
+  &.is-active {
+    background: var(--color-primary-subtle);
+
+    .nav-link-label {
+      color: var(--color-primary);
+      font-weight: 500;
+    }
+
+    .nav-link-icon {
+      color: var(--color-primary);
+    }
+  }
+}
+
+.nav-link-icon {
+  font-size: 20px;
+  color: var(--color-text-muted);
+  transition: color $transition-base;
+
+  @media (min-width: 768px) {
+    font-size: 22px;
+  }
+}
+
+.nav-link-label {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  transition: color $transition-base, font-weight $transition-base;
+
+  @media (min-width: 768px) {
+    font-size: 1rem;
+  }
+}
+
+// ============================================================================
+// NAV FOOTER
+// ============================================================================
+
+.nav-footer {
+  margin-top: auto;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem;
+  background: transparent;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background $transition-base;
+  text-align: left;
+
+  @media (min-width: 768px) {
+    padding: 0.875rem 1rem;
+  }
+
+  &:hover {
+    background: var(--color-surface-alt);
+  }
+
+  .material-symbols-outlined {
+    font-size: 20px;
+    color: var(--color-text-muted);
+
+    @media (min-width: 768px) {
+      font-size: 22px;
+    }
+  }
+
+  span:not(.material-symbols-outlined) {
+    font-size: 0.9375rem;
+    color: var(--color-text-muted);
+
+    @media (min-width: 768px) {
+      font-size: 1rem;
+    }
+  }
+}
+
+// ============================================================================
+// MAIN CONTENT AREA
+// ============================================================================
+
+.shell-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding-top: $header-height-mobile;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+
+  @media (min-width: 768px) {
+    padding-top: $header-height;
+  }
+}
+
+// ============================================================================
+// CONTENT PUSH (Optional - for persistent sidebar on large screens)
+// ============================================================================
+// Uncomment if you want the content to push over instead of overlay on desktop
+// 
+// @media (min-width: 1280px) {
+//   .nav-drawer {
+//     transform: translateX(0);
+//     position: relative;
+//   }
+//   
+//   .nav-backdrop {
+//     display: none;
+//   }
+//   
+//   .shell-content {
+//     margin-left: $drawer-width;
+//   }
+// }
