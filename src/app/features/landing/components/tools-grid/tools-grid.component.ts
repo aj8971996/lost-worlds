@@ -19,6 +19,13 @@ interface ToolCard {
 export class ToolsGridComponent {
   protected readonly tools = signal<readonly ToolCard[]>([
     {
+      title: 'Create Character',
+      description: 'Forge a new hero with the character creation wizard. Build stats, choose abilities, and equip your adventurer.',
+      icon: 'person_add',
+      path: '/create',
+      accentColor: '#10b981'
+    },
+    {
       title: 'Character Sheets',
       description: 'View and manage your party\'s character sheets. Track stats, abilities, skills, and inventory.',
       icon: 'person',

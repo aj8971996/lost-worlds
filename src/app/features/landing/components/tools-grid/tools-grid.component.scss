@@ -48,7 +48,7 @@
   margin: 0 auto;
 }
 
-// Tools Grid
+// Tools Grid - Updated for 5 items
 .tools-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -59,7 +59,8 @@
   }
 
   @media (min-width: 1024px) {
-    grid-template-columns: repeat(4, 1fr);
+    // 6-column grid for flexible layout with 5 cards
+    grid-template-columns: repeat(6, 1fr);
   }
 }
 
@@ -76,6 +77,21 @@
   text-decoration: none;
   transition: all 0.3s ease;
   cursor: pointer;
+
+  // Desktop: Each card spans 2 columns in a 6-column grid (3 cards per row)
+  // But we have 5 cards, so: row 1 = 3 cards, row 2 = 2 cards centered
+  @media (min-width: 1024px) {
+    grid-column: span 2;
+    
+    // Center the last row (cards 4 and 5)
+    &:nth-child(4) {
+      grid-column: 2 / span 2;
+    }
+    
+    &:nth-child(5) {
+      grid-column: 4 / span 2;
+    }
+  }
 
   &:hover {
     transform: translateY(-4px);
@@ -96,6 +112,34 @@
       .arrow {
         transform: translateX(4px);
       }
+    }
+  }
+
+  // Featured card styling (first card - Create Character)
+  &:first-child {
+    position: relative;
+    overflow: hidden;
+    
+    // Subtle glow effect on featured card
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--card-accent), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    &:hover::before {
+      opacity: 1;
+    }
+    
+    .card-icon-wrapper {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%);
+      border: 1px solid rgba(16, 185, 129, 0.2);
     }
   }
 }

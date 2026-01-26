@@ -8,6 +8,11 @@ export const routes: Routes = [
     title: 'Lost Worlds | Where Realms Converge'
   },
   {
+    path: 'create',
+    loadComponent: () => import('./features/create-character/create-character.component')
+      .then(m => m.CreateCharacterComponent)
+  },
+  {
     path: 'characters',
     loadComponent: () => import('./features/characters/characters.component')
       .then(m => m.CharactersComponent),

@@ -12,5 +12,12 @@
     "level": 4,
     "speciesId": "fairy-giant",
     "player": "Golden Nuggets Newest Cook"
+  },
+  {
+    "id": "samson-smithers",
+    "name": "Samson Smithers",
+    "level": 1,
+    "speciesId": "cosmo-goblin",
+    "player": "Test Character Made with Create Character"
   }
 ]

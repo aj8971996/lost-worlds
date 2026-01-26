@@ -1,0 +1,1232 @@
+<div class="create-character-page">
+  <!-- Breadcrumb Navigation -->
+  <nav class="breadcrumb-nav">
+    <div class="breadcrumb-container">
+      <a routerLink="/" class="breadcrumb-link">
+        <span class="material-symbols-outlined">home</span>
+        <span>Home</span>
+      </a>
+      <span class="breadcrumb-separator material-symbols-outlined">chevron_right</span>
+      <a routerLink="/characters" class="breadcrumb-link">Characters</a>
+      <span class="breadcrumb-separator material-symbols-outlined">chevron_right</span>
+      <span class="breadcrumb-current">Create Character</span>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header class="page-header">
+    <div class="header-content">
+      <div class="header-icon" aria-hidden="true">
+        <span class="material-symbols-outlined">person_add</span>
+      </div>
+      <h1 class="page-title">Forge Your Legend</h1>
+      <p class="page-subtitle">Create a new hero for the Lost Worlds</p>
+    </div>
+    <div class="header-decoration" aria-hidden="true"></div>
+  </header>
+
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="loading-state">
+      <div class="loading-spinner">
+        <span class="material-symbols-outlined">progress_activity</span>
+      </div>
+      <p>Loading reference data...</p>
+    </div>
+  } @else {
+    <!-- Wizard Container -->
+    <div class="wizard-container">
+      <!-- Step Indicator -->
+      <nav class="step-indicator" aria-label="Character creation steps">
+        @for (step of steps; track step.id; let i = $index) {
+          <button 
+            class="step-item" 
+            [class.active]="currentStep() === i"
+            [class.completed]="i < currentStep()"
+            [class.clickable]="i <= currentStep()"
+            (click)="i <= currentStep() ? goToStep(i) : null"
+            [attr.aria-current]="currentStep() === i ? 'step' : null"
+          >
+            <div class="step-icon">
+              @if (i < currentStep()) {
+                <span class="material-symbols-outlined">check</span>
+              } @else {
+                <span class="material-symbols-outlined">{{ step.icon }}</span>
+              }
+            </div>
+            <span class="step-label">{{ step.label }}</span>
+          </button>
+          @if (i < steps.length - 1) {
+            <div class="step-connector" [class.completed]="i < currentStep()"></div>
+          }
+        }
+      </nav>
+
+      <!-- Step Content -->
+      <main class="step-content">
+        <!-- STEP 0: Identity -->
+        @if (currentStep() === 0) {
+          <section class="wizard-step" aria-labelledby="identity-heading">
+            <h2 id="identity-heading" class="step-title">
+              <span class="material-symbols-outlined">person</span>
+              Character Identity
+            </h2>
+            <p class="step-description">Define who your character is at their core.</p>
+
+            <div class="form-grid">
+              <div class="form-group span-2">
+                <label for="character-name">Character Name</label>
+                <input 
+                  type="text" 
+                  id="character-name" 
+                  [ngModel]="characterName()"
+                  (ngModelChange)="characterName.set($event)"
+                  placeholder="Enter character name..."
+                  class="form-input"
+                />
+              </div>
+
+              <div class="form-group span-2">
+                <label for="species">Species</label>
+                <select 
+                  id="species" 
+                  [ngModel]="selectedSpeciesId()"
+                  (ngModelChange)="selectedSpeciesId.set($event)"
+                  class="form-select"
+                >
+                  <option value="">Select a species...</option>
+                  @for (species of speciesList(); track species.id) {
+                    <option [value]="species.id">{{ species.name }}</option>
+                  }
+                </select>
+                @if (getSelectedSpecies(); as species) {
+                  <div class="species-info">
+                    <p class="species-description">{{ species.description }}</p>
+                    @if (species.traits?.length) {
+                      <div class="species-traits">
+                        <strong>Traits:</strong>
+                        <span class="trait-list">{{ species.traits?.join(', ') }}</span>
+                      </div>
+                    }
+                    @if (species.statBonuses) {
+                      <div class="species-bonuses">
+                        <strong>Stat Bonuses:</strong>
+                        @for (bonus of species.statBonuses | keyvalue; track bonus.key) {
+                          <span class="bonus-tag">{{ bonus.key }} +{{ bonus.value }}</span>
+                        }
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+
+              <div class="form-group">
+                <label for="level">Starting Level</label>
+                <input 
+                  type="number" 
+                  id="level" 
+                  [ngModel]="characterLevel()"
+                  (ngModelChange)="characterLevel.set($event)"
+                  min="1" 
+                  max="20"
+                  class="form-input"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="xp">Starting XP</label>
+                <input 
+                  type="number" 
+                  id="xp" 
+                  [ngModel]="characterXp()"
+                  (ngModelChange)="characterXp.set($event)"
+                  min="0"
+                  class="form-input"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="age">Age</label>
+                <input 
+                  type="number" 
+                  id="age" 
+                  [ngModel]="characterAge()"
+                  (ngModelChange)="characterAge.set($event)"
+                  min="1"
+                  class="form-input"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="height">Height</label>
+                <input 
+                  type="text" 
+                  id="height" 
+                  [ngModel]="characterHeight()"
+                  (ngModelChange)="characterHeight.set($event)"
+                  placeholder="e.g., 5.5 ft"
+                  class="form-input"
+                />
+              </div>
+            </div>
+          </section>
+        }
+
+        <!-- STEP 1: Stats -->
+        @if (currentStep() === 1) {
+          <section class="wizard-step" aria-labelledby="stats-heading">
+            <h2 id="stats-heading" class="step-title">
+              <span class="material-symbols-outlined">analytics</span>
+              Character Stats
+            </h2>
+            <p class="step-description">Allocate your character's base attributes.</p>
+
+            <div class="stats-container">
+              <!-- Physical Stats -->
+              <div class="stat-category">
+                <h3 class="category-title physical">
+                  <span class="material-symbols-outlined">fitness_center</span>
+                  Physical
+                </h3>
+                <div class="stats-grid">
+                  @for (stat of getStatsByCategory('physical'); track stat.key) {
+                    <div class="stat-card">
+                      <div class="stat-header">
+                        <span class="stat-abbr">{{ stat.abbr }}</span>
+                        <span class="stat-name">{{ stat.label }}</span>
+                      </div>
+                      <div class="stat-inputs">
+                        <div class="input-group">
+                          <label>Value</label>
+                          <input 
+                            type="number" 
+                            [ngModel]="stat.value"
+                            (ngModelChange)="updateStatValue(stats().indexOf(stat), $event)"
+                            class="stat-input"
+                          />
+                        </div>
+                        <div class="input-group">
+                          <label>Bonus</label>
+                          <input 
+                            type="number" 
+                            [ngModel]="stat.bonus"
+                            (ngModelChange)="updateStatBonus(stats().indexOf(stat), $event)"
+                            class="stat-input"
+                          />
+                        </div>
+                      </div>
+                      <div class="stat-derived">
+                        <span class="derived-item" title="Modifier">
+                          <span class="material-symbols-outlined">add_circle</span>
+                          {{ formatMod(getStatMod(stat.value)) }}
+                        </span>
+                        <span class="derived-item" title="Dice">
+                          <span class="material-symbols-outlined">casino</span>
+                          {{ getStatDice(stat.value) }}D20
+                        </span>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <!-- Mental Stats -->
+              <div class="stat-category">
+                <h3 class="category-title mental">
+                  <span class="material-symbols-outlined">psychology</span>
+                  Mental
+                </h3>
+                <div class="stats-grid">
+                  @for (stat of getStatsByCategory('mental'); track stat.key) {
+                    <div class="stat-card">
+                      <div class="stat-header">
+                        <span class="stat-abbr">{{ stat.abbr }}</span>
+                        <span class="stat-name">{{ stat.label }}</span>
+                      </div>
+                      <div class="stat-inputs">
+                        <div class="input-group">
+                          <label>Value</label>
+                          <input 
+                            type="number" 
+                            [ngModel]="stat.value"
+                            (ngModelChange)="updateStatValue(stats().indexOf(stat), $event)"
+                            class="stat-input"
+                          />
+                        </div>
+                        <div class="input-group">
+                          <label>Bonus</label>
+                          <input 
+                            type="number" 
+                            [ngModel]="stat.bonus"
+                            (ngModelChange)="updateStatBonus(stats().indexOf(stat), $event)"
+                            class="stat-input"
+                          />
+                        </div>
+                      </div>
+                      <div class="stat-derived">
+                        <span class="derived-item" title="Modifier">
+                          <span class="material-symbols-outlined">add_circle</span>
+                          {{ formatMod(getStatMod(stat.value)) }}
+                        </span>
+                        <span class="derived-item" title="Dice">
+                          <span class="material-symbols-outlined">casino</span>
+                          {{ getStatDice(stat.value) }}D20
+                        </span>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <!-- Magical Stats -->
+              <div class="stat-category">
+                <h3 class="category-title magical">
+                  <span class="material-symbols-outlined">auto_awesome</span>
+                  Magical
+                </h3>
+                <div class="stats-grid">
+                  @for (stat of getStatsByCategory('magical'); track stat.key) {
+                    <div class="stat-card">
+                      <div class="stat-header">
+                        <span class="stat-abbr">{{ stat.abbr }}</span>
+                        <span class="stat-name">{{ stat.label }}</span>
+                      </div>
+                      <div class="stat-inputs">
+                        <div class="input-group">
+                          <label>Value</label>
+                          <input 
+                            type="number" 
+                            [ngModel]="stat.value"
+                            (ngModelChange)="updateStatValue(stats().indexOf(stat), $event)"
+                            class="stat-input"
+                          />
+                        </div>
+                        <div class="input-group">
+                          <label>Bonus</label>
+                          <input 
+                            type="number" 
+                            [ngModel]="stat.bonus"
+                            (ngModelChange)="updateStatBonus(stats().indexOf(stat), $event)"
+                            class="stat-input"
+                          />
+                        </div>
+                      </div>
+                      <div class="stat-derived">
+                        <span class="derived-item" title="Modifier">
+                          <span class="material-symbols-outlined">add_circle</span>
+                          {{ formatMod(getStatMod(stat.value)) }}
+                        </span>
+                        <span class="derived-item" title="Dice">
+                          <span class="material-symbols-outlined">casino</span>
+                          {{ getStatDice(stat.value) }}D20
+                        </span>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+
+            <!-- Resources Section -->
+            <div class="resources-section">
+              <h3 class="section-title">
+                <span class="material-symbols-outlined">favorite</span>
+                Resources
+              </h3>
+              <div class="resources-grid">
+                <div class="resource-card health">
+                  <label>Health</label>
+                  <div class="resource-inputs">
+                    <input 
+                      type="number" 
+                      [ngModel]="healthCurrent()"
+                      (ngModelChange)="healthCurrent.set($event)"
+                      placeholder="Current"
+                    />
+                    <span>/</span>
+                    <input 
+                      type="number" 
+                      [ngModel]="healthMax()"
+                      (ngModelChange)="healthMax.set($event)"
+                      placeholder="Max"
+                    />
+                  </div>
+                </div>
+                <div class="resource-card stamina">
+                  <label>Stamina</label>
+                  <div class="resource-inputs">
+                    <input 
+                      type="number" 
+                      [ngModel]="staminaCurrent()"
+                      (ngModelChange)="staminaCurrent.set($event)"
+                    />
+                    <span>/</span>
+                    <input 
+                      type="number" 
+                      [ngModel]="staminaMax()"
+                      (ngModelChange)="staminaMax.set($event)"
+                    />
+                  </div>
+                </div>
+                <div class="resource-card sanity">
+                  <label>Sanity</label>
+                  <div class="resource-inputs">
+                    <input 
+                      type="number" 
+                      [ngModel]="sanityCurrent()"
+                      (ngModelChange)="sanityCurrent.set($event)"
+                    />
+                    <span>/</span>
+                    <input 
+                      type="number" 
+                      [ngModel]="sanityMax()"
+                      (ngModelChange)="sanityMax.set($event)"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Combat Stats -->
+            <div class="combat-section">
+              <h3 class="section-title">
+                <span class="material-symbols-outlined">swords</span>
+                Combat
+              </h3>
+              <div class="combat-grid">
+                <div class="combat-card">
+                  <label>Action Points</label>
+                  <input 
+                    type="number" 
+                    [ngModel]="actionPoints()"
+                    (ngModelChange)="actionPoints.set($event)"
+                  />
+                </div>
+                <div class="combat-card">
+                  <label>Base Movement (ft)</label>
+                  <input 
+                    type="number" 
+                    [ngModel]="baseMovement()"
+                    (ngModelChange)="baseMovement.set($event)"
+                  />
+                </div>
+                <div class="combat-card">
+                  <label>Initiative Mod</label>
+                  <input 
+                    type="number" 
+                    [ngModel]="initiativeMod()"
+                    (ngModelChange)="initiativeMod.set($event)"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+        }
+
+        <!-- STEP 2: Skills -->
+        @if (currentStep() === 2) {
+          <section class="wizard-step" aria-labelledby="skills-heading">
+            <h2 id="skills-heading" class="step-title">
+              <span class="material-symbols-outlined">psychology</span>
+              Skills
+            </h2>
+            <p class="step-description">
+              Allocate skill points. You have 
+              <strong class="highlight">{{ availableSkillPoints() }}</strong> 
+              points remaining ({{ characterLevel() }} total from level).
+            </p>
+
+            <div class="skills-grid">
+              @for (skill of skills(); track skill.id) {
+                <div class="skill-card" [class.has-points]="skill.level > 0">
+                  <div class="skill-info">
+                    <span class="skill-name">{{ skill.name }}</span>
+                    <span class="skill-description">{{ skill.description }}</span>
+                  </div>
+                  <div class="skill-controls">
+                    <button 
+                      class="skill-btn decrement"
+                      (click)="decrementSkill(skill.id)"
+                      [disabled]="skill.level === 0"
+                      aria-label="Decrease skill level"
+                    >
+                      <span class="material-symbols-outlined">remove</span>
+                    </button>
+                    <span class="skill-level">{{ skill.level }}</span>
+                    <button 
+                      class="skill-btn increment"
+                      (click)="incrementSkill(skill.id)"
+                      [disabled]="availableSkillPoints() <= 0 || skill.level >= 10"
+                      aria-label="Increase skill level"
+                    >
+                      <span class="material-symbols-outlined">add</span>
+                    </button>
+                  </div>
+                  @if (skill.level > 0) {
+                    <div class="skill-bonus">
+                      <span class="material-symbols-outlined">casino</span>
+                      +{{ skill.level }}D20
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </section>
+        }
+
+        <!-- STEP 3: Magic -->
+        @if (currentStep() === 3) {
+          <section class="wizard-step" aria-labelledby="magic-heading">
+            <h2 id="magic-heading" class="step-title">
+              <span class="material-symbols-outlined">auto_awesome</span>
+              Magic Focuses
+            </h2>
+            <p class="step-description">
+              Invest in magical focuses. You have 
+              <strong class="highlight">{{ availableFocusPoints() }}</strong> 
+              points remaining ({{ characterLevel() * 2 }} total).
+              Components are granted based on your school investments.
+            </p>
+
+            <!-- Component Pools Preview (if any) -->
+            @if (hasComponents()) {
+              <div class="components-preview">
+                <h4>
+                  <span class="material-symbols-outlined">toll</span>
+                  Your Magic Components
+                </h4>
+                <div class="component-pool-grid">
+                  @for (pool of componentPools(); track pool.type) {
+                    <div class="component-pool-card" [class]="pool.college">
+                      <div class="pool-header">
+                        <span class="material-symbols-outlined">{{ pool.icon }}</span>
+                        <span class="pool-name">{{ pool.name }}</span>
+                      </div>
+                      <div class="pool-value">{{ pool.max }}</div>
+                      <div class="pool-source">
+                        {{ pool.schoolName }} ({{ pool.perLevel }}/level)
+                      </div>
+                      <div class="pool-recharge">{{ pool.rechargeCondition }}</div>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+
+            <!-- Cosmic College -->
+            <div class="magic-college cosmic">
+              <div class="college-header">
+                <h3 class="college-title">
+                  <span class="college-icon">✦</span>
+                  Cosmic Magic
+                </h3>
+                <div class="college-progression">
+                  <span class="degree-badge">{{ getDegreeDisplayName(cosmicProgression().degree) }}</span>
+                  <span class="progression-info">
+                    {{ cosmicProgression().totalSchoolLevels }} School Levels • Cap: {{ cosmicProgression().focusLevelCap }}
+                  </span>
+                </div>
+              </div>
+              @for (school of getSchoolsForCollege('cosmic'); track school.id) {
+                <div class="magic-school">
+                  <div class="school-header">
+                    <h4 class="school-title">{{ school.name }}</h4>
+                    @if (getSchoolComponent(school.id); as comp) {
+                      <span class="school-component" title="{{ comp.rechargeCondition }}">
+                        <span class="material-symbols-outlined">{{ comp.icon }}</span>
+                        {{ comp.name }} ({{ comp.perLevel }}/lvl)
+                      </span>
+                    }
+                  </div>
+                  <div class="focuses-grid">
+                    @for (focus of getFocusesBySchool(school.id); track focus.id) {
+                      <div class="focus-card" [class.has-levels]="focus.level > 0">
+                        <span class="focus-name">{{ focus.name }}</span>
+                        <div class="focus-controls">
+                          <button 
+                            class="focus-btn"
+                            (click)="decrementFocus(focus.id)"
+                            [disabled]="focus.level === 0"
+                          >
+                            <span class="material-symbols-outlined">remove</span>
+                          </button>
+                          <span class="focus-level">{{ focus.level }}</span>
+                          <button 
+                            class="focus-btn"
+                            (click)="incrementFocus(focus.id)"
+                            [disabled]="availableFocusPoints() <= 0 || focus.level >= cosmicProgression().focusLevelCap"
+                          >
+                            <span class="material-symbols-outlined">add</span>
+                          </button>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+
+            <!-- Earthly College -->
+            <div class="magic-college earthly">
+              <div class="college-header">
+                <h3 class="college-title">
+                  <span class="college-icon">⚘</span>
+                  Earthly Magic
+                </h3>
+                <div class="college-progression">
+                  <span class="degree-badge">{{ getDegreeDisplayName(earthlyProgression().degree) }}</span>
+                  <span class="progression-info">
+                    {{ earthlyProgression().totalSchoolLevels }} School Levels • Cap: {{ earthlyProgression().focusLevelCap }}
+                  </span>
+                </div>
+              </div>
+              @for (school of getSchoolsForCollege('earthly'); track school.id) {
+                <div class="magic-school">
+                  <div class="school-header">
+                    <h4 class="school-title">{{ school.name }}</h4>
+                    @if (getSchoolComponent(school.id); as comp) {
+                      <span class="school-component" title="{{ comp.rechargeCondition }}">
+                        <span class="material-symbols-outlined">{{ comp.icon }}</span>
+                        {{ comp.name }} ({{ comp.perLevel }}/lvl)
+                      </span>
+                    }
+                  </div>
+                  <div class="focuses-grid">
+                    @for (focus of getFocusesBySchool(school.id); track focus.id) {
+                      <div class="focus-card" [class.has-levels]="focus.level > 0">
+                        <span class="focus-name">{{ focus.name }}</span>
+                        <div class="focus-controls">
+                          <button 
+                            class="focus-btn"
+                            (click)="decrementFocus(focus.id)"
+                            [disabled]="focus.level === 0"
+                          >
+                            <span class="material-symbols-outlined">remove</span>
+                          </button>
+                          <span class="focus-level">{{ focus.level }}</span>
+                          <button 
+                            class="focus-btn"
+                            (click)="incrementFocus(focus.id)"
+                            [disabled]="availableFocusPoints() <= 0 || focus.level >= earthlyProgression().focusLevelCap"
+                          >
+                            <span class="material-symbols-outlined">add</span>
+                          </button>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+
+            <!-- Dead College -->
+            <div class="magic-college dead">
+              <div class="college-header">
+                <h3 class="college-title">
+                  <span class="college-icon">☠</span>
+                  Dead Magic
+                </h3>
+                <div class="college-progression">
+                  <span class="degree-badge">{{ getDegreeDisplayName(deadProgression().degree) }}</span>
+                  <span class="progression-info">
+                    {{ deadProgression().totalSchoolLevels }} School Levels • Cap: {{ deadProgression().focusLevelCap }}
+                  </span>
+                </div>
+              </div>
+              @for (school of getSchoolsForCollege('dead'); track school.id) {
+                <div class="magic-school">
+                  <div class="school-header">
+                    <h4 class="school-title">{{ school.name }}</h4>
+                    @if (getSchoolComponent(school.id); as comp) {
+                      <span class="school-component" title="{{ comp.rechargeCondition }}">
+                        <span class="material-symbols-outlined">{{ comp.icon }}</span>
+                        {{ comp.name }} ({{ comp.perLevel }}/lvl)
+                      </span>
+                    }
+                  </div>
+                  <div class="focuses-grid">
+                    @for (focus of getFocusesBySchool(school.id); track focus.id) {
+                      <div class="focus-card" [class.has-levels]="focus.level > 0">
+                        <span class="focus-name">{{ focus.name }}</span>
+                        <div class="focus-controls">
+                          <button 
+                            class="focus-btn"
+                            (click)="decrementFocus(focus.id)"
+                            [disabled]="focus.level === 0"
+                          >
+                            <span class="material-symbols-outlined">remove</span>
+                          </button>
+                          <span class="focus-level">{{ focus.level }}</span>
+                          <button 
+                            class="focus-btn"
+                            (click)="incrementFocus(focus.id)"
+                            [disabled]="availableFocusPoints() <= 0 || focus.level >= deadProgression().focusLevelCap"
+                          >
+                            <span class="material-symbols-outlined">add</span>
+                          </button>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          </section>
+        }
+
+        <!-- STEP 4: Abilities -->
+        @if (currentStep() === 4) {
+          <section class="wizard-step" aria-labelledby="abilities-heading">
+            <h2 id="abilities-heading" class="step-title">
+              <span class="material-symbols-outlined">bolt</span>
+              Prepared Abilities
+            </h2>
+            <p class="step-description">
+              Select abilities to prepare. 
+              <strong class="highlight">{{ selectedAbilityIds().length }} / {{ maxPreparedAbilities() }}</strong> 
+              slots used. Only abilities matching your focus levels are shown.
+            </p>
+
+            <!-- Filters -->
+            <div class="ability-filters">
+              <div class="search-box">
+                <span class="material-symbols-outlined">search</span>
+                <input 
+                  type="text" 
+                  placeholder="Search abilities..."
+                  [ngModel]="abilitySearchQuery()"
+                  (ngModelChange)="abilitySearchQuery.set($event)"
+                />
+              </div>
+              <div class="filter-buttons">
+                <button 
+                  class="filter-btn" 
+                  [class.active]="abilityCollegeFilter() === 'all'"
+                  (click)="onCollegeFilterChange('all')"
+                >All</button>
+                <button 
+                  class="filter-btn cosmic" 
+                  [class.active]="abilityCollegeFilter() === 'cosmic'"
+                  (click)="onCollegeFilterChange('cosmic')"
+                >Cosmic</button>
+                <button 
+                  class="filter-btn earthly" 
+                  [class.active]="abilityCollegeFilter() === 'earthly'"
+                  (click)="onCollegeFilterChange('earthly')"
+                >Earthly</button>
+                <button 
+                  class="filter-btn dead" 
+                  [class.active]="abilityCollegeFilter() === 'dead'"
+                  (click)="onCollegeFilterChange('dead')"
+                >Dead</button>
+              </div>
+            </div>
+
+            <!-- Selected Abilities Summary -->
+            @if (selectedAbilityIds().length > 0) {
+              <div class="selected-abilities-summary">
+                <h4>Selected Abilities</h4>
+                <div class="selected-tags">
+                  @for (id of selectedAbilityIds(); track id) {
+                    @if (getAbilityById(id); as ability) {
+                      <span class="ability-tag" [class]="getAbilityCollege(ability)">
+                        {{ ability.name }}
+                        <button (click)="toggleAbilitySelection(id)" aria-label="Remove ability">
+                          <span class="material-symbols-outlined">close</span>
+                        </button>
+                      </span>
+                    }
+                  }
+                </div>
+              </div>
+            }
+
+            <!-- Abilities List -->
+            <div class="abilities-list">
+              @for (ability of filteredAbilities(); track ability.id) {
+                <div 
+                  class="ability-card" 
+                  [class.selected]="isAbilitySelected(ability.id)"
+                  [class.expanded]="isAbilityExpanded(ability.id)"
+                  [class]="getAbilityCollege(ability)"
+                >
+                  <div class="ability-header" (click)="toggleAbilityExpanded(ability.id)">
+                    <div class="ability-main">
+                      <button 
+                        class="select-btn"
+                        (click)="toggleAbilitySelection(ability.id); $event.stopPropagation()"
+                        [disabled]="!isAbilitySelected(ability.id) && selectedAbilityIds().length >= maxPreparedAbilities()"
+                      >
+                        @if (isAbilitySelected(ability.id)) {
+                          <span class="material-symbols-outlined">check_circle</span>
+                        } @else {
+                          <span class="material-symbols-outlined">radio_button_unchecked</span>
+                        }
+                      </button>
+                      <span class="ability-name">{{ ability.name }}</span>
+                      <span class="ability-focus">{{ getAbilityFocus(ability) }} Lv.{{ getAbilityRequiredLevel(ability) }}</span>
+                    </div>
+                    <div class="ability-costs">
+                      @if (ability.apCost !== null) {
+                        <span class="cost-badge ap">{{ ability.apCost }} AP</span>
+                      }
+                      @if (ability.componentCost) {
+                        @for (cost of ability.componentCost; track cost.type) {
+                          <span class="cost-badge component">
+                            <span class="material-symbols-outlined">{{ getCostIcon(cost.type) }}</span>
+                            {{ cost.amount }}
+                          </span>
+                        }
+                      }
+                    </div>
+                    <span class="expand-icon material-symbols-outlined">
+                      {{ isAbilityExpanded(ability.id) ? 'expand_less' : 'expand_more' }}
+                    </span>
+                  </div>
+                  @if (isAbilityExpanded(ability.id)) {
+                    <div class="ability-details">
+                      <p class="ability-description">{{ ability.description }}</p>
+                      <div class="ability-meta">
+                        <span><strong>Range:</strong> {{ ability.range }}</span>
+                        <span><strong>Target:</strong> {{ ability.target }}</span>
+                        <span><strong>Duration:</strong> {{ ability.duration }}</span>
+                      </div>
+                      @if (getDamageDisplay(ability); as damage) {
+                        <div class="ability-output damage">
+                          <span class="material-symbols-outlined">local_fire_department</span>
+                          <strong>Damage:</strong> {{ damage }}
+                        </div>
+                      }
+                      @if (getHealingDisplay(ability); as healing) {
+                        <div class="ability-output healing">
+                          <span class="material-symbols-outlined">healing</span>
+                          <strong>Healing:</strong> {{ healing }}
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+              }
+
+              @if (filteredAbilities().length === 0) {
+                <div class="empty-state">
+                  <span class="material-symbols-outlined">search_off</span>
+                  <p>No abilities match your criteria or focus levels.</p>
+                  <p class="hint">Try investing in magic focuses to unlock more abilities.</p>
+                </div>
+              }
+            </div>
+          </section>
+        }
+
+        <!-- STEP 5: Equipment -->
+        @if (currentStep() === 5) {
+          <section class="wizard-step" aria-labelledby="equipment-heading">
+            <h2 id="equipment-heading" class="step-title">
+              <span class="material-symbols-outlined">shield</span>
+              Equipment
+            </h2>
+            <p class="step-description">Equip your character with weapons, armor, and accessories.</p>
+
+            <!-- Equipment Tabs -->
+            <div class="equipment-tabs">
+              <button 
+                class="tab-btn" 
+                [class.active]="equipmentTab() === 'weapons'"
+                (click)="equipmentTab.set('weapons')"
+              >
+                <span class="material-symbols-outlined">swords</span>
+                Weapons
+              </button>
+              <button 
+                class="tab-btn" 
+                [class.active]="equipmentTab() === 'armor'"
+                (click)="equipmentTab.set('armor')"
+              >
+                <span class="material-symbols-outlined">shield</span>
+                Armor
+              </button>
+              <button 
+                class="tab-btn" 
+                [class.active]="equipmentTab() === 'accessories'"
+                (click)="equipmentTab.set('accessories')"
+              >
+                <span class="material-symbols-outlined">diamond</span>
+                Accessories
+              </button>
+            </div>
+
+            <!-- Weapons Tab -->
+            @if (equipmentTab() === 'weapons') {
+              <div class="equipment-content">
+                <h4>Selected Weapons</h4>
+                <div class="selected-equipment">
+                  @for (weapon of selectedWeapons(); track weapon.refId) {
+                    @if (getWeaponById(weapon.refId); as ref) {
+                      <div class="equipment-item">
+                        <span class="item-name">{{ ref.name }}</span>
+                        <span class="item-details">{{ ref.damage }} • {{ ref.range }}</span>
+                        <span class="item-qty">x{{ weapon.quantity }}</span>
+                        <button class="remove-btn" (click)="removeWeapon(weapon.refId)">
+                          <span class="material-symbols-outlined">close</span>
+                        </button>
+                      </div>
+                    }
+                  }
+                  @if (selectedWeapons().length === 0) {
+                    <p class="no-items">No weapons equipped</p>
+                  }
+                </div>
+
+                <h4>Available Weapons</h4>
+                <div class="equipment-grid">
+                  @for (weapon of weaponsList(); track weapon.id) {
+                    <div class="equipment-option" (click)="addWeapon(weapon)">
+                      <span class="option-name">{{ weapon.name }}</span>
+                      <span class="option-details">{{ weapon.damage }} • {{ weapon.apCost }} AP</span>
+                      <span class="option-range">{{ weapon.range }}</span>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+
+            <!-- Armor Tab -->
+            @if (equipmentTab() === 'armor') {
+              <div class="equipment-content">
+                <h4>Armor Slots</h4>
+                <p class="armor-hp-total">Total Armor HP: <strong>{{ totalArmorHp() }}</strong></p>
+                <div class="armor-slots">
+                  @for (slot of armorSlots; track slot) {
+                    <div class="armor-slot">
+                      <span class="slot-name">{{ slot | titlecase }}</span>
+                      @if (getArmorInSlot(slot); as equipped) {
+                        @if (getArmorById(equipped.refId); as armor) {
+                          <div class="equipped-armor">
+                            <span>{{ armor.name }}</span>
+                            <span class="armor-dr">DR: {{ armor.damageReduction.dice }}</span>
+                            <button (click)="unequipArmor(slot)">
+                              <span class="material-symbols-outlined">close</span>
+                            </button>
+                          </div>
+                        }
+                      } @else {
+                        <span class="empty-slot">Empty</span>
+                      }
+                      <div class="slot-options">
+                        @for (armor of getArmorForSlot(slot); track armor.id) {
+                          <button class="armor-option" (click)="equipArmor(armor)">
+                            {{ armor.name }}
+                          </button>
+                        }
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+
+            <!-- Accessories Tab -->
+            @if (equipmentTab() === 'accessories') {
+              <div class="equipment-content">
+                <h4>Selected Accessories</h4>
+                <div class="selected-equipment">
+                  @for (acc of selectedAccessories(); track acc.refId) {
+                    @if (getAccessoryById(acc.refId); as ref) {
+                      <div class="equipment-item">
+                        <span class="item-name">{{ ref.name }}</span>
+                        <span class="item-details">{{ ref.effect }}</span>
+                        <button class="remove-btn" (click)="removeAccessory(acc.refId)">
+                          <span class="material-symbols-outlined">close</span>
+                        </button>
+                      </div>
+                    }
+                  }
+                  @if (selectedAccessories().length === 0) {
+                    <p class="no-items">No accessories equipped</p>
+                  }
+                </div>
+
+                <h4>Available Accessories</h4>
+                <div class="equipment-grid">
+                  @for (acc of accessoriesList(); track acc.id) {
+                    <div class="equipment-option" (click)="addAccessory(acc)">
+                      <span class="option-name">{{ acc.name }}</span>
+                      <span class="option-details">{{ acc.effect }}</span>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          </section>
+        }
+
+        <!-- STEP 6: Inventory -->
+        @if (currentStep() === 6) {
+          <section class="wizard-step" aria-labelledby="inventory-heading">
+            <h2 id="inventory-heading" class="step-title">
+              <span class="material-symbols-outlined">inventory_2</span>
+              Inventory & Currency
+            </h2>
+            <p class="step-description">Add items to your inventory and set starting wealth.</p>
+
+            <!-- Currency -->
+            <div class="currency-section">
+              <h4>Currency</h4>
+              <div class="currency-inputs">
+                <div class="form-group">
+                  <label>Era</label>
+                  <input 
+                    type="text" 
+                    [ngModel]="currencyEra()"
+                    (ngModelChange)="currencyEra.set($event)"
+                    class="form-input"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Wealth</label>
+                  <input 
+                    type="number" 
+                    [ngModel]="currencyWealth()"
+                    (ngModelChange)="currencyWealth.set($event)"
+                    step="0.01"
+                    class="form-input"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Selected Items -->
+            <div class="inventory-section">
+              <h4>Current Inventory</h4>
+              <div class="inventory-list">
+                @for (item of selectedItems(); track item.refId) {
+                  @if (getItemById(item.refId); as ref) {
+                    <div class="inventory-item">
+                      <span class="item-name">{{ ref.name }}</span>
+                      <span class="item-qty">x{{ item.quantity }}</span>
+                      <span class="item-category">{{ item.category }}</span>
+                      <button (click)="removeItem(item.refId)">
+                        <span class="material-symbols-outlined">close</span>
+                      </button>
+                    </div>
+                  }
+                }
+                @if (selectedItems().length === 0) {
+                  <p class="no-items">Inventory is empty</p>
+                }
+              </div>
+            </div>
+
+            <!-- Available Items -->
+            <div class="available-items">
+              <h4>Add Items</h4>
+              <div class="items-grid">
+                @for (item of itemsList(); track item.id) {
+                  <div class="item-option">
+                    <div class="item-info">
+                      <span class="item-name">{{ item.name }}</span>
+                      <span class="item-desc">{{ item.description }}</span>
+                    </div>
+                    <div class="item-actions">
+                      <button (click)="addItem(item, 'consumable')" title="Add as consumable">
+                        <span class="material-symbols-outlined">science</span>
+                      </button>
+                      <button (click)="addItem(item, 'general')" title="Add as general">
+                        <span class="material-symbols-outlined">inventory_2</span>
+                      </button>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          </section>
+        }
+
+        <!-- STEP 7: Review -->
+        @if (currentStep() === 7) {
+          <section class="wizard-step review-step" aria-labelledby="review-heading">
+            <h2 id="review-heading" class="step-title">
+              <span class="material-symbols-outlined">fact_check</span>
+              Review & Download
+            </h2>
+            <p class="step-description">Review your character and download the JSON file.</p>
+
+            <div class="review-grid">
+              <!-- Identity Summary -->
+              <div class="review-card">
+                <h4>
+                  <span class="material-symbols-outlined">person</span>
+                  Identity
+                </h4>
+                <div class="review-content">
+                  <p><strong>Name:</strong> {{ characterName() }}</p>
+                  <p><strong>Species:</strong> {{ getSelectedSpecies()?.name || 'Not selected' }}</p>
+                  <p><strong>Level:</strong> {{ characterLevel() }}</p>
+                  <p><strong>Age:</strong> {{ characterAge() }}</p>
+                  <p><strong>Height:</strong> {{ characterHeight() }}</p>
+                </div>
+              </div>
+
+              <!-- Stats Summary -->
+              <div class="review-card">
+                <h4>
+                  <span class="material-symbols-outlined">analytics</span>
+                  Stats
+                </h4>
+                <div class="review-content stats-summary">
+                  @for (stat of stats(); track stat.key) {
+                    <span class="stat-pill">
+                      <strong>{{ stat.abbr }}:</strong> {{ stat.value }}
+                    </span>
+                  }
+                </div>
+              </div>
+
+              <!-- Skills Summary -->
+              <div class="review-card">
+                <h4>
+                  <span class="material-symbols-outlined">psychology</span>
+                  Skills
+                </h4>
+                <div class="review-content">
+                  @for (skill of skills(); track skill.id) {
+                    @if (skill.level > 0) {
+                      <span class="skill-pill">{{ skill.name }}: {{ skill.level }}</span>
+                    }
+                  }
+                  @if (totalSkillPointsAllocated() === 0) {
+                    <p class="no-items">No skills allocated</p>
+                  }
+                </div>
+              </div>
+
+              <!-- Magic Summary -->
+              <div class="review-card">
+                <h4>
+                  <span class="material-symbols-outlined">auto_awesome</span>
+                  Magic Focuses
+                </h4>
+                <div class="review-content">
+                  @for (focus of magicFocuses(); track focus.id) {
+                    @if (focus.level > 0) {
+                      <span class="focus-pill" [class]="focus.college">
+                        {{ focus.name }}: {{ focus.level }}
+                      </span>
+                    }
+                  }
+                  @if (totalFocusLevels() === 0) {
+                    <p class="no-items">No magic focuses</p>
+                  }
+                </div>
+              </div>
+
+              <!-- Components Summary -->
+              <div class="review-card">
+                <h4>
+                  <span class="material-symbols-outlined">toll</span>
+                  Magic Components
+                </h4>
+                <div class="review-content">
+                  @for (pool of componentPools(); track pool.type) {
+                    <span class="component-pill" [class]="pool.college">
+                      <span class="material-symbols-outlined">{{ pool.icon }}</span>
+                      {{ pool.name }}: {{ pool.max }}
+                    </span>
+                  }
+                  @if (!hasComponents()) {
+                    <p class="no-items">No magic components (invest in focuses)</p>
+                  }
+                </div>
+              </div>
+
+              <!-- Abilities Summary -->
+              <div class="review-card">
+                <h4>
+                  <span class="material-symbols-outlined">bolt</span>
+                  Prepared Abilities
+                </h4>
+                <div class="review-content">
+                  @for (id of selectedAbilityIds(); track id) {
+                    @if (getAbilityById(id); as ability) {
+                      <span class="ability-pill" [class]="getAbilityCollege(ability)">
+                        {{ ability.name }}
+                      </span>
+                    }
+                  }
+                  @if (selectedAbilityIds().length === 0) {
+                    <p class="no-items">No abilities prepared</p>
+                  }
+                </div>
+              </div>
+
+              <!-- Equipment Summary -->
+              <div class="review-card">
+                <h4>
+                  <span class="material-symbols-outlined">shield</span>
+                  Equipment
+                </h4>
+                <div class="review-content">
+                  <p><strong>Weapons:</strong> {{ selectedWeapons().length }}</p>
+                  <p><strong>Armor Pieces:</strong> {{ selectedArmor().length }} ({{ totalArmorHp() }} HP)</p>
+                  <p><strong>Accessories:</strong> {{ selectedAccessories().length }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Download Button -->
+            <div class="download-section">
+              <button 
+                class="download-btn" 
+                (click)="downloadCharacter()"
+                [disabled]="!canProceed()"
+              >
+                <span class="material-symbols-outlined">download</span>
+                Download Character JSON
+              </button>
+              <p class="download-hint">
+                The file will be saved as <code>{{ characterName() | lowercase | slice:0:20 }}.json</code>
+              </p>
+            </div>
+          </section>
+        }
+      </main>
+
+      <!-- Navigation Buttons -->
+      <footer class="wizard-footer">
+        <button 
+          class="nav-btn secondary" 
+          (click)="prevStep()"
+          [disabled]="currentStep() === 0"
+        >
+          <span class="material-symbols-outlined">arrow_back</span>
+          Previous
+        </button>
+        
+        <div class="step-counter">
+          Step {{ currentStep() + 1 }} of {{ steps.length }}
+        </div>
+
+        @if (currentStep() < steps.length - 1) {
+          <button 
+            class="nav-btn primary" 
+            (click)="nextStep()"
+            [disabled]="!canProceed()"
+          >
+            Next
+            <span class="material-symbols-outlined">arrow_forward</span>
+          </button>
+        } @else {
+          <button 
+            class="nav-btn primary download" 
+            (click)="downloadCharacter()"
+            [disabled]="!canProceed()"
+          >
+            <span class="material-symbols-outlined">download</span>
+            Download
+          </button>
+        }
+      </footer>
+    </div>
+  }
+</div>

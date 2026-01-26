@@ -1,0 +1,182 @@
+{
+  "id": "samson-smithers",
+  "name": "Samson Smithers",
+  "level": 1,
+  "xp": 0,
+  "speciesId": "cosmo-goblin",
+  "age": 25,
+  "height": "5.5 ft",
+  "stats": {
+    "physical": {
+      "might": {
+        "bonus": 0,
+        "value": 20
+      },
+      "grit": {
+        "bonus": 0,
+        "value": 10
+      },
+      "speed": {
+        "bonus": 0,
+        "value": 0
+      }
+    },
+    "mental": {
+      "knowledge": {
+        "bonus": 0,
+        "value": 0
+      },
+      "foresight": {
+        "bonus": 0,
+        "value": 0
+      },
+      "courage": {
+        "bonus": 0,
+        "value": 0
+      },
+      "determination": {
+        "bonus": 0,
+        "value": 0
+      }
+    },
+    "magical": {
+      "astrology": {
+        "bonus": 0,
+        "value": 0
+      },
+      "magiks": {
+        "bonus": 0,
+        "value": 0
+      },
+      "nature": {
+        "bonus": 0,
+        "value": 0
+      }
+    }
+  },
+  "resources": {
+    "health": {
+      "current": 200,
+      "max": 200
+    },
+    "armorHp": {
+      "current": 55,
+      "max": 55
+    },
+    "stamina": {
+      "current": 185,
+      "max": 185
+    },
+    "sanity": {
+      "current": 144,
+      "max": 144
+    }
+  },
+  "components": {
+    "starRunes": {
+      "current": 6,
+      "max": 6
+    }
+  },
+  "combat": {
+    "actionPoints": 6,
+    "baseMovement": 30,
+    "initiativeMod": 0
+  },
+  "skills": {
+    "master-lockpicker": 1
+  },
+  "magic": {
+    "cosmic": {
+      "divination": 1,
+      "constellations": 1
+    },
+    "earthly": {},
+    "dead": {}
+  },
+  "abilities": {
+    "prepared": [
+      "summon-the-lesser-bear",
+      "star-whisper",
+      "hunters-bow",
+      "constellation-brand"
+    ]
+  },
+  "equipment": {
+    "weapons": [
+      {
+        "refId": "throwing-knife",
+        "quantity": 1,
+        "currentHp": 6
+      }
+    ],
+    "armor": {
+      "shoulders": {
+        "refId": "elementalist-shoulders",
+        "currentHp": 10
+      },
+      "chest": {
+        "refId": "elementalist-robes",
+        "currentHp": 15
+      },
+      "arms": {
+        "refId": "elementalist-armguard",
+        "currentHp": 5
+      },
+      "gloves": {
+        "refId": "elementalist-gloves",
+        "currentHp": 5
+      },
+      "boots": {
+        "refId": "elementalist-boots",
+        "currentHp": 10
+      },
+      "legs": {
+        "refId": "elementalist-legs",
+        "currentHp": 10
+      }
+    },
+    "accessories": [
+      {
+        "refId": "quick-draw-holster",
+        "currentHp": 10
+      }
+    ]
+  },
+  "inventory": {
+    "consumables": [
+      {
+        "refId": "water",
+        "quantity": 4
+      },
+      {
+        "refId": "lesser-healing-potion",
+        "quantity": 1
+      }
+    ],
+    "general": [
+      {
+        "refId": "codebreakers-tools",
+        "quantity": 1
+      }
+    ]
+  },
+  "currency": {
+    "era": "Las Vegas",
+    "wealth": 0
+  },
+  "backstory": "",
+  "appearance": "",
+  "alignment": {
+    "overall": "undecided",
+    "traits": {
+      "compassion": "neutral",
+      "mercy": "neutral",
+      "humility": "neutral",
+      "forgiveness": "neutral",
+      "protection": "neutral"
+    }
+  },
+  "relationships": [],
+  "sessionLog": []
+}
