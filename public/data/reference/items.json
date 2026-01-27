@@ -1,19 +1,354 @@
 {
-  "water": {
-    "id": "water",
-    "name": "Water",
-    "category": "consumable",
-    "description": "Clean drinking water.",
-    "effect": "Restores hydration. Required for long rests in harsh environments.",
-    "stackable": true
-  },
   "lesser-healing-potion": {
     "id": "lesser-healing-potion",
     "name": "Lesser Healing Potion",
     "category": "consumable",
-    "description": "A small vial of red liquid that restores health.",
-    "effect": "Restore 2D6 + 5 HP. Costs 1 AP to consume.",
+    "consumableType": "healing-potion",
+    "description": "A cloudy crimson liquid that tastes faintly of iron and honey. Apprentice alchemists brew these by the dozens in preparation for market days, though the quality varies wildly.",
+    "effect": "Recover 2D10 HP",
+    "restoration": [
+      { "resource": "HP", "dice": "2D10" }
+    ],
+    "cost": 1,
+    "levelRequirement": 1,
     "stackable": true
+  },
+  "minor-healing-potion": {
+    "id": "minor-healing-potion",
+    "name": "Minor Healing Potion",
+    "category": "consumable",
+    "consumableType": "healing-potion",
+    "description": "This deeper scarlet brew glows faintly when shaken, the light of captured vitality swirling within. The recipe requires three drops of morning dew collected from a plant that has never known shade.",
+    "effect": "Recover 4D10 HP",
+    "restoration": [
+      { "resource": "HP", "dice": "4D10" }
+    ],
+    "cost": 10,
+    "levelRequirement": 10,
+    "stackable": true
+  },
+  "greater-healing-potion": {
+    "id": "greater-healing-potion",
+    "name": "Greater Healing Potion",
+    "category": "consumable",
+    "consumableType": "healing-potion",
+    "description": "Contained in reinforced crystal vials etched with protective runes, this luminous elixir pulses like a living heartbeat. Tales speak of warriors rising from death's threshold after a single draught.",
+    "effect": "Recover 10D10 HP",
+    "restoration": [
+      { "resource": "HP", "dice": "10D10" }
+    ],
+    "cost": 35,
+    "levelRequirement": 35,
+    "stackable": true
+  },
+  "lesser-vigor-potion": {
+    "id": "lesser-vigor-potion",
+    "name": "Lesser Vigor Potion",
+    "category": "consumable",
+    "consumableType": "vigor-potion",
+    "description": "Bright amber and effervescent, this tonic fizzes against the tongue and sends a pleasant warmth through tired muscles. Laborers and travelers keep these close.",
+    "effect": "Recover 2D10 ST",
+    "restoration": [
+      { "resource": "ST", "dice": "2D10" }
+    ],
+    "cost": 1,
+    "levelRequirement": 1,
+    "stackable": true
+  },
+  "minor-vigor-potion": {
+    "id": "minor-vigor-potion",
+    "name": "Minor Vigor Potion",
+    "category": "consumable",
+    "consumableType": "vigor-potion",
+    "description": "The deep gold liquid seems to catch light that isn't there, and those who drink it describe feeling as though they've just woken from the most restful sleep of their lives.",
+    "effect": "Recover 4D10 ST",
+    "restoration": [
+      { "resource": "ST", "dice": "4D10" }
+    ],
+    "cost": 10,
+    "levelRequirement": 10,
+    "stackable": true
+  },
+  "greater-vigor-potion": {
+    "id": "greater-vigor-potion",
+    "name": "Greater Vigor Potion",
+    "category": "consumable",
+    "consumableType": "vigor-potion",
+    "description": "This radiant elixir, the color of liquid sunshine, is brewed only during solstices when the boundary between Earthly and Cosmic magic grows thin. A single vial can restore a body pushed far beyond mortal limits.",
+    "effect": "Recover 10D10 ST",
+    "restoration": [
+      { "resource": "ST", "dice": "10D10" }
+    ],
+    "cost": 35,
+    "levelRequirement": 35,
+    "stackable": true
+  },
+  "lesser-clarity-potion": {
+    "id": "lesser-clarity-potion",
+    "name": "Lesser Clarity Potion",
+    "category": "consumable",
+    "consumableType": "clarity-potion",
+    "description": "Pale silver and utterly still regardless of how the vial moves, this potion quiets the storm of anxious thoughts. Those recovering from minor magical trauma or sleepless nights find it invaluable.",
+    "effect": "Recover 2D10 SY",
+    "restoration": [
+      { "resource": "SY", "dice": "2D10" }
+    ],
+    "cost": 1,
+    "levelRequirement": 1,
+    "stackable": true
+  },
+  "minor-clarity-potion": {
+    "id": "minor-clarity-potion",
+    "name": "Minor Clarity Potion",
+    "category": "consumable",
+    "consumableType": "clarity-potion",
+    "description": "The liquid shimmers with captured starlight, and drinking it feels like stepping from a crowded room into peaceful solitude. Scholars who have gazed too long into forbidden texts seek these out.",
+    "effect": "Recover 4D10 SY",
+    "restoration": [
+      { "resource": "SY", "dice": "4D10" }
+    ],
+    "cost": 10,
+    "levelRequirement": 10,
+    "stackable": true
+  },
+  "greater-clarity-potion": {
+    "id": "greater-clarity-potion",
+    "name": "Greater Clarity Potion",
+    "category": "consumable",
+    "consumableType": "clarity-potion",
+    "description": "While expensive, given their ornate containers and sheer magical properties of recovering mental wounds, often the issue is finding a marketplace which sells a large abundance of these.",
+    "effect": "Recover 10D10 SY",
+    "restoration": [
+      { "resource": "SY", "dice": "10D10" }
+    ],
+    "cost": 35,
+    "levelRequirement": 35,
+    "stackable": true
+  },
+  "minor-speed-potion": {
+    "id": "minor-speed-potion",
+    "name": "Minor Speed Potion",
+    "category": "consumable",
+    "consumableType": "speed-potion",
+    "description": "A fizzing green concoction that tastes like wind and lightning. The effect is subtle—the world doesn't slow, but your legs simply cooperate more. Couriers and messengers consider these a professional necessity.",
+    "effect": "Add +10 ft to movement. Duration: 5 minutes. Does not stack.",
+    "temporaryEffects": [
+      {
+        "type": "movement",
+        "amount": 10,
+        "duration": "5 minutes"
+      }
+    ],
+    "cost": 25,
+    "stackable": true
+  },
+  "lesser-speed-potion": {
+    "id": "lesser-speed-potion",
+    "name": "Lesser Speed Potion",
+    "category": "consumable",
+    "consumableType": "speed-potion",
+    "description": "The bright emerald liquid crackles audibly in its vial, and drinkers report that their heartbeat sounds like galloping hooves for its duration. The crash afterward is unavoidable.",
+    "effect": "Add +20 ft to movement. Duration: 3 minutes. Does not stack. After effect: -5 ft to movement for 1 minute.",
+    "temporaryEffects": [
+      {
+        "type": "movement",
+        "amount": 20,
+        "duration": "3 minutes",
+        "afterEffect": {
+          "type": "movement",
+          "amount": -5,
+          "duration": "1 minute"
+        }
+      }
+    ],
+    "cost": 50,
+    "stackable": true
+  },
+  "greater-speed-potion": {
+    "id": "greater-speed-potion",
+    "name": "Greater Speed Potion",
+    "category": "consumable",
+    "consumableType": "speed-potion",
+    "description": "This volatile teal elixir must be consumed immediately upon opening, as exposure to air causes it to evaporate within seconds. Those who drink it describe the world becoming a blur of colors and shapes.",
+    "effect": "Add +50 ft to movement. Duration: 3 minutes. Does not stack. After effect: -15 ft to movement for 1 minute, then gain exhausted.",
+    "temporaryEffects": [
+      {
+        "type": "movement",
+        "amount": 50,
+        "duration": "3 minutes",
+        "afterEffect": {
+          "type": "exhausted",
+          "duration": "until rest"
+        }
+      }
+    ],
+    "cost": 75,
+    "stackable": true
+  },
+  "borrowed-time-potion": {
+    "id": "borrowed-time-potion",
+    "name": "Borrowed Time Potion",
+    "category": "consumable",
+    "consumableType": "utility-potion",
+    "description": "Thick as syrup and black as a moonless night, this potion tastes like nothing at all—a concerning absence that unsettles most drinkers. It steals moments from your future self to give to your present.",
+    "effect": "Gain +3 AP for the current turn. Lose -2 AP the following turn. Does not stack.",
+    "temporaryEffects": [
+      {
+        "type": "ap",
+        "amount": 3,
+        "duration": "1 turn",
+        "afterEffect": {
+          "type": "ap",
+          "amount": -2,
+          "duration": "1 turn"
+        }
+      }
+    ],
+    "cost": 30,
+    "stackable": true
+  },
+  "greater-leap-potion": {
+    "id": "greater-leap-potion",
+    "name": "Greater Leap Potion",
+    "category": "consumable",
+    "consumableType": "utility-potion",
+    "description": "This effervescent violet brew bubbles with barely contained energy. Drinkers feel suddenly lighter, as though gravity has loosened its grip specifically on them. Performers and acrobats prize these.",
+    "effect": "Gain +30 ft to your vertical leap distance. Does not stack. Duration: 1 minute.",
+    "temporaryEffects": [
+      {
+        "type": "special",
+        "amount": 30,
+        "duration": "1 minute"
+      }
+    ],
+    "cost": 50,
+    "stackable": true,
+    "notes": "Affects vertical leap only"
+  },
+  "height-manipulation-potion": {
+    "id": "height-manipulation-potion",
+    "name": "Height Manipulation Potion",
+    "category": "consumable",
+    "consumableType": "utility-potion",
+    "description": "The swirling, iridescent liquid inside never settles into a single color, shifting through the spectrum like an uncertain thought. Its effects are famously unpredictable.",
+    "effect": "Manipulate yourself to a random height between 1 and 10 ft tall. Duration: 5 minutes.",
+    "temporaryEffects": [
+      {
+        "type": "special",
+        "amount": 0,
+        "duration": "5 minutes"
+      }
+    ],
+    "cost": 50,
+    "stackable": true,
+    "notes": "Height is randomly determined (1-10 ft)"
+  },
+  "cloaking-potion": {
+    "id": "cloaking-potion",
+    "name": "Cloaking Potion",
+    "category": "consumable",
+    "consumableType": "utility-potion",
+    "description": "Completely transparent and visible only by the slight distortion it creates in its vial, this potion has no taste, no smell, and no texture—drinking it feels like swallowing nothing at all.",
+    "effect": "Become invisible to the non-enchanted eye. Individuals can hear, smell, and feel you, but will not be able to see you unless able to see invisible individuals or objects. Duration: 10 minutes.",
+    "temporaryEffects": [
+      {
+        "type": "special",
+        "amount": 0,
+        "duration": "10 minutes"
+      }
+    ],
+    "cost": 70,
+    "stackable": true,
+    "notes": "Does not mask sound, smell, or physical presence"
+  },
+  "roll-of-bandages": {
+    "id": "roll-of-bandages",
+    "name": "Roll of Bandages",
+    "category": "consumable",
+    "consumableType": "bandage",
+    "description": "Clean linen treated with herbs and minor healing enchantments. These bandages represent the intersection of mundane medicine and magical craft. Experienced adventurers never travel without several rolls.",
+    "effect": "Recover 5D6 HP on application and recover 1D6 HP each minute. Duration: 10 minutes.",
+    "restoration": [
+      { "resource": "HP", "dice": "5D6" }
+    ],
+    "cost": 10,
+    "stackable": true,
+    "notes": "Provides ongoing healing over 10 minutes"
+  },
+  "water": {
+    "id": "water",
+    "name": "Water",
+    "category": "consumable",
+    "consumableType": "drink",
+    "description": "Pure, clean water, perhaps the most underestimated restorative in existence. In a world of glowing potions and enchanted elixirs, the simple act of proper hydration is easily forgotten.",
+    "effect": "Recover 2D10 HP, 1D10 ST, 1D10 SY",
+    "restoration": [
+      { "resource": "HP", "dice": "2D10" },
+      { "resource": "ST", "dice": "1D10" },
+      { "resource": "SY", "dice": "1D10" }
+    ],
+    "cost": 1,
+    "stackable": true
+  },
+  "juice": {
+    "id": "juice",
+    "name": "Juice",
+    "category": "consumable",
+    "consumableType": "drink",
+    "description": "Fresh-pressed fruit juice, its sweetness providing quick energy to flagging bodies. The variety matters less than the freshness.",
+    "effect": "Recover 1D10 HP, 2D10 ST",
+    "restoration": [
+      { "resource": "HP", "dice": "1D10" },
+      { "resource": "ST", "dice": "2D10" }
+    ],
+    "cost": 5,
+    "stackable": true
+  },
+  "soda": {
+    "id": "soda",
+    "name": "Soda",
+    "category": "consumable",
+    "consumableType": "drink",
+    "description": "The carbonated beverages of the modern eras. The sugar and bubbles seem to ease mental strain in ways that healers cannot fully explain—perhaps it is simply the familiarity of the taste.",
+    "effect": "Recover 1D10 HP, 2D10 SY",
+    "restoration": [
+      { "resource": "HP", "dice": "1D10" },
+      { "resource": "SY", "dice": "2D10" }
+    ],
+    "cost": 5,
+    "stackable": true
+  },
+  "quick-meal": {
+    "id": "quick-meal",
+    "name": "Quick Meal",
+    "category": "consumable",
+    "consumableType": "food",
+    "description": "A practical meal assembled without ceremony—bread, cheese, dried meat, perhaps a handful of nuts or fruit. Nothing elegant, but everything the body needs.",
+    "effect": "Recover 5D10 HP, 5D10 ST, 5D10 SY",
+    "restoration": [
+      { "resource": "HP", "dice": "5D10" },
+      { "resource": "ST", "dice": "5D10" },
+      { "resource": "SY", "dice": "5D10" }
+    ],
+    "cost": 10,
+    "stackable": true,
+    "notes": "Restoration comes from nutrition, not magic"
+  },
+  "nice-meal": {
+    "id": "nice-meal",
+    "name": "Nice Meal",
+    "category": "consumable",
+    "consumableType": "food",
+    "description": "A proper meal taken at a proper table, with courses that arrive warm and seasoned with care. To sit, to taste, to savor—these acts remind the weary soul that life holds pleasures worth protecting.",
+    "effect": "Recover 12D10 HP, 12D10 ST, 12D10 SY",
+    "restoration": [
+      { "resource": "HP", "dice": "12D10" },
+      { "resource": "ST", "dice": "12D10" },
+      { "resource": "SY", "dice": "12D10" }
+    ],
+    "cost": 40,
+    "stackable": true,
+    "notes": "Veterans know that coin spent on a good meal before battle is never wasted"
   },
   "codebreakers-tools": {
     "id": "codebreakers-tools",
@@ -21,6 +356,30 @@
     "category": "tool",
     "description": "A set of specialized tools for deciphering codes and breaking encryptions.",
     "effect": "Required for Codebreaker skill checks. Grants +1 D20 on code-related checks.",
+    "stackable": false
+  },
+  "lockpicking-tools": {
+    "id": "lockpicking-tools",
+    "name": "Lockpicking Tools",
+    "category": "tool",
+    "description": "A set of picks, tension wrenches, and other implements for bypassing locks.",
+    "effect": "Required for Master Lockpicker skill checks.",
+    "stackable": false
+  },
+  "medical-kit": {
+    "id": "medical-kit",
+    "name": "Medical Kit",
+    "category": "tool",
+    "description": "A comprehensive medical kit containing bandages, antiseptics, splints, and basic surgical tools.",
+    "effect": "Required for Bandaid Maker skill checks. Allows treatment of injuries in the field.",
+    "stackable": false
+  },
+  "cooking-utensils": {
+    "id": "cooking-utensils",
+    "name": "Cooking Utensils",
+    "category": "tool",
+    "description": "Portable cooking equipment including pots, pans, utensils, and basic spices.",
+    "effect": "Required for Best Cook skill checks. Allows preparation of meals with bonuses.",
     "stackable": false
   }
 }

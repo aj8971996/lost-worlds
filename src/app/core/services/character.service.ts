@@ -207,6 +207,7 @@ export class CharacterService {
         id: instance.refId,
         name: `Unknown (${instance.refId})`,
         type: 'dagger',
+        category: 'earthly',  // Default to earthly for unknown weapons
         damage: '1D4',
         range: 'Melee',
         apCost: 1,

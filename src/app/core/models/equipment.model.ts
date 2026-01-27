@@ -7,6 +7,9 @@
  * - Services resolve references at runtime
  * 
  * All equipment can have HP and be damaged.
+ * 
+ * Updated: Added comprehensive weapon types, armor materials, cosmic weapon sources,
+ * and expanded consumable categories from the Lost Worlds Rule Book.
  */
 
 import { StatAbbr } from './stats.model';
@@ -31,13 +34,13 @@ export interface DefenseCheck {
 export interface EquipmentAbility {
   name?: string;
   effect: string;
-  cooldown?: string;          // "12 hours", "1 hour", etc.
+  cooldown?: string;          // "12 hours", "1 hour", "Passive", etc.
   usesPerCooldown?: number;   // How many times per cooldown period
 }
 
 // Damage reduction type
 export interface DamageReduction {
-  dice: string;       // "1D4", "1D8", etc.
+  dice: string;       // "1D4", "1D8", "2D10", etc.
   check?: DefenseCheck;
 }
 
@@ -45,15 +48,49 @@ export interface DamageReduction {
 // WEAPONS
 // ============================================================================
 
-// Weapon types observed in character sheets
+// Weapon categories (Earthly vs Cosmic)
+export type WeaponCategory = 'earthly' | 'cosmic';
+
+// Cosmic entity sources for cosmic weapons
+export type CosmicWeaponSource = 
+  | 'kalaprae'     // The Artful Performer
+  | 'nimietara'    // The Queen of Abundance
+  | 'inrashu'      // The Subservient King of Scarcity
+  | 'inishi'       // The Determined Artisan
+  | 'varinalum';   // The Eternal Sentinel
+
+// Weapon types from the Lost Worlds Rule Book
 export type WeaponType = 
+  // Bladed
+  | 'sickle-blade'
+  | 'long-sword'
+  | 'short-sword'
   | 'dagger'
+  // Impact
+  | 'meteor-hammer'
+  | 'war-hammer'
+  | 'blunt'
+  | 'axe'
+  // Reach
+  | 'polearm'
+  // Ranged
+  | 'bow'
+  | 'crossbow'
+  | 'thrown'
+  // Firearms
+  | 'pistol'
+  | 'revolver'
+  // Special
+  | 'war-fan'
+  | 'whip'
+  | 'gauntlet'
+  | 'shield'
+  | 'improvised'
+  // Legacy (for backwards compatibility)
   | 'sword'
   | 'club'
   | 'staff'
   | 'throwing'
-  | 'bow'
-  | 'meteor-hammer'
   | '1h-weapon'
   | '2h-weapon'
   | 'unarmed';
@@ -63,12 +100,16 @@ export interface WeaponReference {
   id: string;
   name: string;
   type: WeaponType;
+  category: WeaponCategory;
   damage: string;             // "1D6 + SPD", "2D12 + MIT"
   range: string;              // "Melee", "30 ft", "15 ft"
   apCost: number;
   resourceCost?: ResourceCost;
   baseHp: number;             // All weapons have HP
   special?: string;           // Special effect description
+  cost?: number;              // Base monetary cost
+  levelRequirement?: number;  // Minimum level to use effectively
+  cosmicSource?: CosmicWeaponSource;  // For cosmic weapons only
   notes?: string;
 }
 
@@ -108,7 +149,14 @@ export type ArmorSlot =
 export type ArmorSet = 
   | 'elementalist'
   | 'beast-handler'
+  | 'peacekeeper'
   | 'none';
+
+// Armor material types
+export type ArmorMaterial = 
+  | 'cloth'
+  | 'leather'
+  | 'metal';
 
 // Reference data: Armor template
 export interface ArmorReference {
@@ -116,10 +164,13 @@ export interface ArmorReference {
   name: string;
   slot: ArmorSlot;
   set?: ArmorSet;
+  material?: ArmorMaterial;
   baseHp: number;
   damageReduction: DamageReduction;
   special?: EquipmentAbility;
   statBonus?: Partial<Record<StatAbbr, number>>;  // e.g., Elementalist Boots: +5 SPD
+  cost?: number;
+  levelRequirement?: number;
   notes?: string;
 }
 
@@ -151,6 +202,8 @@ export interface AccessoryReference {
   baseHp: number;
   effect: string;
   special?: EquipmentAbility;
+  cost?: number;
+  levelRequirement?: number;
   notes?: string;
 }
 
@@ -173,14 +226,53 @@ export interface ResolvedAccessory extends AccessoryReference {
 // Item categories
 export type ItemCategory = 'consumable' | 'component' | 'tool' | 'general';
 
+// Consumable sub-categories
+export type ConsumableType = 
+  | 'healing-potion'
+  | 'vigor-potion'
+  | 'clarity-potion'
+  | 'speed-potion'
+  | 'utility-potion'
+  | 'food'
+  | 'drink'
+  | 'bandage';
+
+// Resource type that can be restored
+export type RestorableResource = 'HP' | 'ST' | 'SY';
+
+// Restoration effect for consumables
+export interface RestorationEffect {
+  resource: RestorableResource;
+  dice: string;        // "2D10", "4D10", etc.
+  flatBonus?: number;  // Additional flat amount
+}
+
+// Temporary effect from consumables
+export interface TemporaryEffect {
+  type: 'movement' | 'ap' | 'stat' | 'special';
+  stat?: StatAbbr;
+  amount: number;       // Can be positive or negative
+  duration: string;     // "5 minutes", "3 minutes", "1 turn"
+  afterEffect?: {       // Effect that occurs after duration ends
+    type: 'movement' | 'ap' | 'stat' | 'exhausted';
+    amount?: number;
+    duration?: string;
+  };
+}
+
 // Reference data: Item template
 export interface ItemReference {
   id: string;
   name: string;
   category: ItemCategory;
+  consumableType?: ConsumableType;  // For consumables
   description?: string;
-  effect?: string;            // For consumables
-  value?: number;             // Base monetary value
+  effect?: string;                   // Text description of effect
+  restoration?: RestorationEffect[]; // Structured restoration data
+  temporaryEffects?: TemporaryEffect[]; // For potions with temporary buffs
+  value?: number;                    // Base monetary value
+  cost?: number;                     // Purchase cost (may differ from value)
+  levelRequirement?: number;
   stackable: boolean;
   notes?: string;
 }
@@ -225,4 +317,76 @@ export interface ResolvedEquipment {
 export interface ResolvedInventory {
   consumables: ResolvedItem[];
   general: ResolvedItem[];
+}
+
+// ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
+
+/**
+ * Check if a weapon is cosmic
+ */
+export function isCosmicWeapon(weapon: WeaponReference): boolean {
+  return weapon.category === 'cosmic';
+}
+
+/**
+ * Get display name for cosmic source
+ */
+export function getCosmicSourceDisplayName(source: CosmicWeaponSource): string {
+  const names: Record<CosmicWeaponSource, string> = {
+    kalaprae: 'Kalaprae, the Artful Performer',
+    nimietara: 'Nimietara, the Queen of Abundance',
+    inrashu: 'Inrashu, the Subservient King of Scarcity',
+    inishi: 'Inishi, the Determined Artisan',
+    varinalum: 'Varinalum, the Eternal Sentinel'
+  };
+  return names[source];
+}
+
+/**
+ * Get display name for armor material
+ */
+export function getArmorMaterialDisplayName(material: ArmorMaterial): string {
+  const names: Record<ArmorMaterial, string> = {
+    cloth: 'Cloth',
+    leather: 'Leather',
+    metal: 'Metal'
+  };
+  return names[material];
+}
+
+/**
+ * Get display name for weapon type
+ */
+export function getWeaponTypeDisplayName(type: WeaponType): string {
+  const names: Record<WeaponType, string> = {
+    'sickle-blade': 'Sickle Blade',
+    'long-sword': 'Long Sword',
+    'short-sword': 'Short Sword',
+    'dagger': 'Dagger',
+    'meteor-hammer': 'Meteor Hammer',
+    'war-hammer': 'War Hammer',
+    'blunt': 'Blunt Weapon',
+    'axe': 'Axe',
+    'polearm': 'Polearm',
+    'bow': 'Bow',
+    'crossbow': 'Crossbow',
+    'thrown': 'Thrown',
+    'pistol': 'Pistol',
+    'revolver': 'Revolver',
+    'war-fan': 'War Fan',
+    'whip': 'Whip',
+    'gauntlet': 'Gauntlet',
+    'shield': 'Shield',
+    'improvised': 'Improvised',
+    'sword': 'Sword',
+    'club': 'Club',
+    'staff': 'Staff',
+    'throwing': 'Throwing',
+    '1h-weapon': 'One-Handed Weapon',
+    '2h-weapon': 'Two-Handed Weapon',
+    'unarmed': 'Unarmed'
+  };
+  return names[type] || type;
 }

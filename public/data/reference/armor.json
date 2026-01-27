@@ -1,9 +1,191 @@
 {
+  "beast-handler-gloves": {
+    "id": "beast-handler-gloves",
+    "name": "Beast Handler's Gloves",
+    "slot": "gloves",
+    "set": "beast-handler",
+    "material": "leather",
+    "baseHp": 10,
+    "damageReduction": {
+      "dice": "1D8",
+      "check": {
+        "stats": ["SPD", "MIT"],
+        "difficulty": 10
+      }
+    },
+    "notes": "Part of the Beast Handler's armor set. Designed for those who work closely with creatures."
+  },
+  "beast-handler-arm-guard": {
+    "id": "beast-handler-arm-guard",
+    "name": "Beast Handler's Arm Guard",
+    "slot": "arms",
+    "set": "beast-handler",
+    "material": "leather",
+    "baseHp": 10,
+    "damageReduction": {
+      "dice": "1D8",
+      "check": {
+        "stats": ["SPD", "MIT"],
+        "difficulty": 10
+      }
+    },
+    "notes": "Part of the Beast Handler's armor set."
+  },
+  "beast-handler-boots": {
+    "id": "beast-handler-boots",
+    "name": "Beast Handler's Boots",
+    "slot": "boots",
+    "set": "beast-handler",
+    "material": "leather",
+    "baseHp": 15,
+    "damageReduction": {
+      "dice": "1D8",
+      "check": {
+        "stats": ["SPD", "MIT"],
+        "difficulty": 10
+      }
+    },
+    "notes": "Part of the Beast Handler's armor set."
+  },
+  "beast-handler-chest": {
+    "id": "beast-handler-chest",
+    "name": "Beast Handler's Chest Piece",
+    "slot": "chest",
+    "set": "beast-handler",
+    "material": "leather",
+    "baseHp": 25,
+    "damageReduction": {
+      "dice": "1D8",
+      "check": {
+        "stats": ["SPD", "MIT"],
+        "difficulty": 10
+      }
+    },
+    "notes": "Part of the Beast Handler's armor set."
+  },
+  "beast-handler-shoulders": {
+    "id": "beast-handler-shoulders",
+    "name": "Beast Handler's Shoulder Straps",
+    "slot": "shoulders",
+    "set": "beast-handler",
+    "material": "leather",
+    "baseHp": 15,
+    "damageReduction": {
+      "dice": "1D8",
+      "check": {
+        "stats": ["SPD", "MIT"],
+        "difficulty": 10
+      }
+    },
+    "notes": "Part of the Beast Handler's armor set."
+  },
+  "beast-handler-battle-skirt": {
+    "id": "beast-handler-battle-skirt",
+    "name": "Beast Handler's Battle Skirt",
+    "slot": "legs",
+    "set": "beast-handler",
+    "material": "leather",
+    "baseHp": 20,
+    "damageReduction": {
+      "dice": "1D8",
+      "check": {
+        "stats": ["SPD", "MIT"],
+        "difficulty": 10
+      }
+    },
+    "notes": "Part of the Beast Handler's armor set. Alternative leg armor option."
+  },
+  "beast-handler-leg-piece": {
+    "id": "beast-handler-leg-piece",
+    "name": "Beast Handler's Leg Piece",
+    "slot": "legs",
+    "set": "beast-handler",
+    "material": "leather",
+    "baseHp": 20,
+    "damageReduction": {
+      "dice": "1D8",
+      "check": {
+        "stats": ["SPD", "MIT"],
+        "difficulty": 10
+      }
+    },
+    "notes": "Part of the Beast Handler's armor set."
+  },
+  "elementalist-gloves": {
+    "id": "elementalist-gloves",
+    "name": "Elementalist's Gloves",
+    "slot": "gloves",
+    "set": "elementalist",
+    "material": "cloth",
+    "baseHp": 5,
+    "damageReduction": {
+      "dice": "1D4",
+      "check": {
+        "stats": ["MAG", "FRS"],
+        "difficulty": 10
+      }
+    },
+    "special": {
+      "name": "Take a Breather",
+      "effect": "Recover 1D6 Sanity",
+      "cooldown": "1 hour",
+      "usesPerCooldown": 1
+    },
+    "notes": "Part of the Elementalist armor set."
+  },
+  "elementalist-armguard": {
+    "id": "elementalist-armguard",
+    "name": "Elementalist's Armguard",
+    "slot": "arms",
+    "set": "elementalist",
+    "material": "cloth",
+    "baseHp": 5,
+    "damageReduction": {
+      "dice": "1D4",
+      "check": {
+        "stats": ["MAG", "FRS"],
+        "difficulty": 10
+      }
+    },
+    "special": {
+      "name": "Dig Deep",
+      "effect": "Recover 3 Components",
+      "cooldown": "12 hours",
+      "usesPerCooldown": 1
+    },
+    "notes": "Part of the Elementalist armor set."
+  },
+  "elementalist-boots": {
+    "id": "elementalist-boots",
+    "name": "Elementalist's Boots",
+    "slot": "boots",
+    "set": "elementalist",
+    "material": "cloth",
+    "baseHp": 10,
+    "damageReduction": {
+      "dice": "1D4",
+      "check": {
+        "stats": ["MAG", "FRS"],
+        "difficulty": 10
+      }
+    },
+    "special": {
+      "name": "Speed Increase",
+      "effect": "Add 5 SPD",
+      "cooldown": "Passive",
+      "usesPerCooldown": 1
+    },
+    "statBonus": {
+      "SPD": 5
+    },
+    "notes": "Part of the Elementalist armor set."
+  },
   "elementalist-robes": {
     "id": "elementalist-robes",
     "name": "Elementalist's Robes",
     "slot": "chest",
     "set": "elementalist",
+    "material": "cloth",
     "baseHp": 15,
     "damageReduction": {
       "dice": "1D4",
@@ -18,55 +200,14 @@
       "cooldown": "12 hours",
       "usesPerCooldown": 1
     },
-    "notes": "Part of the Elementalist armor set. Holden's version is styled as a trench coat."
-  },
-  "elementalist-gloves": {
-    "id": "elementalist-gloves",
-    "name": "Elementalist's Gloves",
-    "slot": "gloves",
-    "set": "elementalist",
-    "baseHp": 5,
-    "damageReduction": {
-      "dice": "1D4",
-      "check": {
-        "stats": ["MAG", "FRS"],
-        "difficulty": 10
-      }
-    },
-    "special": {
-      "name": "Take a Breather",
-      "effect": "Recover 1 D6 Sanity",
-      "cooldown": "1 Hour",
-      "usesPerCooldown": 1
-    },
-    "notes": "Part of the Elementalist armor set."
-  },
-  "elementalist-armguard": {
-    "id": "elementalist-armguard",
-    "name": "Elementalist's Armguard",
-    "slot": "arms",
-    "set": "elementalist",
-    "baseHp": 5,
-    "damageReduction": {
-      "dice": "1D4",
-      "check": {
-        "stats": ["MAG", "FRS"],
-        "difficulty": 10
-      }
-    },
-    "special": {
-      "name": "Dig Deep",
-      "effect": "Recover 3 Components",
-      "cooldown": "12 Hours",
-      "usesPerCooldown": 1
-    },
     "notes": "Part of the Elementalist armor set."
   },
   "elementalist-shoulders": {
     "id": "elementalist-shoulders",
-    "name": "Elementalist's Shoulders",
+    "name": "Elementalist's Shoulder Piece",
     "slot": "shoulders",
     "set": "elementalist",
+    "material": "cloth",
     "baseHp": 10,
     "damageReduction": {
       "dice": "1D4",
@@ -77,8 +218,8 @@
     },
     "special": {
       "name": "Slight Recovery",
-      "effect": "Recover 1 D10 Health",
-      "cooldown": "12 Hours",
+      "effect": "Recover 1D10 Health",
+      "cooldown": "12 hours",
       "usesPerCooldown": 1
     },
     "notes": "Part of the Elementalist armor set."
@@ -88,6 +229,7 @@
     "name": "Elementalist's Leg Guards",
     "slot": "legs",
     "set": "elementalist",
+    "material": "cloth",
     "baseHp": 10,
     "damageReduction": {
       "dice": "1D4",
@@ -102,87 +244,105 @@
       "cooldown": "Passive",
       "usesPerCooldown": 1
     },
-    "notes": "Part of the Elementalist armor set."
-  },
-  "elementalist-boots": {
-    "id": "elementalist-boots",
-    "name": "Elementalist's Boots",
-    "slot": "boots",
-    "set": "elementalist",
-    "baseHp": 10,
-    "damageReduction": {
-      "dice": "1D4",
-      "check": {
-        "stats": ["MAG", "FRS"],
-        "difficulty": 10
-      }
-    },
-    "special": {
-      "name": "Speed Increase",
-      "effect": "Add 5 SPD",
-      "cooldown": "Passive",
-      "usesPerCooldown": 1
+    "statBonus": {
+      "SPD": 5
     },
     "notes": "Part of the Elementalist armor set."
   },
-  "beast-handler-chest": {
-    "id": "beast-handler-chest",
-    "name": "Beast Handler's Chest Piece",
-    "slot": "chest",
-    "set": "beast-handler",
-    "baseHp": 25,
-    "damageReduction": {
-      "dice": "1D8",
-      "check": {
-        "stats": ["SPD", "MIT"],
-        "difficulty": 10
-      }
-    },
-    "notes": "Part of the Beast Handler's armor set. Holden's version is styled as a trench coat."
-  },
-  "beast-handler-shoulders": {
-    "id": "beast-handler-shoulders",
-    "name": "Beast Handler's Shoulder Straps",
-    "slot": "shoulders",
-    "set": "beast-handler",
-    "baseHp": 15,
-    "damageReduction": {
-      "dice": "1D8",
-      "check": {
-        "stats": ["SPD", "MIT"],
-        "difficulty": 10
-      }
-    },
-    "notes": "Part of the Beast Handler's armor set. Holden's version is styled as a trench coat."
-  },
-  "beast-handler-gloves": {
-    "id": "beast-handler-gloves",
-    "name": "Beast Handler's Gloves",
+  "peacekeeper-gloves": {
+    "id": "peacekeeper-gloves",
+    "name": "Peacekeeper Gloves",
     "slot": "gloves",
-    "set": "beast-handler",
-    "baseHp": 10,
-    "damageReduction": {
-      "dice": "1D8",
-      "check": {
-        "stats": ["SPD", "MIT"],
-        "difficulty": 10
-      }
-    },
-    "notes": "Part of the Beast Handler's armor set. Holden's version is styled as a trench coat."
-  },
-  "beast-handler-boots": {
-    "id": "beast-handler-boots",
-    "name": "Beast Handler's Boots",
-    "slot": "boots",
-    "set": "beast-handler",
+    "set": "peacekeeper",
+    "material": "metal",
     "baseHp": 15,
     "damageReduction": {
-      "dice": "1D8",
+      "dice": "2D10",
       "check": {
-        "stats": ["SPD", "MIT"],
+        "stats": ["GRT", "MIT"],
         "difficulty": 10
       }
     },
-    "notes": "Part of the Beast Handler's armor set. Holden's version is styled as a trench coat."
+    "notes": "Part of the Peacekeeper armor set. Heavy metal armor for front-line defenders."
+  },
+  "peacekeeper-arm-guards": {
+    "id": "peacekeeper-arm-guards",
+    "name": "Peacekeeper Arm Guards",
+    "slot": "arms",
+    "set": "peacekeeper",
+    "material": "metal",
+    "baseHp": 15,
+    "damageReduction": {
+      "dice": "2D10",
+      "check": {
+        "stats": ["GRT", "MIT"],
+        "difficulty": 10
+      }
+    },
+    "notes": "Part of the Peacekeeper armor set."
+  },
+  "peacekeeper-boots": {
+    "id": "peacekeeper-boots",
+    "name": "Peacekeeper Boots",
+    "slot": "boots",
+    "set": "peacekeeper",
+    "material": "metal",
+    "baseHp": 20,
+    "damageReduction": {
+      "dice": "2D10",
+      "check": {
+        "stats": ["GRT", "MIT"],
+        "difficulty": 10
+      }
+    },
+    "notes": "Part of the Peacekeeper armor set."
+  },
+  "peacekeeper-chest": {
+    "id": "peacekeeper-chest",
+    "name": "Peacekeeper Chest Piece",
+    "slot": "chest",
+    "set": "peacekeeper",
+    "material": "metal",
+    "baseHp": 35,
+    "damageReduction": {
+      "dice": "2D10",
+      "check": {
+        "stats": ["GRT", "MIT"],
+        "difficulty": 10
+      }
+    },
+    "notes": "Part of the Peacekeeper armor set."
+  },
+  "peacekeeper-shoulders": {
+    "id": "peacekeeper-shoulders",
+    "name": "Peacekeeper Shoulder Pads",
+    "slot": "shoulders",
+    "set": "peacekeeper",
+    "material": "metal",
+    "baseHp": 20,
+    "damageReduction": {
+      "dice": "2D10",
+      "check": {
+        "stats": ["GRT", "MIT"],
+        "difficulty": 10
+      }
+    },
+    "notes": "Part of the Peacekeeper armor set."
+  },
+  "peacekeeper-legs": {
+    "id": "peacekeeper-legs",
+    "name": "Peacekeeper Leg Guards",
+    "slot": "legs",
+    "set": "peacekeeper",
+    "material": "metal",
+    "baseHp": 30,
+    "damageReduction": {
+      "dice": "2D10",
+      "check": {
+        "stats": ["GRT", "MIT"],
+        "difficulty": 10
+      }
+    },
+    "notes": "Part of the Peacekeeper armor set."
   }
 }
