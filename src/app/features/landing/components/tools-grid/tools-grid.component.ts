@@ -40,6 +40,13 @@ export class ToolsGridComponent {
       accentColor: '#9370db'
     },
     {
+      title: 'Equipment Armory',
+      description: 'Explore weapons, armor, and items. Filter by type, cosmic source, armor set, and more.',
+      icon: 'inventory_2',
+      path: '/equipment',
+      accentColor: '#e74c3c'
+    },
+    {
       title: 'Combat Tracker',
       description: 'Run smooth encounters with initiative tracking, HP management, and condition tracking.',
       icon: 'swords',

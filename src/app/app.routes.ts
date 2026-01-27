@@ -31,6 +31,12 @@ export const routes: Routes = [
     title: 'Ability Codex | Lost Worlds'
   },
   {
+    path: 'equipment',
+    loadComponent: () => import('./features/equipment-browser/equipment-browser')
+      .then(m => m.EquipmentBrowserComponent),
+    title: 'Equipment Armory | Lost Worlds'
+  },
+  {
     path: 'combat',
     loadComponent: () => import('./features/combat/combat.component')
       .then(m => m.CombatComponent),
