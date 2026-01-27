@@ -22,6 +22,29 @@
     ],
     "componentAccess": ["starRunes", "lightRunes", "voidShards", "realmPoints"]
   },
+  "cosmikin-elf": {
+    "id": "cosmikin-elf",
+    "name": "Half-Cosmikin, Half-Elf",
+    "parent1": "cosmikin",
+    "parent2": "elf",
+    "selectedModifiers": [
+      { "stat": "AST", "amount": 10 },
+      { "stat": "MAG", "amount": 10 },
+      { "stat": "SPD", "amount": 5 },
+      { "stat": "GRT", "amount": -10 },
+      { "stat": "DET", "amount": -10 },
+      { "stat": "NAT", "amount": -5 }
+    ],
+    "traits": [
+      "Pointed ears",
+      "Long-lived",
+      "Natural magical affinity",
+      "Otherworldly appearance",
+      "Angelic and demonic traits",
+      "Unstable in earthly realms"
+    ],
+    "componentAccess": ["starRunes", "lightRunes", "voidShards", "realmPoints"]
+  },
   "human-elf": {
     "id": "human-elf",
     "name": "Half-Human, Half-Elf",
