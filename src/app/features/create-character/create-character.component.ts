@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -225,6 +225,16 @@ const SCHOOL_COMPONENT_CONFIG: Record<string, {
 export class CreateCharacterComponent implements OnInit {
   private readonly refData = inject(ReferenceDataService);
 
+  constructor() {
+    // Watch for species selection changes and apply stat modifiers
+    effect(() => {
+      const speciesId = this.selectedSpeciesId();
+      if (speciesId) {
+        this.applySpeciesModifiers(speciesId);
+      }
+    });
+  }
+
   // =========================================================================
   // STATE
   // =========================================================================
@@ -276,13 +286,30 @@ export class CreateCharacterComponent implements OnInit {
     { key: 'nature', label: 'Nature', abbr: 'NAT', category: 'magical', bonus: 0, value: 0 }
   ]);
 
-  // Resources
-  healthMax = signal(200);
-  healthCurrent = signal(200);
-  staminaMax = signal(185);
-  staminaCurrent = signal(185);
-  sanityMax = signal(144);
-  sanityCurrent = signal(144);
+  // Stat Point Tracking
+  // Level 1: 30 points, +15 for each level after
+  totalStatPointsAvailable = computed(() => {
+    const level = this.characterLevel();
+    return 30 + (level - 1) * 15;
+  });
+
+  // Sum of all allocated stat values (not including species bonuses)
+  totalStatPointsAllocated = computed(() => {
+    return this.stats().reduce((sum, stat) => sum + stat.value, 0);
+  });
+
+  // Remaining points to allocate
+  remainingStatPoints = computed(() => {
+    return this.totalStatPointsAvailable() - this.totalStatPointsAllocated();
+  });
+
+  // Resources - Default is 100 for all
+  healthMax = signal(100);
+  healthCurrent = signal(100);
+  staminaMax = signal(100);
+  staminaCurrent = signal(100);
+  sanityMax = signal(100);
+  sanityCurrent = signal(100);
 
   // Combat
   actionPoints = signal(6);
@@ -297,7 +324,8 @@ export class CreateCharacterComponent implements OnInit {
   });
 
   availableSkillPoints = computed(() => {
-    return this.characterLevel() - this.totalSkillPointsAllocated();
+    // Players receive 2 skill levels at level 1 (level + 1)
+    return (this.characterLevel() + 1) - this.totalSkillPointsAllocated();
   });
 
   // === STEP 4: Magic Focuses ===
@@ -554,6 +582,70 @@ export class CreateCharacterComponent implements OnInit {
     }
   }
 
+  /**
+   * Apply species stat modifiers as starting stat values
+   * Species modifiers become the initial stat values that players can then adjust with their 30 points
+   */
+  private applySpeciesModifiers(speciesId: string): void {
+    const species = this.speciesList().find(s => s.id === speciesId);
+    if (!species) return;
+
+    const modifiers = this.getSpeciesModifiers(species);
+    
+    // Map stat abbreviation to key
+    const statAbbrToKey: Record<string, string> = {
+      'MIT': 'might',
+      'GRT': 'grit',
+      'SPD': 'speed',
+      'KNW': 'knowledge',
+      'FRS': 'foresight',
+      'COR': 'courage',
+      'DET': 'determination',
+      'AST': 'astrology',
+      'MAG': 'magiks',
+      'NAT': 'nature'
+    };
+
+    // Create a map of stat modifications
+    const modifierMap = new Map<string, number>();
+    for (const mod of modifiers) {
+      const key = statAbbrToKey[mod.stat];
+      if (key) {
+        modifierMap.set(key, mod.amount);
+      }
+    }
+
+    // Apply modifiers to stats - species modifiers go to bonus field
+    // Value field is what the player allocates from their point pool
+    this.stats.update(stats => {
+      return stats.map(stat => {
+        const modifier = modifierMap.get(stat.key) || 0;
+        return {
+          ...stat,
+          bonus: modifier, // Species modifier goes to bonus
+          value: 0 // Reset value - player allocates from their point pool
+        };
+      });
+    });
+
+    // Also apply resource modifiers if any (HP, STA, SY)
+    for (const mod of modifiers) {
+      if (mod.stat === 'HP') {
+        const newHp = 100 + mod.amount;
+        this.healthMax.set(newHp);
+        this.healthCurrent.set(newHp);
+      } else if (mod.stat === 'STA') {
+        const newSta = 100 + mod.amount;
+        this.staminaMax.set(newSta);
+        this.staminaCurrent.set(newSta);
+      } else if (mod.stat === 'SY') {
+        const newSy = 100 + mod.amount;
+        this.sanityMax.set(newSy);
+        this.sanityCurrent.set(newSy);
+      }
+    }
+  }
+
   private initializeMagicFocuses(magicSchools: Record<string, unknown>): void {
     const focuses: FocusInput[] = [];
     
@@ -600,10 +692,28 @@ export class CreateCharacterComponent implements OnInit {
   // STAT HELPERS
   // =========================================================================
 
-  updateStatValue(index: number, value: number): void {
+  updateStatValue(index: number, newValue: number): void {
+    const currentStats = this.stats();
+    const currentStat = currentStats[index];
+    const oldValue = currentStat.value;
+    
+    // Don't allow negative values
+    if (newValue < 0) {
+      newValue = 0;
+    }
+    
+    // Calculate how many points this change would use
+    const pointDifference = newValue - oldValue;
+    const remainingAfterChange = this.remainingStatPoints() - pointDifference;
+    
+    // If this would exceed available points, cap at maximum allowed
+    if (remainingAfterChange < 0) {
+      newValue = oldValue + this.remainingStatPoints();
+    }
+    
     this.stats.update(stats => {
       const newStats = [...stats];
-      newStats[index] = { ...newStats[index], value };
+      newStats[index] = { ...newStats[index], value: newValue };
       return newStats;
     });
   }
@@ -614,6 +724,13 @@ export class CreateCharacterComponent implements OnInit {
       newStats[index] = { ...newStats[index], bonus };
       return newStats;
     });
+  }
+
+  /**
+   * Get the effective stat value (allocated points + species bonus)
+   */
+  getEffectiveStatValue(stat: StatInput): number {
+    return stat.value + stat.bonus;
   }
 
   getStatMod(value: number): number {

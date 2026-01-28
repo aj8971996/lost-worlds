@@ -461,6 +461,68 @@ $transition-slow: 0.4s ease;
 // STATS SECTION
 // ============================================================================
 
+// Stat Points Tracker
+.stat-points-tracker {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  background: $color-bg-elevated;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  
+  .points-display {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+  
+  .points-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: $color-text-secondary;
+  }
+  
+  .points-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $color-accent;
+    
+    &.warning {
+      color: $color-warning;
+    }
+    
+    &.depleted {
+      color: $color-success;
+    }
+  }
+  
+  .points-total {
+    font-size: 1rem;
+    color: $color-text-muted;
+  }
+  
+  .points-bar {
+    height: 8px;
+    background: $color-bg-card;
+    border-radius: 4px;
+    overflow: hidden;
+    
+    .points-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, $color-accent 0%, lighten($color-accent, 10%) 100%);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+  }
+  
+  .points-hint {
+    font-size: 0.8rem;
+    color: $color-text-muted;
+  }
+}
+
 .stats-container {
   display: flex;
   flex-direction: column;
@@ -521,6 +583,7 @@ $transition-slow: 0.4s ease;
     align-items: baseline;
     gap: 0.5rem;
     margin-bottom: 0.75rem;
+    flex-wrap: wrap;
     
     .stat-abbr {
       font-family: $font-display;
@@ -532,6 +595,16 @@ $transition-slow: 0.4s ease;
     .stat-name {
       font-size: 0.875rem;
       color: $color-text-secondary;
+      flex: 1;
+    }
+    
+    .stat-total {
+      font-size: 1rem;
+      font-weight: 600;
+      color: $color-text-primary;
+      background: rgba($color-accent, 0.15);
+      padding: 0.15rem 0.5rem;
+      border-radius: $radius-sm;
     }
   }
   
@@ -550,6 +623,37 @@ $transition-slow: 0.4s ease;
         margin-bottom: 0.25rem;
         text-transform: uppercase;
         letter-spacing: 0.05em;
+      }
+      
+      &.species-bonus {
+        flex: 0 0 auto;
+        min-width: 60px;
+        
+        .bonus-display {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          padding: 0.5rem;
+          background: $color-bg-card;
+          border: 1px solid $color-border;
+          border-radius: $radius-sm;
+          font-size: 1rem;
+          font-weight: 600;
+          color: $color-text-muted;
+          
+          &.positive {
+            color: $color-success;
+            background: rgba($color-success, 0.1);
+            border-color: rgba($color-success, 0.3);
+          }
+          
+          &.negative {
+            color: $color-danger;
+            background: rgba($color-danger, 0.1);
+            border-color: rgba($color-danger, 0.3);
+          }
+        }
       }
     }
   }
@@ -629,6 +733,7 @@ $transition-slow: 0.4s ease;
   border: 1px solid $color-border;
   border-radius: $radius-md;
   padding: 1rem;
+  overflow: hidden; // Prevent content overflow
   
   label {
     display: flex;
@@ -652,9 +757,12 @@ $transition-slow: 0.4s ease;
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    width: 100%; // Ensure it stays within card
     
     input {
       flex: 1;
+      min-width: 0; // Allow shrinking
+      max-width: 60px; // Limit max width
       padding: 0.5rem;
       background: $color-bg-card;
       border: 1px solid $color-border;
@@ -671,6 +779,7 @@ $transition-slow: 0.4s ease;
     
     span {
       color: $color-text-muted;
+      flex-shrink: 0;
     }
   }
 }
@@ -878,6 +987,8 @@ $transition-slow: 0.4s ease;
   border: 1px solid $color-border;
   border-radius: $radius-md;
   transition: all $transition-fast;
+  overflow: hidden; // Prevent content overflow
+  min-width: 0; // Allow card to shrink
   
   &.has-levels {
     background: rgba($color-accent, 0.05);
@@ -886,12 +997,19 @@ $transition-slow: 0.4s ease;
   .focus-name {
     font-size: 0.9rem;
     color: $color-text-primary;
+    flex: 1;
+    min-width: 0; // Allow name to shrink
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-right: 0.5rem;
   }
   
   .focus-controls {
     display: flex;
     align-items: center;
     gap: 0.35rem;
+    flex-shrink: 0; // Don't shrink controls
   }
   
   .focus-btn {
@@ -906,6 +1024,7 @@ $transition-slow: 0.4s ease;
     color: $color-text-secondary;
     cursor: pointer;
     transition: all $transition-fast;
+    flex-shrink: 0; // Don't shrink buttons
     
     &:hover:not(:disabled) {
       background: $color-accent;
@@ -929,6 +1048,7 @@ $transition-slow: 0.4s ease;
     font-weight: 700;
     font-size: 1rem;
     color: $color-text-primary;
+    flex-shrink: 0; // Don't shrink level display
   }
 }
 
@@ -1075,9 +1195,11 @@ $transition-slow: 0.4s ease;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  max-height: 500px;
+  max-height: 600px; // Increased from 500px
   overflow-y: auto;
   padding-right: 0.5rem;
+  // Use min-height to ensure the list doesn't collapse when cards expand
+  min-height: 200px;
   
   &::-webkit-scrollbar {
     width: 6px;

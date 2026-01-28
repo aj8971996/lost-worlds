@@ -185,7 +185,33 @@
               <span class="material-symbols-outlined">analytics</span>
               Character Stats
             </h2>
-            <p class="step-description">Allocate your character's base attributes.</p>
+            <p class="step-description">
+              Allocate your stat points. Species bonuses are applied automatically.
+            </p>
+
+            <!-- Stat Points Tracker -->
+            <div class="stat-points-tracker">
+              <div class="points-display">
+                <span class="points-label">Stat Points:</span>
+                <span class="points-value" [class.warning]="remainingStatPoints() < 5" [class.depleted]="remainingStatPoints() === 0">
+                  {{ remainingStatPoints() }}
+                </span>
+                <span class="points-total">/ {{ totalStatPointsAvailable() }}</span>
+              </div>
+              <div class="points-bar">
+                <div 
+                  class="points-bar-fill" 
+                  [style.width.%]="(totalStatPointsAllocated() / totalStatPointsAvailable()) * 100"
+                ></div>
+              </div>
+              <span class="points-hint">
+                @if (remainingStatPoints() > 0) {
+                  {{ remainingStatPoints() }} points remaining to allocate
+                } @else {
+                  All points allocated!
+                }
+              </span>
+            </div>
 
             <div class="stats-container">
               <!-- Physical Stats -->
@@ -200,35 +226,36 @@
                       <div class="stat-header">
                         <span class="stat-abbr">{{ stat.abbr }}</span>
                         <span class="stat-name">{{ stat.label }}</span>
+                        <span class="stat-total" title="Total (Allocated + Species)">
+                          = {{ getEffectiveStatValue(stat) }}
+                        </span>
                       </div>
                       <div class="stat-inputs">
                         <div class="input-group">
-                          <label>Value</label>
+                          <label>Allocated</label>
                           <input 
                             type="number" 
                             [ngModel]="stat.value"
                             (ngModelChange)="updateStatValue(stats().indexOf(stat), $event)"
                             class="stat-input"
+                            min="0"
                           />
                         </div>
-                        <div class="input-group">
-                          <label>Bonus</label>
-                          <input 
-                            type="number" 
-                            [ngModel]="stat.bonus"
-                            (ngModelChange)="updateStatBonus(stats().indexOf(stat), $event)"
-                            class="stat-input"
-                          />
+                        <div class="input-group species-bonus">
+                          <label>Species</label>
+                          <span class="bonus-display" [class.positive]="stat.bonus > 0" [class.negative]="stat.bonus < 0">
+                            {{ stat.bonus >= 0 ? '+' : '' }}{{ stat.bonus }}
+                          </span>
                         </div>
                       </div>
                       <div class="stat-derived">
                         <span class="derived-item" title="Modifier">
                           <span class="material-symbols-outlined">add_circle</span>
-                          {{ formatMod(getStatMod(stat.value)) }}
+                          {{ formatMod(getStatMod(getEffectiveStatValue(stat))) }}
                         </span>
                         <span class="derived-item" title="Dice">
                           <span class="material-symbols-outlined">casino</span>
-                          {{ getStatDice(stat.value) }}D20
+                          {{ getStatDice(getEffectiveStatValue(stat)) }}D20
                         </span>
                       </div>
                     </div>
@@ -248,35 +275,36 @@
                       <div class="stat-header">
                         <span class="stat-abbr">{{ stat.abbr }}</span>
                         <span class="stat-name">{{ stat.label }}</span>
+                        <span class="stat-total" title="Total (Allocated + Species)">
+                          = {{ getEffectiveStatValue(stat) }}
+                        </span>
                       </div>
                       <div class="stat-inputs">
                         <div class="input-group">
-                          <label>Value</label>
+                          <label>Allocated</label>
                           <input 
                             type="number" 
                             [ngModel]="stat.value"
                             (ngModelChange)="updateStatValue(stats().indexOf(stat), $event)"
                             class="stat-input"
+                            min="0"
                           />
                         </div>
-                        <div class="input-group">
-                          <label>Bonus</label>
-                          <input 
-                            type="number" 
-                            [ngModel]="stat.bonus"
-                            (ngModelChange)="updateStatBonus(stats().indexOf(stat), $event)"
-                            class="stat-input"
-                          />
+                        <div class="input-group species-bonus">
+                          <label>Species</label>
+                          <span class="bonus-display" [class.positive]="stat.bonus > 0" [class.negative]="stat.bonus < 0">
+                            {{ stat.bonus >= 0 ? '+' : '' }}{{ stat.bonus }}
+                          </span>
                         </div>
                       </div>
                       <div class="stat-derived">
                         <span class="derived-item" title="Modifier">
                           <span class="material-symbols-outlined">add_circle</span>
-                          {{ formatMod(getStatMod(stat.value)) }}
+                          {{ formatMod(getStatMod(getEffectiveStatValue(stat))) }}
                         </span>
                         <span class="derived-item" title="Dice">
                           <span class="material-symbols-outlined">casino</span>
-                          {{ getStatDice(stat.value) }}D20
+                          {{ getStatDice(getEffectiveStatValue(stat)) }}D20
                         </span>
                       </div>
                     </div>
@@ -296,35 +324,36 @@
                       <div class="stat-header">
                         <span class="stat-abbr">{{ stat.abbr }}</span>
                         <span class="stat-name">{{ stat.label }}</span>
+                        <span class="stat-total" title="Total (Allocated + Species)">
+                          = {{ getEffectiveStatValue(stat) }}
+                        </span>
                       </div>
                       <div class="stat-inputs">
                         <div class="input-group">
-                          <label>Value</label>
+                          <label>Allocated</label>
                           <input 
                             type="number" 
                             [ngModel]="stat.value"
                             (ngModelChange)="updateStatValue(stats().indexOf(stat), $event)"
                             class="stat-input"
+                            min="0"
                           />
                         </div>
-                        <div class="input-group">
-                          <label>Bonus</label>
-                          <input 
-                            type="number" 
-                            [ngModel]="stat.bonus"
-                            (ngModelChange)="updateStatBonus(stats().indexOf(stat), $event)"
-                            class="stat-input"
-                          />
+                        <div class="input-group species-bonus">
+                          <label>Species</label>
+                          <span class="bonus-display" [class.positive]="stat.bonus > 0" [class.negative]="stat.bonus < 0">
+                            {{ stat.bonus >= 0 ? '+' : '' }}{{ stat.bonus }}
+                          </span>
                         </div>
                       </div>
                       <div class="stat-derived">
                         <span class="derived-item" title="Modifier">
                           <span class="material-symbols-outlined">add_circle</span>
-                          {{ formatMod(getStatMod(stat.value)) }}
+                          {{ formatMod(getStatMod(getEffectiveStatValue(stat))) }}
                         </span>
                         <span class="derived-item" title="Dice">
                           <span class="material-symbols-outlined">casino</span>
-                          {{ getStatDice(stat.value) }}D20
+                          {{ getStatDice(getEffectiveStatValue(stat)) }}D20
                         </span>
                       </div>
                     </div>
@@ -439,7 +468,7 @@
             <p class="step-description">
               Allocate skill points. You have 
               <strong class="highlight">{{ availableSkillPoints() }}</strong> 
-              points remaining ({{ characterLevel() }} total from level).
+              points remaining ({{ characterLevel() + 1 }} total from level).
             </p>
 
             <div class="skills-grid">
@@ -1083,7 +1112,7 @@
                 <div class="review-content stats-summary">
                   @for (stat of stats(); track stat.key) {
                     <span class="stat-pill">
-                      <strong>{{ stat.abbr }}:</strong> {{ stat.value }}
+                      <strong>{{ stat.abbr }}:</strong> {{ getEffectiveStatValue(stat) }}
                     </span>
                   }
                 </div>
