@@ -227,6 +227,7 @@ $earthly-color: #4caf50;
   @include respond-to('lg') {
     grid-template-columns: 280px 1fr;
     gap: $spacing-6;
+    align-items: start; // Ensure sidebar sticks properly at top
   }
 
   @include respond-to('xl') {
@@ -327,16 +328,16 @@ $earthly-color: #4caf50;
   }
 
   @include respond-to('lg') {
-    position: static;
+    position: sticky;
+    top: $spacing-6;
     width: auto;
     max-width: none;
     transform: none;
     border: $border-width-thin solid var(--color-border);
     border-radius: $border-radius-lg;
     height: fit-content;
-    max-height: calc(100vh - 200px);
-    position: sticky;
-    top: $spacing-6;
+    max-height: calc(100vh - $spacing-6 - $spacing-6);
+    align-self: start;
   }
 }
 
@@ -611,6 +612,8 @@ $earthly-color: #4caf50;
 
 .equipment-list {
   min-width: 0;
+  min-height: 400px; // Prevent dramatic height changes when filtering
+  overflow-anchor: none; // Prevent scroll anchoring issues when content changes
 }
 
 .results-header {
@@ -619,6 +622,7 @@ $earthly-color: #4caf50;
   justify-content: space-between;
   margin-bottom: $spacing-4;
   padding: 0 $spacing-2;
+  overflow-anchor: none;
 }
 
 .results-count {
@@ -630,6 +634,7 @@ $earthly-color: #4caf50;
   display: flex;
   flex-direction: column;
   gap: $spacing-2;
+  overflow-anchor: none; // Prevent scroll jumps when items are filtered
 }
 
 // =========================================================================

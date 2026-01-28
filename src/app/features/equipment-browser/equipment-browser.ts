@@ -259,9 +259,21 @@ export class EquipmentBrowserComponent implements OnInit {
         if (!matchesSearch) return false;
       }
 
-      // Main category filter
-      if (f.categories.size > 0) {
-        if (!f.categories.has(item.category)) return false;
+      // Build effective categories: explicit selections + implicit from sub-filters
+      // This ensures that selecting a weapon type (e.g., "Sickle Blade") implicitly
+      // filters to weapons only, rather than showing all armor/items too
+      const hasWeaponSubFilters = f.weaponTypes.size > 0 || f.weaponCategories.size > 0 || f.cosmicSources.size > 0;
+      const hasArmorSubFilters = f.armorSlots.size > 0 || f.armorSets.size > 0 || f.armorMaterials.size > 0;
+      const hasItemSubFilters = f.itemCategories.size > 0 || f.consumableTypes.size > 0;
+
+      const effectiveCategories = new Set(f.categories);
+      if (hasWeaponSubFilters) effectiveCategories.add('weapon');
+      if (hasArmorSubFilters) effectiveCategories.add('armor');
+      if (hasItemSubFilters) effectiveCategories.add('item');
+
+      // Apply category filter if any categories are selected (explicit or implicit)
+      if (effectiveCategories.size > 0) {
+        if (!effectiveCategories.has(item.category)) return false;
       }
 
       // Weapon-specific filters
