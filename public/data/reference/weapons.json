@@ -63,7 +63,7 @@
     "name": "Bladed Meteor Hammer",
     "type": "meteor-hammer",
     "category": "earthly",
-    "damage": "2D10 + MIT",
+    "damage": "2D10 + SPD + COR",
     "range": "15 ft",
     "apCost": 1,
     "baseHp": 25,
@@ -75,7 +75,7 @@
     "name": "Weighted Meteor Hammer",
     "type": "meteor-hammer",
     "category": "earthly",
-    "damage": "2D12 + MIT",
+    "damage": "2D12 + SPD + MIT",
     "range": "15 ft",
     "apCost": 1,
     "baseHp": 30,
@@ -828,5 +828,29 @@
     "baseHp": 50,
     "special": "Immutable; +3 D20 on defensive rolls. Once per combat, negate one attack completely.",
     "cost": 70
+  },
+  "flappers-fan": {
+    "id": "flapper-fan",
+    "name": "Flapper's Fan",
+    "type": "fan",
+    "category": "earthly",
+    "damage": "2D6 + SPD + AST",
+    "range": "Melee",
+    "apCost": 1,
+    "baseHp": 25,
+    "special": "Spend 1 additional AP to add 1 D20 to your attack role",
+    "cost": 25
+  },
+  "clawed-rings": {
+    "id": "clawed-rings",
+    "name": "Clawed Rings",
+    "type": "kakute",
+    "category": "earthly",
+    "damage": "1D10 + SPD + NAT",
+    "range": "Melee",
+    "apCost": 1,
+    "baseHp": 15,
+    "special": "Re-roll your Attack Roll on first attack failure of combat",
+    "cost": 20
   }
 }
