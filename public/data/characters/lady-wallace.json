@@ -1,0 +1,160 @@
+{
+  "id": "lady-wallace",
+  "name": "Lady Wallace",
+  "level": 1,
+  "xp": 0,
+  "species": {
+    "type": "pure",
+    "speciesId": "cosmikin-elf"
+  },
+  "age": 2,
+  "height": "5.5 ft",
+  "stats": {
+    "physical": {
+      "might": {
+        "bonus": 0,
+        "value": 5
+      },
+      "grit": {
+        "bonus": -10,
+        "value": 0
+      },
+      "speed": {
+        "bonus": 5,
+        "value": 15
+      }
+    },
+    "mental": {
+      "knowledge": {
+        "bonus": 0,
+        "value": 0
+      },
+      "foresight": {
+        "bonus": 0,
+        "value": 0
+      },
+      "courage": {
+        "bonus": 0,
+        "value": 0
+      },
+      "determination": {
+        "bonus": -10,
+        "value": 0
+      }
+    },
+    "magical": {
+      "astrology": {
+        "bonus": 10,
+        "value": 10
+      },
+      "magiks": {
+        "bonus": 10,
+        "value": 0
+      },
+      "nature": {
+        "bonus": -5,
+        "value": 0
+      }
+    }
+  },
+  "resources": {
+    "health": {
+      "current": 185,
+      "max": 185
+    },
+    "armorHp": {
+      "current": 25,
+      "max": 25
+    },
+    "stamina": {
+      "current": 191,
+      "max": 191
+    },
+    "sanity": {
+      "current": 198,
+      "max": 198
+    }
+  },
+  "components": {
+    "starRunes": {
+      "current": 3,
+      "max": 3
+    },
+    "bodyPoints": {
+      "current": 3,
+      "max": 3
+    }
+  },
+  "combat": {
+    "actionPoints": 6,
+    "baseMovement": 30,
+    "initiativeMod": 0
+  },
+  "skills": {
+    "great-performer": 2
+  },
+  "magic": {
+    "cosmic": {
+      "constellations": 1
+    },
+    "earthly": {
+      "martialArts": 1
+    },
+    "dead": {}
+  },
+  "abilities": {
+    "prepared": [
+      "hunters-bow",
+      "constellation-brand",
+      "summon-the-lesser-bear",
+      "flowing-strike"
+    ]
+  },
+  "equipment": {
+    "weapons": [
+      {
+        "refId": "flapper-fan",
+        "quantity": 1,
+        "currentHp": 25
+      }
+    ],
+    "armor": {
+      "chest": {
+        "refId": "elementalist-robes",
+        "currentHp": 15
+      },
+      "legs": {
+        "refId": "elementalist-legs",
+        "currentHp": 10
+      }
+    },
+    "accessories": []
+  },
+  "inventory": {
+    "consumables": [
+      {
+        "refId": "water",
+        "quantity": 5
+      }
+    ],
+    "general": []
+  },
+  "currency": {
+    "era": "Las Vegas",
+    "wealth": 0
+  },
+  "backstory": "",
+  "appearance": "",
+  "alignment": {
+    "overall": "undecided",
+    "traits": {
+      "compassion": "neutral",
+      "mercy": "neutral",
+      "humility": "neutral",
+      "forgiveness": "neutral",
+      "protection": "neutral"
+    }
+  },
+  "relationships": [],
+  "sessionLog": []
+}
