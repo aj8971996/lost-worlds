@@ -1,10 +1,14 @@
-<section class="initiative-list">
-  <!-- Header -->
-  <header class="initiative-header">
-    <div class="header-content">
-      <h2 class="initiative-title">
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     INITIATIVE LIST COMPONENT
+     Track turn order during combat encounters
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<section class="initiative-tracker panel">
+  <!-- Panel Header -->
+  <header class="initiative-tracker__header">
+    <div class="initiative-tracker__title-row">
+      <h2 class="panel__title">
         <span class="material-symbols-outlined">format_list_numbered</span>
-        Initiative Tracker
+        Initiative
       </h2>
       @if (combatState().isActive) {
         <span class="round-badge">Round {{ combatState().round }}</span>
@@ -15,7 +19,8 @@
     <div class="combat-controls">
       @if (!combatState().isActive) {
         <button 
-          class="btn btn-primary"
+          type="button"
+          class="btn btn--primary"
           [disabled]="combatState().initiative.length === 0"
           (click)="startCombat()"
         >
@@ -23,69 +28,88 @@
           Start Combat
         </button>
       } @else {
-        <button class="btn btn-ghost" (click)="previousTurn()">
+        <button 
+          type="button"
+          class="btn btn--ghost"
+          (click)="previousTurn()"
+          aria-label="Previous turn"
+        >
           <span class="material-symbols-outlined">skip_previous</span>
         </button>
-        <button class="btn btn-primary" (click)="nextTurn()">
+        <button 
+          type="button"
+          class="btn btn--primary"
+          (click)="nextTurn()"
+        >
           <span class="material-symbols-outlined">skip_next</span>
-          Next Turn
+          Next
         </button>
-        <button class="btn btn-ghost btn-danger" (click)="endCombat()">
+        <button 
+          type="button"
+          class="btn btn--ghost btn--danger"
+          (click)="endCombat()"
+          aria-label="End combat"
+        >
           <span class="material-symbols-outlined">stop</span>
-          End
         </button>
       }
     </div>
   </header>
 
-  <!-- Current Turn Display -->
+  <!-- Current Turn Banner -->
   @if (combatState().isActive && currentTurnEntry(); as current) {
-    <div class="current-turn-display">
-      <span class="current-label">Current Turn</span>
-      <span class="current-name">{{ current.name }}</span>
-      <span class="current-initiative">{{ current.initiative }}</span>
+    <div class="current-turn">
+      <span class="current-turn__label">Current Turn</span>
+      <span class="current-turn__name">{{ current.name }}</span>
+      <span class="current-turn__initiative">{{ current.initiative }}</span>
     </div>
   }
 
   <!-- Initiative List -->
-  <div class="initiative-entries">
+  <div class="initiative-list">
     @if (sortedInitiative().length === 0) {
       <div class="empty-state">
         <span class="material-symbols-outlined">group_add</span>
-        <p>No combatants added yet</p>
-        <p class="hint">Add characters or NPCs to begin tracking initiative</p>
+        <p>No combatants added</p>
+        <p class="empty-state__hint">Add characters or NPCs below</p>
       </div>
     } @else {
       @for (entry of sortedInitiative(); track entry.id) {
         <div 
           class="initiative-entry"
-          [class.current-turn]="entry.isCurrentTurn"
-          [class.is-player]="entry.isPlayer"
-          [class.is-npc]="!entry.isPlayer"
+          [class.initiative-entry--active]="entry.isCurrentTurn"
+          [class.initiative-entry--player]="entry.isPlayer"
+          [class.initiative-entry--npc]="!entry.isPlayer"
         >
-          <div class="entry-indicator">
+          <!-- Turn Indicator -->
+          <div class="initiative-entry__indicator">
             @if (entry.isCurrentTurn) {
-              <span class="material-symbols-outlined turn-marker">arrow_right</span>
+              <span class="material-symbols-outlined initiative-entry__marker">arrow_right</span>
             }
           </div>
           
-          <span class="entry-icon material-symbols-outlined">
+          <!-- Type Icon -->
+          <span class="initiative-entry__icon material-symbols-outlined">
             {{ getEntryIcon(entry) }}
           </span>
           
-          <div class="entry-info">
-            <span class="entry-name">{{ entry.name }}</span>
+          <!-- Info -->
+          <div class="initiative-entry__info">
+            <span class="initiative-entry__name">{{ entry.name }}</span>
             @if (entry.notes) {
-              <span class="entry-notes">{{ entry.notes }}</span>
+              <span class="initiative-entry__notes">{{ entry.notes }}</span>
             }
           </div>
           
-          <span class="entry-initiative">{{ entry.initiative }}</span>
+          <!-- Initiative Value -->
+          <span class="initiative-entry__value">{{ entry.initiative }}</span>
           
+          <!-- Remove Button -->
           <button 
-            class="remove-btn"
+            type="button"
+            class="initiative-entry__remove"
             (click)="removeEntry(entry.id)"
-            title="Remove from initiative"
+            aria-label="Remove {{ entry.name }} from initiative"
           >
             <span class="material-symbols-outlined">close</span>
           </button>
@@ -97,28 +121,36 @@
   <!-- Add Entry Section -->
   <div class="add-section">
     @if (!showAddForm()) {
-      <div class="add-buttons">
-        <button class="btn btn-secondary" (click)="toggleAddForm()">
+      <div class="add-section__buttons">
+        <button 
+          type="button"
+          class="btn btn--secondary"
+          (click)="toggleAddForm()"
+        >
           <span class="material-symbols-outlined">person_add</span>
           Add Character
         </button>
-        <button class="btn btn-ghost" (click)="addQuickNpc()">
+        <button 
+          type="button"
+          class="btn btn--ghost"
+          (click)="addQuickNpc()"
+        >
           <span class="material-symbols-outlined">smart_toy</span>
-          Quick Add NPC
+          Quick NPC
         </button>
       </div>
     } @else {
       <div class="add-form">
-        <h3 class="form-title">Add to Initiative</h3>
+        <h3 class="add-form__title">Add to Initiative</h3>
         
         <!-- Character Selection -->
         <div class="form-group">
           <label class="form-label">Select Character (Optional)</label>
           <select 
-            class="form-input"
+            class="form-select"
             (change)="onCharacterSelect($event)"
           >
-            <option value="">-- Manual Entry --</option>
+            <option value="">— Manual Entry —</option>
             @for (char of characters(); track char.id) {
               <option [value]="char.id">{{ char.name }}</option>
             }
@@ -137,9 +169,9 @@
           />
         </div>
 
-        <!-- Initiative Input -->
+        <!-- Initiative Input Row -->
         <div class="form-row">
-          <div class="form-group flex-1">
+          <div class="form-group form-group--flex">
             <label class="form-label">Initiative</label>
             <input 
               type="number"
@@ -152,7 +184,8 @@
           
           @if (selectedCharacterId()) {
             <button 
-              class="btn btn-secondary roll-initiative-btn"
+              type="button"
+              class="btn btn--secondary add-form__roll-btn"
               (click)="rollInitiativeForCharacter()"
             >
               <span class="material-symbols-outlined">casino</span>
@@ -163,26 +196,30 @@
 
         <!-- Is Player Toggle -->
         <div class="form-group">
-          <label class="toggle-label">
+          <label class="toggle">
             <input 
               type="checkbox"
+              class="toggle__input"
               [checked]="newEntryIsPlayer()"
               (change)="newEntryIsPlayer.set($any($event.target).checked)"
             />
-            <span class="toggle-text">Is Player Character</span>
+            <span class="toggle__label">Is Player Character</span>
           </label>
         </div>
 
         <!-- Form Actions -->
-        <div class="form-actions">
-          <button class="btn btn-ghost" (click)="toggleAddForm()">Cancel</button>
+        <div class="add-form__actions">
           <button 
-            class="btn btn-primary"
+            type="button"
+            class="btn btn--ghost"
+            (click)="toggleAddForm()"
+          >Cancel</button>
+          <button 
+            type="button"
+            class="btn btn--primary"
             [disabled]="!newEntryName() || newEntryInitiative() === null"
             (click)="addEntry()"
-          >
-            Add to Initiative
-          </button>
+          >Add to Initiative</button>
         </div>
       </div>
     }

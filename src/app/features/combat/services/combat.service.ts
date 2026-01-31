@@ -82,8 +82,9 @@ export class CombatService {
     });
   }
 
-  selectStat(stat: StatAbbr | null): void {
-    this.updateCalculatorState({ selectedStat: stat });
+  // CHANGED: Now accepts array of stats
+  selectStats(stats: StatAbbr[]): void {
+    this.updateCalculatorState({ selectedStats: stats });
   }
 
   selectAttackType(type: AttackType | null): void {
@@ -102,7 +103,7 @@ export class CombatService {
   setMode(mode: 'simple' | 'combat'): void {
     this.updateCalculatorState({ 
       mode,
-      selectedStat: null,
+      selectedStats: [],
       selectedAttackType: null
     });
   }
@@ -192,42 +193,63 @@ export class CombatService {
   // ============================================================================
 
   /**
-   * Calculate a simple stat roll (single stat + skills)
+   * Calculate a simple stat roll
+   * CHANGED: Now accepts an array of StatAbbr instead of a single stat
    */
   calculateSimpleRoll(
     character: Character | ResolvedCharacter,
-    stat: StatAbbr,
+    stats: StatAbbr[],
     selectedSkills: string[] = [],
     skillNames: Record<string, string> = {},
     bonusDice: number = 0,
     bonusModifier: number = 0
   ): RollCalculation {
-    const primaryStat = this.createStatContribution(character, stat);
+    // Create contributions for all selected stats
+    const statContributions = stats.map(stat => this.createStatContribution(character, stat));
+    
     const skillContributions = this.getSkillContributions(
       character.skills, 
       selectedSkills, 
       skillNames
     );
 
+    // Calculate total dice and modifiers from all stats
+    const totalStatDice = statContributions.reduce((sum, stat) => sum + stat.dice, 0);
+    const totalStatMod = statContributions.reduce((sum, stat) => sum + stat.mod, 0);
     const totalSkillDice = skillContributions.reduce((sum, s) => sum + s.bonusDice, 0);
 
     const dicePool: DicePool = {
-      baseDice: primaryStat.dice,
+      baseDice: totalStatDice,
       secondaryDice: 0,
       skillDice: totalSkillDice,
       bonusDice: bonusDice,
-      totalDice: primaryStat.dice + totalSkillDice + bonusDice,
-      modifier: primaryStat.mod + bonusModifier
+      totalDice: totalStatDice + totalSkillDice + bonusDice,
+      modifier: totalStatMod + bonusModifier
     };
+
+    // Create description based on number of stats
+    let description: string;
+    if (stats.length === 1) {
+      description = `${character.name} rolls ${STAT_NAMES[stats[0]]}`;
+    } else {
+      const statNames = stats.map(s => STAT_NAMES[s]).join(' + ');
+      description = `${character.name} rolls ${statNames}`;
+    }
 
     const calculation: RollCalculation = {
       context: { type: 'stat' },
       characterId: character.id,
       characterName: character.name,
-      primaryStat,
+      
+      // For backward compatibility with single stat, set primaryStat if only one stat selected
+      primaryStat: stats.length === 1 ? statContributions[0] : undefined,
+      
+      // NEW: Store all stat contributions
+      primaryStats: statContributions,
+      
       skills: skillContributions,
       dicePool,
-      description: `${character.name} rolls ${STAT_NAMES[stat]}`
+      description
     };
 
     this.lastCalculation.set(calculation);
@@ -327,14 +349,15 @@ export class CombatService {
 
   /**
    * Quick roll - calculate and roll in one step
+   * CHANGED: Now accepts array of stats
    */
   quickRoll(
     character: Character | ResolvedCharacter,
-    stat: StatAbbr,
+    stats: StatAbbr[],
     selectedSkills: string[] = [],
     skillNames: Record<string, string> = {}
   ): { calculation: RollCalculation; result: DiceRollResult } {
-    const calculation = this.calculateSimpleRoll(character, stat, selectedSkills, skillNames);
+    const calculation = this.calculateSimpleRoll(character, stats, selectedSkills, skillNames);
     const result = this.rollDice(calculation);
     return { calculation, result };
   }

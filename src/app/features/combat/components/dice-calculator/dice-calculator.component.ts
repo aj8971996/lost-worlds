@@ -63,7 +63,10 @@ export class DiceCalculatorComponent implements OnInit {
   // UI State
   readonly mode = signal<'simple' | 'combat'>('simple');
   readonly combatTab = signal<'attack' | 'defense'>('attack');
-  readonly selectedStat = signal<StatAbbr | null>(null);
+  
+  // CHANGED: selectedStat is now a Set to support multiple selections
+  readonly selectedStats = signal<Set<StatAbbr>>(new Set());
+  
   readonly selectedAttackType = signal<AttackType | null>(null);
   readonly selectedSkills = signal<Set<string>>(new Set());
   readonly bonusDice = signal(0);
@@ -133,7 +136,8 @@ export class DiceCalculatorComponent implements OnInit {
     if (!this.selectedCharacter()) return false;
     
     if (this.mode() === 'simple') {
-      return this.selectedStat() !== null;
+      // CHANGED: Now requires at least one stat to be selected
+      return this.selectedStats().size > 0;
     } else {
       return this.selectedAttackType() !== null;
     }
@@ -151,8 +155,7 @@ export class DiceCalculatorComponent implements OnInit {
     return calc.dicePool.modifier;
   });
 
-  // Add this near the top of the class, after the signals
-readonly statCategories: ('physical' | 'mental' | 'magical')[] = ['physical', 'mental', 'magical'];
+  readonly statCategories: ('physical' | 'mental' | 'magical')[] = ['physical', 'mental', 'magical'];
 
   ngOnInit(): void {
     this.loadCharacters();
@@ -202,7 +205,7 @@ readonly statCategories: ('physical' | 'mental' | 'magical')[] = ['physical', 'm
   }
 
   private resetSelections(): void {
-    this.selectedStat.set(null);
+    this.selectedStats.set(new Set());
     this.selectedAttackType.set(null);
     this.selectedSkills.set(new Set());
     this.bonusDice.set(0);
@@ -217,7 +220,7 @@ readonly statCategories: ('physical' | 'mental' | 'magical')[] = ['physical', 'm
 
   setMode(mode: 'simple' | 'combat'): void {
     this.mode.set(mode);
-    this.selectedStat.set(null);
+    this.selectedStats.set(new Set());
     this.selectedAttackType.set(null);
     this.currentCalculation.set(null);
     this.rollResult.set(null);
@@ -234,8 +237,29 @@ readonly statCategories: ('physical' | 'mental' | 'magical')[] = ['physical', 'm
   // STAT & ATTACK TYPE SELECTION
   // ============================================================================
 
-  selectStat(abbr: StatAbbr): void {
-    this.selectedStat.set(abbr);
+  // CHANGED: Toggle stat selection instead of single select
+  toggleStat(abbr: StatAbbr): void {
+    this.selectedStats.update(stats => {
+      const newStats = new Set(stats);
+      if (newStats.has(abbr)) {
+        newStats.delete(abbr);
+      } else {
+        newStats.add(abbr);
+      }
+      return newStats;
+    });
+    this.rollResult.set(null);
+    this.updateCalculation();
+  }
+
+  // NEW: Check if a stat is selected
+  isStatSelected(abbr: StatAbbr): boolean {
+    return this.selectedStats().has(abbr);
+  }
+
+  // NEW: Clear all selected stats
+  clearStats(): void {
+    this.selectedStats.set(new Set());
     this.rollResult.set(null);
     this.updateCalculation();
   }
@@ -292,15 +316,16 @@ readonly statCategories: ('physical' | 'mental' | 'magical')[] = ['physical', 'm
     const names = this.skillNames();
 
     if (this.mode() === 'simple') {
-      const stat = this.selectedStat();
-      if (!stat) {
+      // CHANGED: Pass array of selected stats instead of single stat
+      const stats = Array.from(this.selectedStats());
+      if (stats.length === 0) {
         this.currentCalculation.set(null);
         return;
       }
 
       const calc = this.combatService.calculateSimpleRoll(
         character,
-        stat,
+        stats,
         selectedSkillIds,
         names,
         this.bonusDice(),

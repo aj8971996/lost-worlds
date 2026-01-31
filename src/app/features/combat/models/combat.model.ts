@@ -27,7 +27,7 @@ export interface RollContext {
 // ============================================================================
 
 export interface DicePool {
-  baseDice: number;           // D20s from primary stat
+  baseDice: number;           // D20s from primary stat(s)
   secondaryDice: number;      // D20s from secondary stat (combat only)
   skillDice: number;          // Bonus D20s from skills
   bonusDice: number;          // Any additional bonus dice
@@ -57,7 +57,12 @@ export interface RollCalculation {
   characterName: string;
   
   // Stat contributions
+  // CHANGED: primaryStat can now be undefined, using primaryStats array instead for multi-stat rolls
   primaryStat?: StatContribution;
+  
+  // NEW: Array of primary stats for simple rolls with multiple stats
+  primaryStats?: StatContribution[];
+  
   secondaryStat?: StatContribution;
   
   // Skill contributions
@@ -225,7 +230,10 @@ export interface CalculatorState {
   mode: CalculatorMode;
   combatTab: CombatTab;
   selectedCharacterId: string | null;
-  selectedStat: StatAbbr | null;
+  
+  // CHANGED: Now an array of stats instead of a single stat
+  selectedStats: StatAbbr[];
+  
   selectedAttackType: AttackType | null;
   selectedSkills: string[];
   customBonusDice: number;
@@ -238,7 +246,7 @@ export function getDefaultCalculatorState(): CalculatorState {
     mode: 'simple',
     combatTab: 'attack',
     selectedCharacterId: null,
-    selectedStat: null,
+    selectedStats: [],
     selectedAttackType: null,
     selectedSkills: [],
     customBonusDice: 0,
