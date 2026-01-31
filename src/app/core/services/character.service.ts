@@ -21,7 +21,10 @@ import {
   ResolvedAccessory,
   ResolvedEquipment,
   ResolvedInventory,
-  ArmorSlot
+  ArmorSlot,
+  getCosmicSourceDisplayName,
+  getArmorMaterialDisplayName,
+  getWeaponTypeDisplayName
 } from '../models/equipment.model';
 import { ResolvedAbility } from '../models/ability.model';
 import { ResolvedSkill, SkillId } from '../models/skills.model';
@@ -31,8 +34,8 @@ import { calculateMod } from '../models/stats.model';
  * Raw character data that might have legacy species format
  */
 interface RawCharacter extends Omit<Character, 'species'> {
-  species: CharacterSpeciesSelection | string;  // Can be new format or legacy string
-  speciesId?: string;  // Legacy field
+  species: CharacterSpeciesSelection | string;
+  speciesId?: string;
 }
 
 /**
@@ -50,9 +53,6 @@ export class CharacterService {
   // LOADING
   // ============================================================================
 
-  /**
-   * Get list of all characters (summary only)
-   */
   getCharacterList(): Observable<CharacterSummary[]> {
     return this.http.get<RawCharacter[]>(`${this.basePath}/index.json`).pipe(
       map(rawChars => rawChars.map(raw => this.normalizeCharacterSummary(raw))),
@@ -63,9 +63,6 @@ export class CharacterService {
     );
   }
 
-  /**
-   * Load raw character data (unresolved)
-   */
   getCharacter(id: string): Observable<Character | null> {
     return this.http.get<RawCharacter>(`${this.basePath}/${id}.json`).pipe(
       map(raw => this.normalizeCharacter(raw)),
@@ -76,9 +73,6 @@ export class CharacterService {
     );
   }
 
-  /**
-   * Load character with all references resolved
-   */
   getResolvedCharacter(id: string): Observable<ResolvedCharacter | null> {
     return forkJoin({
       character: this.getCharacter(id),
@@ -95,22 +89,14 @@ export class CharacterService {
   // NORMALIZATION (Legacy Support)
   // ============================================================================
 
-  /**
-   * Normalize raw character data to current format
-   * Handles legacy species format
-   */
   private normalizeCharacter(raw: RawCharacter): Character {
-    // Handle species migration
     let species: CharacterSpeciesSelection;
     
     if (typeof raw.species === 'string') {
-      // Legacy format: just a string ID
       species = migrateSpeciesId(raw.species);
     } else if (raw.speciesId && typeof raw.speciesId === 'string') {
-      // Legacy format: speciesId field
       species = migrateSpeciesId(raw.speciesId);
     } else {
-      // New format: already a CharacterSpeciesSelection
       species = raw.species as CharacterSpeciesSelection;
     }
 
@@ -122,9 +108,6 @@ export class CharacterService {
     } as Character;
   }
 
-  /**
-   * Normalize character summary from raw data
-   */
   private normalizeCharacterSummary(raw: RawCharacter): CharacterSummary {
     let species: CharacterSpeciesSelection;
     
@@ -166,9 +149,6 @@ export class CharacterService {
     };
   }
 
-  /**
-   * Resolve species selection to actual species data
-   */
   private resolveSpecies(
     selection: CharacterSpeciesSelection,
     refData: AllReferenceData
@@ -176,15 +156,10 @@ export class CharacterService {
     if (selection.type === 'pure') {
       const species = refData.species[selection.speciesId];
       if (species) return species;
-      
-      // Fallback for unknown species
       return this.unknownSpecies(selection.speciesId);
     } else {
-      // Mixed heritage
       const species = refData.species[selection.mixedHeritageId];
       if (species) return species;
-      
-      // Fallback for unknown mixed heritage
       return this.unknownSpecies(selection.mixedHeritageId);
     }
   }
@@ -207,7 +182,7 @@ export class CharacterService {
         id: instance.refId,
         name: `Unknown (${instance.refId})`,
         type: 'dagger',
-        category: 'earthly',  // Default to earthly for unknown weapons
+        category: 'earthly',
         damage: '1D4',
         range: 'Melee',
         apCost: 1,
@@ -330,7 +305,7 @@ export class CharacterService {
       const ref = refData.skills[id];
       return {
         id: id as SkillId,
-        name: ref?.name || id,
+        name: ref?.name || this.formatSkillName(id),
         description: ref?.description || '',
         level: level || 0,
         bonusDice: level || 0
@@ -338,10 +313,15 @@ export class CharacterService {
     });
   }
 
+  private formatSkillName(id: string): string {
+    return id.split('-').map(word => 
+      word.charAt(0).toUpperCase() + word.slice(1)
+    ).join(' ');
+  }
+
   private computeDerivedValues(character: Character): ResolvedCharacter['computed'] {
     const stats = character.stats;
     
-    // Calculate total armor HP
     let totalArmorHp = 0;
     for (const armor of Object.values(character.equipment.armor)) {
       if (armor) {
@@ -349,7 +329,6 @@ export class CharacterService {
       }
     }
 
-    // Get stat values for attack/defense calculations
     const spd = stats.physical.speed.value;
     const mit = stats.physical.might.value;
     const grt = stats.physical.grit.value;

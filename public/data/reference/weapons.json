@@ -829,7 +829,7 @@
     "special": "Immutable; +3 D20 on defensive rolls. Once per combat, negate one attack completely.",
     "cost": 70
   },
-  "flappers-fan": {
+  "flapper-fan": {
     "id": "flapper-fan",
     "name": "Flapper's Fan",
     "type": "fan",

@@ -3,7 +3,22 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CharacterService } from '@core/services/character.service';
 import { ResolvedCharacter, OverallAlignment } from '@core/models/character.model';
-import { ArmorSlot, ResourceCost } from '@core/models/equipment.model';
+import { 
+  ArmorSlot, 
+  ResourceCost,
+  ResolvedWeapon,
+  ResolvedArmor,
+  ResolvedItem,
+  ResolvedAccessory,
+  WeaponCategory,
+  CosmicWeaponSource,
+  ArmorMaterial,
+  ArmorSet,
+  getCosmicSourceDisplayName,
+  getArmorMaterialDisplayName,
+  getWeaponTypeDisplayName,
+  isCosmicWeapon
+} from '@core/models/equipment.model';
 import { 
   AbilitySource, 
   ComponentCost, 
@@ -19,7 +34,6 @@ import {
 import { calculateMod, calculateDice } from '@core/models/stats.model';
 import { calculateCollegeProgression, FocusLevels, MagicCollege } from '@core/models/magic.model';
 
-// Interface for aggregated school levels
 interface SchoolLevel {
   schoolId: string;
   schoolName: string;
@@ -42,12 +56,12 @@ export class CharacterDetailComponent implements OnInit {
   isLoading = signal(true);
   error = signal<string | null>(null);
 
-  // Expanded abilities state (independent - multiple can be open)
   expandedAbilities = signal<Set<string>>(new Set());
+  expandedWeapons = signal<Set<string>>(new Set());
+  expandedItems = signal<Set<string>>(new Set());
 
   readonly armorSlots: ArmorSlot[] = ['head', 'shoulders', 'chest', 'arms', 'gloves', 'legs', 'boots'];
 
-  // Focus to School mapping
   private readonly focusToSchool: Record<string, { school: string; schoolName: string }> = {
     // Cosmic - Stars
     divination: { school: 'stars', schoolName: 'School of Stars' },
@@ -115,7 +129,6 @@ export class CharacterDetailComponent implements OnInit {
     reaper: { school: 'endings', schoolName: 'School of Endings' },
   };
 
-  // Computed values for magic schools (aggregated from focuses)
   cosmicSchools = computed(() => this.getSchoolLevels(this.character()?.magic.cosmic));
   earthlySchools = computed(() => this.getSchoolLevels(this.character()?.magic.earthly));
   deadSchools = computed(() => this.getSchoolLevels(this.character()?.magic.dead));
@@ -124,6 +137,19 @@ export class CharacterDetailComponent implements OnInit {
     const char = this.character();
     if (!char) return 0;
     return char.resolvedSkills.filter(s => s.level > 0).length;
+  });
+
+  // Computed: separate cosmic and earthly weapons
+  cosmicWeapons = computed(() => {
+    const char = this.character();
+    if (!char) return [];
+    return char.equipment.weapons.filter(w => w.category === 'cosmic');
+  });
+
+  earthlyWeapons = computed(() => {
+    const char = this.character();
+    if (!char) return [];
+    return char.equipment.weapons.filter(w => w.category === 'earthly');
   });
 
   ngOnInit(): void {
@@ -155,7 +181,7 @@ export class CharacterDetailComponent implements OnInit {
   }
 
   // =========================================================================
-  // ABILITY EXPANSION (INDEPENDENT - MULTIPLE CAN BE OPEN)
+  // EXPANSION TOGGLES
   // =========================================================================
 
   toggleAbilityExpanded(abilityId: string): void {
@@ -172,6 +198,167 @@ export class CharacterDetailComponent implements OnInit {
 
   isAbilityExpanded(abilityId: string): boolean {
     return this.expandedAbilities().has(abilityId);
+  }
+
+  toggleWeaponExpanded(weaponId: string): void {
+    this.expandedWeapons.update(set => {
+      const newSet = new Set(set);
+      if (newSet.has(weaponId)) {
+        newSet.delete(weaponId);
+      } else {
+        newSet.add(weaponId);
+      }
+      return newSet;
+    });
+  }
+
+  isWeaponExpanded(weaponId: string): boolean {
+    return this.expandedWeapons().has(weaponId);
+  }
+
+  toggleItemExpanded(itemId: string): void {
+    this.expandedItems.update(set => {
+      const newSet = new Set(set);
+      if (newSet.has(itemId)) {
+        newSet.delete(itemId);
+      } else {
+        newSet.add(itemId);
+      }
+      return newSet;
+    });
+  }
+
+  isItemExpanded(itemId: string): boolean {
+    return this.expandedItems().has(itemId);
+  }
+
+  // =========================================================================
+  // WEAPON HELPERS
+  // =========================================================================
+
+  isCosmicWeapon(weapon: ResolvedWeapon): boolean {
+    return weapon.category === 'cosmic';
+  }
+
+  getWeaponCategoryDisplay(category: WeaponCategory): string {
+    return category === 'cosmic' ? 'Cosmic' : 'Earthly';
+  }
+
+  getCosmicSourceName(source: CosmicWeaponSource): string {
+    return getCosmicSourceDisplayName(source);
+  }
+
+  getWeaponTypeName(type: string): string {
+    return getWeaponTypeDisplayName(type as any);
+  }
+
+  hasWeaponSpecial(weapon: ResolvedWeapon): boolean {
+    return !!weapon.special || !!weapon.cosmicSource || !!weapon.notes;
+  }
+
+  getWeaponHpPercent(weapon: ResolvedWeapon): number {
+    return this.getResourcePercent(weapon.currentHp, weapon.maxHp);
+  }
+
+  // =========================================================================
+  // ARMOR HELPERS
+  // =========================================================================
+
+  getArmorMaterialName(material: ArmorMaterial | undefined): string {
+    if (!material) return '';
+    return getArmorMaterialDisplayName(material);
+  }
+
+  getArmorSetName(set: ArmorSet | undefined): string {
+    if (!set || set === 'none') return '';
+    const names: Record<ArmorSet, string> = {
+      'elementalist': 'Elementalist',
+      'beast-handler': 'Beast Handler',
+      'peacekeeper': 'Peacekeeper',
+      'none': ''
+    };
+    return names[set] || '';
+  }
+
+  hasArmorSpecial(armor: ResolvedArmor): boolean {
+    return !!armor.special || !!armor.statBonus || !!armor.notes;
+  }
+
+  formatDamageReduction(armor: ResolvedArmor): string {
+    if (!armor.damageReduction) return '';
+    const dr = armor.damageReduction;
+    let result = dr.dice;
+    if (dr.check) {
+      result += ` (${dr.check.stats.join('/')} vs ${dr.check.difficulty})`;
+    }
+    return result;
+  }
+
+  getArmorStatBonuses(armor: ResolvedArmor): string[] {
+    if (!armor.statBonus) return [];
+    return Object.entries(armor.statBonus).map(([stat, value]) => 
+      `${value > 0 ? '+' : ''}${value} ${stat}`
+    );
+  }
+
+  // =========================================================================
+  // ITEM HELPERS
+  // =========================================================================
+
+  hasItemDetails(item: ResolvedItem): boolean {
+    return !!item.description || !!item.effect || 
+          (item.restoration?.length ?? 0) > 0 ||
+          (item.temporaryEffects?.length ?? 0) > 0;
+  }
+
+  formatRestoration(item: ResolvedItem): string[] {
+    if (!item.restoration) return [];
+    return item.restoration.map(r => {
+      let result = `${r.dice}`;
+      if (r.flatBonus) result += ` + ${r.flatBonus}`;
+      result += ` ${r.resource}`;
+      return result;
+    });
+  }
+
+  formatTemporaryEffects(item: ResolvedItem): string[] {
+    if (!item.temporaryEffects) return [];
+    return item.temporaryEffects.map(effect => {
+      let result = `${effect.amount > 0 ? '+' : ''}${effect.amount}`;
+      if (effect.stat) result += ` ${effect.stat}`;
+      else if (effect.type === 'movement') result += ' ft. movement';
+      else if (effect.type === 'ap') result += ' AP';
+      result += ` (${effect.duration})`;
+      return result;
+    });
+  }
+
+  getConsumableIcon(item: ResolvedItem): string {
+    if (!item.consumableType) return 'science';
+    const icons: Record<string, string> = {
+      'healing-potion': 'healing',
+      'vigor-potion': 'directions_run',
+      'clarity-potion': 'psychology',
+      'speed-potion': 'speed',
+      'utility-potion': 'science',
+      'food': 'restaurant',
+      'drink': 'local_cafe',
+      'bandage': 'medical_services'
+    };
+    return icons[item.consumableType] || 'science';
+  }
+
+  // =========================================================================
+  // ACCESSORY HELPERS
+  // =========================================================================
+
+  hasAccessorySpecial(accessory: ResolvedAccessory): boolean {
+    return !!accessory.special;
+  }
+
+  getAccessorySpecialCooldown(accessory: ResolvedAccessory): string {
+    if (!accessory.special?.cooldown) return '';
+    return accessory.special.cooldown;
   }
 
   // =========================================================================
@@ -208,9 +395,6 @@ export class CharacterDetailComponent implements OnInit {
            this.deadSchools().length > 0;
   }
 
-  /**
-   * Aggregates focus levels into school-level totals
-   */
   private getSchoolLevels(focuses: FocusLevels | undefined): SchoolLevel[] {
     if (!focuses) return [];
     
@@ -321,9 +505,6 @@ export class CharacterDetailComponent implements OnInit {
     }
   }
 
-  /**
-   * Get the college from an ability source
-   */
   getAbilityCollege(ability: ResolvedAbility): string | null {
     if (hasCollegeAndFocus(ability.source)) {
       return ability.source.college || null;
@@ -331,9 +512,6 @@ export class CharacterDetailComponent implements OnInit {
     return null;
   }
 
-  /**
-   * Get the focus name from an ability source
-   */
   getAbilityFocus(ability: ResolvedAbility): string {
     if (hasCollegeAndFocus(ability.source)) {
       return this.formatFocusName(ability.source.focus);
@@ -341,9 +519,6 @@ export class CharacterDetailComponent implements OnInit {
     return '';
   }
 
-  /**
-   * Get required level from an ability source
-   */
   getRequiredLevel(ability: ResolvedAbility): number {
     const source = ability.source;
     if (hasCollegeAndFocus(source)) {
@@ -359,9 +534,6 @@ export class CharacterDetailComponent implements OnInit {
   // ABILITY OUTPUT DISPLAY HELPERS
   // =========================================================================
 
-  /**
-   * Get formatted damage string for display - handles both old string format and new AbilityDamage
-   */
   getDamageDisplay(ability: ResolvedAbility): string | null {
     if (!ability.damage) return null;
     
@@ -372,9 +544,6 @@ export class CharacterDetailComponent implements OnInit {
     return formatDamage(ability.damage);
   }
 
-  /**
-   * Get damage type for styling
-   */
   getDamageType(ability: ResolvedAbility): string | null {
     if (!ability.damage || typeof ability.damage === 'string') {
       return null;
@@ -382,9 +551,6 @@ export class CharacterDetailComponent implements OnInit {
     return (ability.damage as AbilityDamage).type;
   }
 
-  /**
-   * Get formatted healing string for display - handles both old string format and new AbilityHealing
-   */
   getHealingDisplay(ability: ResolvedAbility): string | null {
     if (!ability.healing) return null;
     
@@ -395,27 +561,19 @@ export class CharacterDetailComponent implements OnInit {
     return formatHealing(ability.healing);
   }
 
-  /**
-   * Get summon creature name for display
-   */
   getSummonName(ability: ResolvedAbility): string {
     return ability.summon?.creature?.name ?? 'Summon';
   }
 
-  /**
-   * Get a brief effect summary for the row preview
-   */
   getEffectSummary(ability: ResolvedAbility): string | null {
     const effects = ability.effects;
     if (!effects) return null;
 
-    // Dice modifiers - most common effect
     if (effects.diceModifiers?.length) {
       const mod = effects.diceModifiers[0];
       return `${mod.amount > 0 ? '+' : ''}${mod.amount} D20 ${mod.applies}`;
     }
 
-    // Stat modifiers
     if (effects.statModifiers?.length) {
       const mod = effects.statModifiers[0];
       const statsText = mod.stats === 'all' ? 'all stats' : 
@@ -423,38 +581,31 @@ export class CharacterDetailComponent implements OnInit {
       return `${mod.amount > 0 ? '+' : ''}${mod.amount} ${statsText}`;
     }
 
-    // Movement
     if (effects.movement) {
       return `${effects.movement.amount > 0 ? '+' : ''}${effects.movement.amount} ft. movement`;
     }
 
-    // Damage reduction
     if (effects.damageReduction) {
       return `${effects.damageReduction.dice} damage reduction`;
     }
 
-    // Conditions applied
     if (effects.appliesConditions?.length) {
       return `Applies ${effects.appliesConditions[0].condition}`;
     }
 
-    // Conditions removed
     if (effects.removesConditions?.length) {
       return `Removes ${effects.removesConditions[0]}`;
     }
 
-    // Resistances granted
     if (effects.resistances?.length) {
       return `Resist ${effects.resistances[0]}`;
     }
 
-    // Grants
     if (effects.grants?.length) {
       const grant = effects.grants[0];
       return grant.length > 25 ? grant.substring(0, 22) + '...' : grant;
     }
 
-    // Special effects
     if (effects.special?.length) {
       const special = effects.special[0];
       return special.length > 25 ? special.substring(0, 22) + '...' : special;
@@ -467,30 +618,18 @@ export class CharacterDetailComponent implements OnInit {
   // ABILITY TYPE HELPERS
   // =========================================================================
 
-  /**
-   * Check if ability is a reaction
-   */
   isReaction(ability: ResolvedAbility): boolean {
     return isReactionAbility(ability);
   }
 
-  /**
-   * Check if ability is a summon
-   */
   isSummon(ability: ResolvedAbility): boolean {
     return isSummonAbility(ability);
   }
 
-  /**
-   * Check if ability has sanity cost
-   */
   hasSanityCost(ability: ResolvedAbility): boolean {
     return !!ability.sanityCost && ability.sanityCost > 0;
   }
 
-  /**
-   * Check if ability has any costs
-   */
   hasAnyCosts(ability: ResolvedAbility): boolean {
     return !!(
       ability.staminaCost ||
@@ -503,30 +642,23 @@ export class CharacterDetailComponent implements OnInit {
   // COST FORMATTING METHODS
   // =========================================================================
 
-  /**
-   * Get the Material Symbols icon name for a resource/component type
-   */
   getCostIcon(type: string): string {
     const icons: Record<string, string> = {
-      // Universal
       'AP': 'schedule',
       'ST': 'directions_run',
       'HP': 'favorite',
       'SY': 'psychology',
-      // Cosmic
       'SR': 'star',
       'LR': 'light_mode',
       'Hours': 'hourglass_empty',
       'VS': 'dark_mode',
       'RP': 'public',
-      // Earthly
       'FP': 'adjust',
       'LS': 'eco',
       'CP': 'construction',
       'EP': 'whatshot',
       'SP': 'record_voice_over',
       'BP': 'fitness_center',
-      // Dead
       'FE': 'skull',
       'DE': 'science',
       'DC': 'toll',
@@ -534,30 +666,23 @@ export class CharacterDetailComponent implements OnInit {
     return icons[type] || 'toll';
   }
 
-  /**
-   * Get the full name for a resource/component type
-   */
   getCostTypeName(type: string): string {
     const names: Record<string, string> = {
-      // Universal
       'AP': 'Action Points',
       'ST': 'Stamina',
       'HP': 'Health',
       'SY': 'Sanity',
-      // Cosmic
       'SR': 'Star Runes',
       'LR': 'Light Runes',
       'Hours': 'Hours',
       'VS': 'Void Shards',
       'RP': 'Realm Points',
-      // Earthly
       'FP': 'Focus Points',
       'LS': 'Life Seeds',
       'CP': 'Craft Points',
       'EP': 'Elemental Points',
       'SP': 'Speech Points',
       'BP': 'Body Points',
-      // Dead
       'FE': 'Funeral Essence',
       'DE': 'Decay Essence',
       'DC': 'Damned Coins',
@@ -565,9 +690,6 @@ export class CharacterDetailComponent implements OnInit {
     return names[type] || type;
   }
 
-  /**
-   * Format component cost for display, including "per" costs
-   */
   formatComponentCost(cost: ComponentCost): string {
     if (cost.per) {
       return `${cost.amount} ${cost.type} per ${cost.per}`;
@@ -575,9 +697,6 @@ export class CharacterDetailComponent implements OnInit {
     return `${cost.amount} ${cost.type}`;
   }
 
-  /**
-   * Check if an ability has any resource costs (components, stamina, etc.)
-   */
   hasResourceCosts(ability: ResolvedAbility): boolean {
     return !!(
       (ability.componentCost && ability.componentCost.length > 0) ||
@@ -585,23 +704,17 @@ export class CharacterDetailComponent implements OnInit {
     );
   }
 
-  /**
-   * Get all non-AP costs for an ability as a formatted array
-   */
   getAbilityCosts(ability: ResolvedAbility): Array<{ type: string; amount: number; per?: string }> {
     const costs: Array<{ type: string; amount: number; per?: string }> = [];
     
-    // Add stamina cost if present
     if (ability.staminaCost) {
       costs.push({ type: 'ST', amount: ability.staminaCost });
     }
     
-    // Add sanity cost if present
     if (ability.sanityCost) {
       costs.push({ type: 'SY', amount: ability.sanityCost });
     }
     
-    // Add component costs if present
     if (ability.componentCost && ability.componentCost.length > 0) {
       costs.push(...ability.componentCost);
     }

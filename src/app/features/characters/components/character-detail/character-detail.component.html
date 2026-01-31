@@ -393,53 +393,190 @@
               Equipment
             </h2>
 
-            <!-- Weapons -->
-            <div class="equipment-section">
-              <h3 class="equipment-section__title">
-                <span class="material-symbols-outlined">swords</span>
-                Weapons
-              </h3>
-              @if (character()!.equipment.weapons.length > 0) {
+            <!-- Weapons Section - Cosmic -->
+            @if (cosmicWeapons().length > 0) {
+              <div class="equipment-section equipment-section--cosmic">
+                <h3 class="equipment-section__title">
+                  <span class="material-symbols-outlined">auto_awesome</span>
+                  Cosmic Weapons
+                  <span class="equipment-section__badge equipment-section__badge--cosmic">{{ cosmicWeapons().length }}</span>
+                </h3>
                 <div class="equipment-list">
-                  @for (weapon of character()!.equipment.weapons; track weapon.id) {
-                    <div class="weapon-card">
-                      <div class="weapon-card__header">
-                        <span class="weapon-card__name">{{ weapon.customName || weapon.name }}</span>
-                        <span class="weapon-card__type">{{ formatWeaponType(weapon.type) }}</span>
-                      </div>
-                      <div class="weapon-card__stats">
-                        <span class="weapon-card__stat">
-                          <span class="weapon-card__stat-label">DMG</span>
-                          <span class="weapon-card__stat-value">{{ weapon.damage }}</span>
-                        </span>
-                        <span class="weapon-card__stat">
-                          <span class="weapon-card__stat-label">RNG</span>
-                          <span class="weapon-card__stat-value">{{ weapon.range }}</span>
-                        </span>
-                        <span class="weapon-card__stat">
-                          <span class="weapon-card__stat-label">AP</span>
-                          <span class="weapon-card__stat-value">{{ weapon.apCost }}</span>
-                        </span>
-                        @if (weapon.quantity && weapon.quantity > 1) {
-                          <span class="weapon-card__stat">
-                            <span class="weapon-card__stat-label">QTY</span>
-                            <span class="weapon-card__stat-value">{{ weapon.quantity }}</span>
+                  @for (weapon of cosmicWeapons(); track weapon.id) {
+                    <article 
+                      class="weapon-card weapon-card--cosmic"
+                      [class.is-expanded]="isWeaponExpanded(weapon.id)"
+                    >
+                      <button 
+                        class="weapon-card__header"
+                        (click)="toggleWeaponExpanded(weapon.id)"
+                      >
+                        <div class="weapon-card__cosmic-indicator"></div>
+                        <div class="weapon-card__main">
+                          <span class="weapon-card__name">{{ weapon.customName || weapon.name }}</span>
+                          <span class="weapon-card__type-badge">{{ getWeaponTypeName(weapon.type) }}</span>
+                        </div>
+                        <div class="weapon-card__quick-stats">
+                          <span class="weapon-card__stat weapon-card__stat--damage">
+                            <span class="material-symbols-outlined">bolt</span>
+                            {{ weapon.damage }}
                           </span>
+                          <span class="weapon-card__stat weapon-card__stat--ap">
+                            {{ weapon.apCost }} AP
+                          </span>
+                        </div>
+                        <span class="material-symbols-outlined weapon-card__chevron">expand_more</span>
+                      </button>
+                      
+                      <div class="weapon-card__details">
+                        <div class="weapon-card__stats-grid">
+                          <div class="weapon-stat">
+                            <span class="weapon-stat__label">Damage</span>
+                            <span class="weapon-stat__value">{{ weapon.damage }}</span>
+                          </div>
+                          <div class="weapon-stat">
+                            <span class="weapon-stat__label">Range</span>
+                            <span class="weapon-stat__value">{{ weapon.range }}</span>
+                          </div>
+                          <div class="weapon-stat">
+                            <span class="weapon-stat__label">AP Cost</span>
+                            <span class="weapon-stat__value">{{ weapon.apCost }}</span>
+                          </div>
+                          @if (weapon.quantity && weapon.quantity > 1) {
+                            <div class="weapon-stat">
+                              <span class="weapon-stat__label">Quantity</span>
+                              <span class="weapon-stat__value">{{ weapon.quantity }}</span>
+                            </div>
+                          }
+                        </div>
+                        
+                        <!-- Cosmic Source -->
+                        @if (weapon.cosmicSource) {
+                          <div class="weapon-card__cosmic-source">
+                            <span class="material-symbols-outlined">stars</span>
+                            <span>Blessed by {{ getCosmicSourceName(weapon.cosmicSource) }}</span>
+                          </div>
+                        }
+                        
+                        <!-- Special Effect -->
+                        @if (weapon.special) {
+                          <div class="weapon-card__special">
+                            <span class="material-symbols-outlined">auto_awesome</span>
+                            <span>{{ weapon.special }}</span>
+                          </div>
+                        }
+                        
+                        <!-- HP Bar -->
+                        <div class="weapon-card__hp">
+                          <span class="weapon-card__hp-label">Durability</span>
+                          <div class="weapon-card__hp-bar">
+                            <div class="weapon-card__hp-fill" [style.width.%]="getWeaponHpPercent(weapon)"></div>
+                          </div>
+                          <span class="weapon-card__hp-text">{{ weapon.currentHp }}/{{ weapon.maxHp }}</span>
+                        </div>
+                        
+                        @if (weapon.notes) {
+                          <div class="weapon-card__notes">
+                            <span class="material-symbols-outlined">info</span>
+                            <span>{{ weapon.notes }}</span>
+                          </div>
                         }
                       </div>
-                      <div class="weapon-card__hp">
-                        <span class="weapon-card__hp-label">HP</span>
-                        <span class="weapon-card__hp-value">{{ weapon.currentHp }} / {{ weapon.maxHp }}</span>
-                      </div>
-                    </div>
+                    </article>
                   }
                 </div>
-              } @else {
-                <p class="empty-message">No weapons equipped</p>
-              }
-            </div>
+              </div>
+            }
 
-            <!-- Armor -->
+            <!-- Weapons Section - Earthly -->
+            @if (earthlyWeapons().length > 0) {
+              <div class="equipment-section equipment-section--earthly">
+                <h3 class="equipment-section__title">
+                  <span class="material-symbols-outlined">swords</span>
+                  Earthly Weapons
+                  <span class="equipment-section__badge equipment-section__badge--earthly">{{ earthlyWeapons().length }}</span>
+                </h3>
+                <div class="equipment-list">
+                  @for (weapon of earthlyWeapons(); track weapon.id) {
+                    <article 
+                      class="weapon-card weapon-card--earthly"
+                      [class.is-expanded]="isWeaponExpanded(weapon.id)"
+                    >
+                      <button 
+                        class="weapon-card__header"
+                        (click)="toggleWeaponExpanded(weapon.id)"
+                      >
+                        <div class="weapon-card__main">
+                          <span class="weapon-card__name">{{ weapon.customName || weapon.name }}</span>
+                          <span class="weapon-card__type-badge">{{ getWeaponTypeName(weapon.type) }}</span>
+                        </div>
+                        <div class="weapon-card__quick-stats">
+                          <span class="weapon-card__stat weapon-card__stat--damage">
+                            <span class="material-symbols-outlined">bolt</span>
+                            {{ weapon.damage }}
+                          </span>
+                          <span class="weapon-card__stat weapon-card__stat--ap">
+                            {{ weapon.apCost }} AP
+                          </span>
+                        </div>
+                        <span class="material-symbols-outlined weapon-card__chevron">expand_more</span>
+                      </button>
+                      
+                      <div class="weapon-card__details">
+                        <div class="weapon-card__stats-grid">
+                          <div class="weapon-stat">
+                            <span class="weapon-stat__label">Damage</span>
+                            <span class="weapon-stat__value">{{ weapon.damage }}</span>
+                          </div>
+                          <div class="weapon-stat">
+                            <span class="weapon-stat__label">Range</span>
+                            <span class="weapon-stat__value">{{ weapon.range }}</span>
+                          </div>
+                          <div class="weapon-stat">
+                            <span class="weapon-stat__label">AP Cost</span>
+                            <span class="weapon-stat__value">{{ weapon.apCost }}</span>
+                          </div>
+                          @if (weapon.quantity && weapon.quantity > 1) {
+                            <div class="weapon-stat">
+                              <span class="weapon-stat__label">Quantity</span>
+                              <span class="weapon-stat__value">{{ weapon.quantity }}</span>
+                            </div>
+                          }
+                        </div>
+                        
+                        @if (weapon.special) {
+                          <div class="weapon-card__special">
+                            <span class="material-symbols-outlined">auto_awesome</span>
+                            <span>{{ weapon.special }}</span>
+                          </div>
+                        }
+                        
+                        <div class="weapon-card__hp">
+                          <span class="weapon-card__hp-label">Durability</span>
+                          <div class="weapon-card__hp-bar">
+                            <div class="weapon-card__hp-fill" [style.width.%]="getWeaponHpPercent(weapon)"></div>
+                          </div>
+                          <span class="weapon-card__hp-text">{{ weapon.currentHp }}/{{ weapon.maxHp }}</span>
+                        </div>
+                        
+                        @if (weapon.notes) {
+                          <div class="weapon-card__notes">
+                            <span class="material-symbols-outlined">info</span>
+                            <span>{{ weapon.notes }}</span>
+                          </div>
+                        }
+                      </div>
+                    </article>
+                  }
+                </div>
+              </div>
+            }
+
+            @if (character()!.equipment.weapons.length === 0) {
+              <p class="empty-message">No weapons equipped</p>
+            }
+
+            <!-- Armor Section -->
             <div class="equipment-section">
               <h3 class="equipment-section__title">
                 <span class="material-symbols-outlined">security</span>
@@ -451,7 +588,23 @@
                     <span class="armor-slot__name">{{ formatArmorSlot(slot) }}</span>
                     @if (character()!.equipment.armor[slot]; as armor) {
                       <span class="armor-slot__item">{{ armor.name }}</span>
+                      @if (armor.material) {
+                        <span class="armor-slot__material">{{ getArmorMaterialName(armor.material) }}</span>
+                      }
+                      <div class="armor-slot__dr">
+                        <span class="material-symbols-outlined">shield</span>
+                        <span>{{ formatDamageReduction(armor) }}</span>
+                      </div>
+                      @for (bonus of getArmorStatBonuses(armor); track bonus) {
+                        <span class="armor-slot__bonus">{{ bonus }}</span>
+                      }
                       <span class="armor-slot__hp">{{ armor.currentHp }}/{{ armor.maxHp }} HP</span>
+                      @if (armor.special) {
+                        <div class="armor-slot__special" [title]="armor.special.effect">
+                          <span class="material-symbols-outlined">auto_awesome</span>
+                          <span>{{ armor.special.name || 'Special' }}</span>
+                        </div>
+                      }
                     } @else {
                       <span class="armor-slot__empty">Empty</span>
                     }
@@ -460,7 +613,7 @@
               </div>
             </div>
 
-            <!-- Accessories -->
+            <!-- Accessories Section -->
             @if (character()!.equipment.accessories.length > 0) {
               <div class="equipment-section">
                 <h3 class="equipment-section__title">
@@ -470,9 +623,20 @@
                 <div class="accessories-list">
                   @for (accessory of character()!.equipment.accessories; track accessory.id) {
                     <div class="accessory-card">
-                      <span class="accessory-card__name">{{ accessory.name }}</span>
-                      <span class="accessory-card__effect">{{ accessory.effect }}</span>
-                      <span class="accessory-card__hp">{{ accessory.currentHp }}/{{ accessory.maxHp }} HP</span>
+                      <div class="accessory-card__header">
+                        <span class="accessory-card__name">{{ accessory.name }}</span>
+                        <span class="accessory-card__hp">{{ accessory.currentHp }}/{{ accessory.maxHp }} HP</span>
+                      </div>
+                      <p class="accessory-card__effect">{{ accessory.effect }}</p>
+                      @if (accessory.special) {
+                        <div class="accessory-card__special">
+                          <span class="material-symbols-outlined">auto_awesome</span>
+                          <span>{{ accessory.special.effect }}</span>
+                          @if (accessory.special.cooldown) {
+                            <span class="accessory-card__cooldown">({{ accessory.special.cooldown }})</span>
+                          }
+                        </div>
+                      }
                     </div>
                   }
                 </div>
@@ -481,7 +645,7 @@
           </section>
 
           <!-- ================================================================ -->
-          <!-- ABILITIES PANEL - Updated with dropdown-style -->
+          <!-- ABILITIES PANEL -->
           <!-- ================================================================ -->
           <section class="panel panel--abilities">
             <h2 class="panel__title">
@@ -497,28 +661,23 @@
                     [attr.data-college]="getAbilityCollege(ability)"
                     [class.is-expanded]="isAbilityExpanded(ability.id)"
                   >
-                    <!-- Row Header (always visible, clickable to expand) -->
                     <button 
                       class="ability-row__header"
                       (click)="toggleAbilityExpanded(ability.id)"
                       [attr.aria-expanded]="isAbilityExpanded(ability.id)"
                     >
-                      <!-- College indicator bar -->
                       <div class="ability-row__college-bar"></div>
                       
-                      <!-- Name + Focus -->
                       <div class="ability-row__primary">
                         <h3 class="ability-row__name">{{ ability.name }}</h3>
                         <span class="ability-row__focus">{{ getAbilityFocus(ability) }}</span>
                       </div>
                       
-                      <!-- Level badge -->
                       <div class="ability-row__level" [title]="'Required Focus Level'">
                         <span class="ability-row__level-value">{{ getRequiredLevel(ability) }}</span>
                         <span class="ability-row__level-label">Lv</span>
                       </div>
                       
-                      <!-- Key output preview (damage/healing/effect) -->
                       <div class="ability-row__output">
                         @if (getDamageDisplay(ability)) {
                           <div class="output-badge output-badge--damage" [attr.data-damage-type]="getDamageType(ability)">
@@ -546,7 +705,6 @@
                         }
                       </div>
                       
-                      <!-- AP cost -->
                       <div class="ability-row__ap">
                         @if (ability.apCost !== null) {
                           <span class="ap-badge">
@@ -560,21 +718,15 @@
                         }
                       </div>
                       
-                      <!-- Expand chevron -->
-                      <span class="material-symbols-outlined ability-row__chevron">
-                        expand_more
-                      </span>
+                      <span class="material-symbols-outlined ability-row__chevron">expand_more</span>
                     </button>
 
-                    <!-- Expanded Details (collapsible) -->
                     <div class="ability-row__details">
                       <div class="ability-details">
-                        <!-- Description -->
                         <div class="ability-details__section ability-details__description">
                           <p>{{ ability.description }}</p>
                         </div>
 
-                        <!-- Stats Grid (Range, Duration, Target, Area) -->
                         <div class="ability-details__stats-grid">
                           <div class="stat-item">
                             <span class="material-symbols-outlined">straighten</span>
@@ -600,7 +752,6 @@
                           }
                         </div>
 
-                        <!-- Costs Section -->
                         @if (hasAnyCosts(ability)) {
                           <div class="ability-details__section">
                             <h4 class="ability-details__section-title">Costs</h4>
@@ -627,7 +778,6 @@
                           </div>
                         }
 
-                        <!-- Summon Details -->
                         @if (ability.summon?.creature; as creature) {
                           <div class="ability-details__section">
                             <h4 class="ability-details__section-title">Summon: {{ creature.name }}</h4>
@@ -658,7 +808,6 @@
                           </div>
                         }
 
-                        <!-- Effects Section -->
                         @if (ability.effects) {
                           <div class="ability-details__section">
                             <h4 class="ability-details__section-title">Effects</h4>
@@ -725,7 +874,6 @@
                           </div>
                         }
 
-                        <!-- Reaction Trigger -->
                         @if (ability.reactionTrigger) {
                           <div class="ability-details__section">
                             <h4 class="ability-details__section-title">Trigger</h4>
@@ -733,7 +881,6 @@
                           </div>
                         }
 
-                        <!-- Notes -->
                         @if (ability.notes) {
                           <div class="ability-details__section ability-details__notes">
                             <span class="material-symbols-outlined">info</span>
@@ -741,7 +888,6 @@
                           </div>
                         }
 
-                        <!-- Tags & Source -->
                         <div class="ability-details__footer">
                           <div class="ability-tags">
                             @if (ability.isPassive) {
@@ -877,7 +1023,7 @@
             <!-- Currency -->
             <div class="currency-display">
               <span class="material-symbols-outlined">paid</span>
-              <span class="currency-display__amount">{{ character()!.currency.wealth | number }}</span>
+              <span class="currency-display__amount">{{ character()!.currency.wealth | number:'1.2-2' }}</span>
               <span class="currency-display__era">{{ character()!.currency.era }}</span>
             </div>
 
@@ -886,9 +1032,46 @@
                 <h4 class="inventory-section__title">Consumables</h4>
                 <ul class="item-list">
                   @for (item of character()!.inventory.consumables; track item.id) {
-                    <li class="item-list__item">
-                      <span class="item-list__name">{{ item.customName || item.name }}</span>
-                      <span class="item-list__qty">×{{ item.quantity }}</span>
+                    <li 
+                      class="item-list__item" 
+                      [class.item-list__item--expandable]="hasItemDetails(item)"
+                      [class.is-expanded]="isItemExpanded(item.id)"
+                    >
+                      <button 
+                        class="item-list__header"
+                        (click)="hasItemDetails(item) && toggleItemExpanded(item.id)"
+                        [disabled]="!hasItemDetails(item)"
+                      >
+                        <span class="material-symbols-outlined item-list__icon">{{ getConsumableIcon(item) }}</span>
+                        <span class="item-list__name">{{ item.customName || item.name }}</span>
+                        <span class="item-list__qty">×{{ item.quantity }}</span>
+                        @if (hasItemDetails(item)) {
+                          <span class="material-symbols-outlined item-list__chevron">expand_more</span>
+                        }
+                      </button>
+                      
+                      @if (hasItemDetails(item)) {
+                        <div class="item-list__details">
+                          @if (item.description) {
+                            <p class="item-details__desc">{{ item.description }}</p>
+                          }
+                          @if (item.effect) {
+                            <p class="item-details__effect">{{ item.effect }}</p>
+                          }
+                          @for (restore of formatRestoration(item); track restore) {
+                            <div class="item-details__restore">
+                              <span class="material-symbols-outlined">healing</span>
+                              <span>Restores {{ restore }}</span>
+                            </div>
+                          }
+                          @for (effect of formatTemporaryEffects(item); track effect) {
+                            <div class="item-details__temp">
+                              <span class="material-symbols-outlined">schedule</span>
+                              <span>{{ effect }}</span>
+                            </div>
+                          }
+                        </div>
+                      }
                     </li>
                   }
                 </ul>
@@ -900,10 +1083,35 @@
                 <h4 class="inventory-section__title">General</h4>
                 <ul class="item-list">
                   @for (item of character()!.inventory.general; track item.id) {
-                    <li class="item-list__item">
-                      <span class="item-list__name">{{ item.customName || item.name }}</span>
-                      @if (item.stackable && item.quantity > 1) {
-                        <span class="item-list__qty">×{{ item.quantity }}</span>
+                    <li 
+                      class="item-list__item"
+                      [class.item-list__item--expandable]="hasItemDetails(item)"
+                      [class.is-expanded]="isItemExpanded(item.id)"
+                    >
+                      <button 
+                        class="item-list__header"
+                        (click)="hasItemDetails(item) && toggleItemExpanded(item.id)"
+                        [disabled]="!hasItemDetails(item)"
+                      >
+                        <span class="material-symbols-outlined item-list__icon">category</span>
+                        <span class="item-list__name">{{ item.customName || item.name }}</span>
+                        @if (item.stackable && item.quantity > 1) {
+                          <span class="item-list__qty">×{{ item.quantity }}</span>
+                        }
+                        @if (hasItemDetails(item)) {
+                          <span class="material-symbols-outlined item-list__chevron">expand_more</span>
+                        }
+                      </button>
+                      
+                      @if (hasItemDetails(item)) {
+                        <div class="item-list__details">
+                          @if (item.description) {
+                            <p class="item-details__desc">{{ item.description }}</p>
+                          }
+                          @if (item.effect) {
+                            <p class="item-details__effect">{{ item.effect }}</p>
+                          }
+                        </div>
                       }
                     </li>
                   }
